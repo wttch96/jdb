@@ -47,10 +47,12 @@ class UnixFileSystem extends FileSystem {
 
     /* -- Normalization and construction -- */
 
+    @Override
     public char getSeparator() {
         return slash;
     }
 
+    @Override
     public char getPathSeparator() {
         return colon;
     }
@@ -61,16 +63,26 @@ class UnixFileSystem extends FileSystem {
     /* Normalize the given pathname, whose length is len, starting at the given
        offset; everything before this offset is already normal. */
     private String normalize(String pathname, int len, int off) {
-        if (len == 0) return pathname;
+        if (len == 0) {
+            return pathname;
+        }
         int n = len;
-        while ((n > 0) && (pathname.charAt(n - 1) == '/')) n--;
-        if (n == 0) return "/";
+        while ((n > 0) && (pathname.charAt(n - 1) == '/')) {
+            n--;
+        }
+        if (n == 0) {
+            return "/";
+        }
         StringBuffer sb = new StringBuffer(pathname.length());
-        if (off > 0) sb.append(pathname.substring(0, off));
+        if (off > 0) {
+            sb.append(pathname.substring(0, off));
+        }
         char prevChar = 0;
         for (int i = off; i < n; i++) {
             char c = pathname.charAt(i);
-            if ((prevChar == '/') && (c == '/')) continue;
+            if ((prevChar == '/') && (c == '/')) {
+                continue;
+            }
             sb.append(c);
             prevChar = c;
         }
@@ -80,38 +92,54 @@ class UnixFileSystem extends FileSystem {
     /* Check that the given pathname is normal.  If not, invoke the real
        normalizer on the part of the pathname that requires normalization.
        This way we iterate through the whole pathname string only once. */
+    @Override
     public String normalize(String pathname) {
         int n = pathname.length();
         char prevChar = 0;
         for (int i = 0; i < n; i++) {
             char c = pathname.charAt(i);
-            if ((prevChar == '/') && (c == '/'))
+            if ((prevChar == '/') && (c == '/')) {
                 return normalize(pathname, n, i - 1);
+            }
             prevChar = c;
         }
-        if (prevChar == '/') return normalize(pathname, n, n - 1);
+        if (prevChar == '/') {
+            return normalize(pathname, n, n - 1);
+        }
         return pathname;
     }
 
+    @Override
     public int prefixLength(String pathname) {
-        if (pathname.length() == 0) return 0;
+        if (pathname.length() == 0) {
+            return 0;
+        }
         return (pathname.charAt(0) == '/') ? 1 : 0;
     }
 
+    @Override
     public String resolve(String parent, String child) {
-        if (child.equals("")) return parent;
+        if (child.equals("")) {
+            return parent;
+        }
         if (child.charAt(0) == '/') {
-            if (parent.equals("/")) return child;
+            if (parent.equals("/")) {
+                return child;
+            }
             return parent + child;
         }
-        if (parent.equals("/")) return parent + child;
+        if (parent.equals("/")) {
+            return parent + child;
+        }
         return parent + '/' + child;
     }
 
+    @Override
     public String getDefaultParent() {
         return "/";
     }
 
+    @Override
     public String fromURIPath(String path) {
         String p = path;
         if (p.endsWith("/") && (p.length() > 1)) {
@@ -124,12 +152,16 @@ class UnixFileSystem extends FileSystem {
 
     /* -- Path operations -- */
 
+    @Override
     public boolean isAbsolute(File f) {
         return (f.getPrefixLength() != 0);
     }
 
+    @Override
     public String resolve(File f) {
-        if (isAbsolute(f)) return f.getPath();
+        if (isAbsolute(f)) {
+            return f.getPath();
+        }
         return resolve(System.getProperty("user.dir"), f.getPath());
     }
 
@@ -145,6 +177,7 @@ class UnixFileSystem extends FileSystem {
     // canonicalization algorithm
     private ExpiringCache javaHomePrefixCache = new ExpiringCache();
 
+    @Override
     public String canonicalize(String path) throws IOException {
         if (!useCanonCaches) {
             return canonicalize0(path);
@@ -199,7 +232,9 @@ class UnixFileSystem extends FileSystem {
     // situations as well. Returning null will cause the underlying
     // (expensive) canonicalization routine to be called.
     static String parentOrNull(String path) {
-        if (path == null) return null;
+        if (path == null) {
+            return null;
+        }
         char sep = File.separatorChar;
         int last = path.length() - 1;
         int idx = last;
@@ -238,6 +273,7 @@ class UnixFileSystem extends FileSystem {
 
     public native int getBooleanAttributes0(File f);
 
+    @Override
     public int getBooleanAttributes(File f) {
         int rv = getBooleanAttributes0(f);
         String name = f.getName();
@@ -245,15 +281,21 @@ class UnixFileSystem extends FileSystem {
         return rv | (hidden ? BA_HIDDEN : 0);
     }
 
+    @Override
     public native boolean checkAccess(File f, int access);
+    @Override
     public native long getLastModifiedTime(File f);
+    @Override
     public native long getLength(File f);
+    @Override
     public native boolean setPermission(File f, int access, boolean enable, boolean owneronly);
 
     /* -- File operations -- */
 
+    @Override
     public native boolean createFileExclusively(String path)
         throws IOException;
+    @Override
     public boolean delete(File f) {
         // Keep canonicalization caches in sync after file deletion
         // and renaming operations. Could be more clever than this
@@ -265,8 +307,11 @@ class UnixFileSystem extends FileSystem {
         return delete0(f);
     }
     private native boolean delete0(File f);
+    @Override
     public native String[] list(File f);
+    @Override
     public native boolean createDirectory(File f);
+    @Override
     public boolean rename(File f1, File f2) {
         // Keep canonicalization caches in sync after file deletion
         // and renaming operations. Could be more clever than this
@@ -278,12 +323,15 @@ class UnixFileSystem extends FileSystem {
         return rename0(f1, f2);
     }
     private native boolean rename0(File f1, File f2);
+    @Override
     public native boolean setLastModifiedTime(File f, long time);
+    @Override
     public native boolean setReadOnly(File f);
 
 
     /* -- Filesystem interface -- */
 
+    @Override
     public File[] listRoots() {
         try {
             SecurityManager security = System.getSecurityManager();
@@ -297,14 +345,17 @@ class UnixFileSystem extends FileSystem {
     }
 
     /* -- Disk usage -- */
+    @Override
     public native long getSpace(File f, int t);
 
     /* -- Basic infrastructure -- */
 
+    @Override
     public int compare(File f1, File f2) {
         return f1.getPath().compareTo(f2.getPath());
     }
 
+    @Override
     public int hashCode(File f) {
         return f.getPath().hashCode() ^ 1234321;
     }

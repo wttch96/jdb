@@ -26,12 +26,9 @@
 package java.io;
 
 /**
- * Serializability of a class is enabled by the class implementing the
- * java.io.Serializable interface. Classes that do not implement this
- * interface will not have any of their state serialized or
- * deserialized.  All subtypes of a serializable class are themselves
- * serializable.  The serialization interface has no methods or fields
- * and serves only to identify the semantics of being serializable. <p>
+ * java.io.Serializable 接口的实现类的可串行化是可行的。不实现该接口的类将
+ * 不会有任何序列化和反序列状态。可序列化类的所有子类本身都是可序列化的。
+ * 序列化接口没有任何方法和字段，仅用于标示可序列化的语义。</p>
  *
  * To allow subtypes of non-serializable classes to be serialized, the
  * subtype may assume responsibility for saving and restoring the
