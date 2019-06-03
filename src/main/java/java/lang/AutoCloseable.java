@@ -1,96 +1,44 @@
-/*
- * Copyright (c) 2009, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang;
 
+import java.io.Closeable;
+
 /**
- * An object that may hold resources (such as file or socket handles)
- * until it is closed. The {@link #close()} method of an {@code AutoCloseable}
- * object is called automatically when exiting a {@code
- * try}-with-resources block for which the object has been declared in
- * the resource specification header. This construction ensures prompt
- * release, avoiding resource exhaustion exceptions and errors that
- * may otherwise occur.
+ * 一个对象可能持有资源(比如一个文件或是套接字的处理)直到它(这个对象)关闭. 在资源规范的头
+ * 中定义的{@code AutoCloseable}对象当它从 {@code try}-with-resources 语法块中退出时,会自
+ * 动调用 {@link #close()}方法. 这种结构确保了它可以及时的释放资源,避免了可能发生的资源耗
+ * 尽引起的异常和错误.
  *
  * @author Josh Bloch
- * @apiNote <p>It is possible, and in fact common, for a base class to
- * implement AutoCloseable even though not all of its subclasses or
- * instances will hold releasable resources.  For code that must operate
- * in complete generality, or when it is known that the {@code AutoCloseable}
- * instance requires resource release, it is recommended to use {@code
- * try}-with-resources constructions. However, when using facilities such as
- * {@link java.util.stream.Stream} that support both I/O-based and
- * non-I/O-based forms, {@code try}-with-resources blocks are in
- * general unnecessary when using non-I/O-based forms.
+ * @apiNote <p>事实上,即使不是所有的子类或实例都具有可释放的资源,基类实现可自动关闭也是可能的,这很
+ * 常见. 对于必须以完全的通用性操作的代码,或者当已知 {@code AutoCloseable} 实例需要释放资
+ * 源时,建议在 {@code try}-with-resources 中构造资源. 但是,在使用支持基于 I/O 或者 非 I/O
+ * 的形式,比如 {@link java.util.stream.Stream}的资源时,通常不需要 {@code try} 代码块.
  * @since 1.7
  */
 public interface AutoCloseable {
     /**
-     * Closes this resource, relinquishing any underlying resources.
-     * This method is invoked automatically on objects managed by the
-     * {@code try}-with-resources statement.
-     *
-     * <p>While this interface method is declared to throw {@code
-     * Exception}, implementers are <em>strongly</em> encouraged to
-     * declare concrete implementations of the {@code close} method to
-     * throw more specific exceptions, or to throw no exception at all
-     * if the close operation cannot fail.
-     *
-     * <p> Cases where the close operation may fail require careful
-     * attention by implementers. It is strongly advised to relinquish
-     * the underlying resources and to internally <em>mark</em> the
-     * resource as closed, prior to throwing the exception. The {@code
-     * close} method is unlikely to be invoked more than once and so
-     * this ensures that the resources are released in a timely manner.
-     * Furthermore it reduces problems that could arise when the resource
-     * wraps, or is wrapped, by another resource.
-     *
-     * <p><em>Implementers of this interface are also strongly advised
-     * to not have the {@code close} method throw {@link
-     * InterruptedException}.</em>
+     * 关闭这个资源,放弃任何基础的资源.当对象被 {@code try}-with-resources
+     * 管理时这个方法会自动的执行.
      * <p>
-     * This exception interacts with a thread's interrupted status,
-     * and runtime misbehavior is likely to occur if an {@code
-     * InterruptedException} is {@linkplain Throwable#addSuppressed
-     * suppressed}.
+     * 虽然这个接口方法在定义时抛出 {@code Exception}, 但是<em>强烈</em>建议这个方法的具体实现时
+     * 在{@code close}方法中抛出更多的具体异常,或者不抛出任何异常当关闭操作不会失败的时候.
      * <p>
-     * More generally, if it would cause problems for an
-     * exception to be suppressed, the {@code AutoCloseable.close}
-     * method should not throw it.
-     *
-     * <p>Note that unlike the {@link java.io.Closeable#close close}
-     * method of {@link java.io.Closeable}, this {@code close} method
-     * is <em>not</em> required to be idempotent.  In other words,
-     * calling this {@code close} method more than once may have some
-     * visible side effect, unlike {@code Closeable.close} which is
-     * required to have no effect if called more than once.
+     * 实现者要特别注意关闭操作可能失败的情况. 强烈建议在抛出异常之前,放弃内部底层资源并在
+     * 内部将资源<em>标记</em>为关闭的.{@code close} 方法不太可能被调用很多次,因此这样可以确保资源被及时释放.
+     * 此外,它还减少资源包装(被另一个资源包装)时可能出现的问题.
+     * <p><em>也强烈建议实现该接口的实现者让 {@code close} 方法不抛出 {@link InterruptedException}异常.</em>
      * <p>
-     * However, implementers of this interface are strongly encouraged
-     * to make their {@code close} methods idempotent.
+     * 这个异常与线程的中断状态交互,如果 {@code InterruptedException}被{@linkplain Throwable#addSuppressed(Throwable)}抑制,
+     * 运行时的不当行为很可能发生.
+     * <p>更平常的,如果它会导致问题的异常被抑制,{@code AutoCloseable.close} 方法就不会抛出它.
+     * <p>
+     * 注意,不同于 {@link java.io.Closeable} 的 {@link Closeable#close()} 方法,
+     * 这个 {@code close} 方法<em>不</em>要求是幂等的.换句话说,调用这个{@code close}方法多于一次会出现可见的影响,
+     * 不像{@code Closeable.close} 被要求调用多次时时没有影响的.
+     * <p>
+     * 但是,这个接口的实现都应该保证 {@code close}方法具有幂等性.
      *
-     * @throws Exception if this resource cannot be closed
+     * @throws Exception 如果这个资源无法关闭
      */
     void close() throws Exception;
 }
