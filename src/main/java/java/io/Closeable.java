@@ -1,53 +1,24 @@
-/*
- * Copyright (c) 2003, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
 
 package java.io;
 
-import java.io.IOException;
-
 /**
- * A {@code Closeable} is a source or destination of data that can be closed.
- * The close method is invoked to release resources that the object is
- * holding (such as open files).
+ * 一个{@code Closeable}对象可以关闭数据源或是目标. 当处理资源时可以调用
+ * {@code close}方法关闭,比如处理打开的文件时.
  *
  * @since 1.5
  */
 public interface Closeable extends AutoCloseable {
 
     /**
-     * Closes this stream and releases any system resources associated
-     * with it. If the stream is already closed then invoking this
-     * method has no effect.
+     * 关闭流并且释放系统相关的资源.如果流已经关闭,调用该方法则没有任何效果.
      *
-     * <p> As noted in {@link AutoCloseable#close()}, cases where the
-     * close may fail require careful attention. It is strongly advised
-     * to relinquish the underlying resources and to internally
-     * <em>mark</em> the {@code Closeable} as closed, prior to throwing
-     * the {@code IOException}.
+     * <p> 要注意的是在 {@link AutoCloseable#close()}中, 关闭可能出现失败的情况.
+     * 强烈建议在丢弃基础资源,<em>标记</em> {@code Closeable} 是关闭的时, 优先
+     * 抛出 {@code IOException}.
      *
-     * @throws IOException if an I/O error occurs
+     * <p>即,如果抛出异常则没有完成标记关闭这一动作.
+     *
+     * @throws IOException 如果 I/O 发生错误.
      */
     @Override
     public void close() throws IOException;
