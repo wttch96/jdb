@@ -1,28 +1,3 @@
-/*
- * Copyright (c) 1996, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.io;
 
 /**
@@ -30,29 +5,21 @@ package java.io;
  * 不会有任何序列化和反序列状态。可序列化类的所有子类本身都是可序列化的。
  * 序列化接口没有任何方法和字段，仅用于标示可序列化的语义。</p>
  *
- * To allow subtypes of non-serializable classes to be serialized, the
- * subtype may assume responsibility for saving and restoring the
- * state of the supertype's public, protected, and (if accessible)
- * package fields.  The subtype may assume this responsibility only if
- * the class it extends has an accessible no-arg constructor to
- * initialize the class's state.  It is an error to declare a class
- * Serializable if this is not the case.  The error will be detected at
- * runtime. <p>
+ * 为了允许序列化不可序列化类的子类型,子类型需要自己负责保存和恢复超类数据
+ * 类型的 public, protected 和 (如果可以访问的)包字段. 只有当扩展类具有可
+ * 访问的无参数构造函数来初始化类的状态时,子类型才可以承担此责任.如果不这
+ * 样做,则声明一个颗序列化的类是错误的. 运行时将可能检测到错误.wttch:主要
+ * 是在反序列化的时候会用到,序列化没有无参构造函数并没有发现相关影响.<p>
  *
- * During deserialization, the fields of non-serializable classes will
- * be initialized using the public or protected no-arg constructor of
- * the class.  A no-arg constructor must be accessible to the subclass
- * that is serializable.  The fields of serializable subclasses will
- * be restored from the stream. <p>
+ * 在反序列化期间,将使用该类的public或protected的无参构造函数初始化不可序
+ * 列化类的字段. 无参构造函数必须可被反序列化的子类访问. 可序列化子类的字
+ * 段将从流中恢复.<p>
  *
- * When traversing a graph, an object may be encountered that does not
- * support the Serializable interface. In this case the
- * NotSerializableException will be thrown and will identify the class
- * of the non-serializable object. <p>
+ * 在遍历类依赖的图时,可能会遇到不支持序列化接口的对象.在这种情况下,
+ * NotSerializableException 异常将被抛出.并标识不可序列化对象的类.<p>
  *
- * Classes that require special handling during the serialization and
- * deserialization process must implement special methods with these exact
- * signatures:
+ * 在序列化和反序列化过程中需要特殊处理的类必须实现具有以下确切签名的
+ * 特殊方法:
  *
  * <PRE>
  * private void writeObject(java.io.ObjectOutputStream out)
@@ -63,97 +30,72 @@ package java.io;
  *     throws ObjectStreamException;
  * </PRE>
  *
- * <p>The writeObject method is responsible for writing the state of the
- * object for its particular class so that the corresponding
- * readObject method can restore it.  The default mechanism for saving
- * the Object's fields can be invoked by calling
- * out.defaultWriteObject. The method does not need to concern
- * itself with the state belonging to its superclasses or subclasses.
- * State is saved by writing the individual fields to the
- * ObjectOutputStream using the writeObject method or by using the
- * methods for primitive data types supported by DataOutput.
+ * <p> writeObject 方法负责为其特定的类编写对象的序列化状态,以便响应的利用
+ * readObject 方法能够恢复它. 保存对象字段的默认机制可以通过调用 
+ * out.defaultWriteObject 来序列化. 该方法本身并不需要关心属于其超类或子类
+ * 的状态. 通过使用 writeObject 方法将各个字段写入 ObjectOutputStream, 或者
+ * 使用 DataOutput 支持原始数据类型的方法来保存对象的状态.
  *
- * <p>The readObject method is responsible for reading from the stream and
- * restoring the classes fields. It may call in.defaultReadObject to invoke
- * the default mechanism for restoring the object's non-static and
- * non-transient fields.  The defaultReadObject method uses information in
- * the stream to assign the fields of the object saved in the stream with the
- * correspondingly named fields in the current object.  This handles the case
- * when the class has evolved to add new fields. The method does not need to
- * concern itself with the state belonging to its superclasses or subclasses.
- * State is saved by writing the individual fields to the
- * ObjectOutputStream using the writeObject method or by using the
- * methods for primitive data types supported by DataOutput.
+ * <p> readObject 方法负责从流中读取并恢复类字段. 它默认可以调用 in.defaultReadObject
+ * 来恢复对象的非静态和非瞬态字段. defaultReadObject 方法中使用流中的信息来
+ * 分配保存在流中的对象的字段, 并在当前对象中指定相对应的字段. 当类演化为
+ * 添加新字段时, 这将处理这种情况. 该方法本身不需要关心属于其超类或子类的状态.
+ * 通过使用 writeObject 方法将各个字段写入 ObjectOutputStream, 或者使用 DataOutput 
+ * 写入原始的数据类型来保存状态.
+ *     
+ * <p> 如果序列化流没有将给定的类作为反序列化对象的超类列出, readObjectNoData 方法
+ * 负责为其特定类初始化对象的状态. 当接收方与发送方使用不同的反序列化版本时, 并且
+ * 接收方的版本扩展类发送方版本没有的扩展类时, 可能会发生这种情况. 如果序列化流被
+ * 篡改,也有可能发生这种情况; readObjectNoData 对于正确的初始化反序列化对象非常有用,
+ * 尽管存在"敌对的"或不完整的源流.
  *
- * <p>The readObjectNoData method is responsible for initializing the state of
- * the object for its particular class in the event that the serialization
- * stream does not list the given class as a superclass of the object being
- * deserialized.  This may occur in cases where the receiving party uses a
- * different version of the deserialized instance's class than the sending
- * party, and the receiver's version extends classes that are not extended by
- * the sender's version.  This may also occur if the serialization stream has
- * been tampered; hence, readObjectNoData is useful for initializing
- * deserialized objects properly despite a "hostile" or incomplete source
- * stream.
- *
- * <p>Serializable classes that need to designate an alternative object to be
- * used when writing an object to the stream should implement this
- * special method with the exact signature:
+ * <p>当向流写入对象时, 需要指定要使用的代替对象的可序列化类.
+ * wttch: 这个方法将取代 writeObject 方法执行,也就是说序列化时将使用这个可序列化的
+ * 返回值来代替该对象.
+ * 应当实现这个特殊的方法与精确的签名:
  *
  * <PRE>
  * ANY-ACCESS-MODIFIER Object writeReplace() throws ObjectStreamException;
  * </PRE><p>
  *
- * This writeReplace method is invoked by serialization if the method
- * exists and it would be accessible from a method defined within the
- * class of the object being serialized. Thus, the method can have private,
- * protected and package-private access. Subclass access to this method
- * follows java accessibility rules. <p>
+ * 如果这个方法存在,并且可以从正在序列化的对象的类中定义的方法访问,则通过调用
+ * writeReplace 方法序列化. 因此,该方法可以是 private,protected,package-private.
+ * 对该方法的子类访问遵守 java 颗访问性规则.<p>
  *
- * Classes that need to designate a replacement when an instance of it
- * is read from the stream should implement this special method with the
- * exact signature.
+ * 当从流中读取替换实例时,
+ * wttch: 这个方法在反序列化的时候调用,如果反序列的对象是该类的实例, 最后反序列化
+ * 成的对象将有该方法的返回值来代替. 当然,这个方法可以很好的解决反序列化过程中会
+ * 打破单例的情况,只需让该方法返回单例的 INSTANCE.
+ * 应当实现这个特殊的方法与精确的签名:
  *
  * <PRE>
  * ANY-ACCESS-MODIFIER Object readResolve() throws ObjectStreamException;
  * </PRE><p>
  *
- * This readResolve method follows the same invocation rules and
- * accessibility rules as writeReplace.<p>
+ * 此 readResolve 方法和 writeReplace 方法具有相同的调用规则和可访问性,它们是
+ * 相互的逆操作. <p>
  *
- * The serialization runtime associates with each serializable class a version
- * number, called a serialVersionUID, which is used during deserialization to
- * verify that the sender and receiver of a serialized object have loaded
- * classes for that object that are compatible with respect to serialization.
- * If the receiver has loaded a class for the object that has a different
- * serialVersionUID than that of the corresponding sender's class, then
- * deserialization will result in an {@link InvalidClassException}.  A
- * serializable class can declare its own serialVersionUID explicitly by
- * declaring a field named <code>"serialVersionUID"</code> that must be static,
- * final, and of type <code>long</code>:
+ * 每一个可序列化类在运行时都有一个相关联的版本数字, 称为 serialVersionUID,
+ * 它在反序列化期间使用它来验证序列化对象的发送方和接收方是否为加载该对象
+ * 所兼容的类. 如果接收方为对象加载一个类, 该对象的 serialVersionUID 与对应
+ * 发送方的类不同,反序列化将导致 {@link InvalidClassException} 异常. 可序列化类
+ * 可以显式地声明自己的 <code>"serialVersionUID"</code>, 它必须是静态的, final的,
+ * 类型为 <code>long</code>:
  *
  * <PRE>
  * ANY-ACCESS-MODIFIER static final long serialVersionUID = 42L;
  * </PRE>
  *
- * If a serializable class does not explicitly declare a serialVersionUID, then
- * the serialization runtime will calculate a default serialVersionUID value
- * for that class based on various aspects of the class, as described in the
- * Java(TM) Object Serialization Specification.  However, it is <em>strongly
- * recommended</em> that all serializable classes explicitly declare
- * serialVersionUID values, since the default serialVersionUID computation is
- * highly sensitive to class details that may vary depending on compiler
- * implementations, and can thus result in unexpected
- * <code>InvalidClassException</code>s during deserialization.  Therefore, to
- * guarantee a consistent serialVersionUID value across different java compiler
- * implementations, a serializable class must declare an explicit
- * serialVersionUID value.  It is also strongly advised that explicit
- * serialVersionUID declarations use the <code>private</code> modifier where
- * possible, since such declarations apply only to the immediately declaring
- * class--serialVersionUID fields are not useful as inherited members. Array
- * classes cannot declare an explicit serialVersionUID, so they always have
- * the default computed value, but the requirement for matching
- * serialVersionUID values is waived for array classes.
+ * 如果可序列化类没有显示声明 serialVersionUID, 则序列化运行时将根据该类的各个
+ * 方面计算该类的默认 serialVersionUID 的值, 如Java(TM)对象序列化规范中描述的那样.
+ * 但是,<em>强烈建议</em>所有可序列化类显式的声明 serialVersionUID 的值,因为默认
+ * serialVersionUID 计算对类的细节非常敏感, 类细节可能因为编译器实现的不同而有所不同,
+ * 因此,在反序列化期间可能导致 <code>InvalidClassException</code> 异常.
+ * 因此,为了保证跨不同java编译器实现的 serialVersionUID值一致, serializable 类必须
+ * 显式声明 serialVersionUID 的值. 另外,还强烈建议显式声明的 serialVersionUID 尽可能
+ * 使用 private 修饰符, 以为此类声明只适用当前的类,对其继承成员是没有作用的. 数组类
+ * 不能显式的声明 serialVersionUID 的值, 因此他们始终具有默认的计算值,但是数组类
+ * 放弃了匹配serialVersionUID 的要求.
  *
  * @author  unascribed
  * @see java.io.ObjectOutputStream
