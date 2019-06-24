@@ -1,83 +1,39 @@
-/*
- * Copyright (c) 1994, 2010, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.io;
 
 /**
- * A <code>FilterInputStream</code> contains
- * some other input stream, which it uses as
- * its  basic source of data, possibly transforming
- * the data along the way or providing  additional
- * functionality. The class <code>FilterInputStream</code>
- * itself simply overrides all  methods of
- * <code>InputStream</code> with versions that
- * pass all requests to the contained  input
- * stream. Subclasses of <code>FilterInputStream</code>
- * may further override some of  these methods
- * and may also provide additional methods
- * and fields.
- *
- * @author  Jonathan Payne
- * @since   JDK1.0
+ * 一个 <code>FilterInputStream</code>包含了一个其他的输入流, 它使用这些基本的流作为基本的数据来源, 可能在传输过程中转换
+ * 数据, 或是添加一些额外的功能. <code>FilterInputStream</code>类简单的重写了 <code>InputStream</code> 的所有方法, 其版
+ * 本讲所有的请求传递给包含的输入流. <code>FilterInputStream</code> 的子类可以更多的重写它的方法, 以提供更多的额外功能或
+ * 字段.
  */
 public
 class FilterInputStream extends InputStream {
     /**
-     * The input stream to be filtered.
+     * 要被过滤的输入流.
+     * 原子化操作: 使所有对 in 的赋值立即写入内存生效.
      */
     protected volatile InputStream in;
 
     /**
-     * Creates a <code>FilterInputStream</code>
-     * by assigning the  argument <code>in</code>
-     * to the field <code>this.in</code> so as
-     * to remember it for later use.
+     * 使用指定的参数 <code>in</code> 创建一个 <code>FilterInputStream</code> 对象, 并把它存储在 <code>this.in</code>字
+     * 中记住它以便稍后使用它.
      *
-     * @param   in   the underlying input stream, or <code>null</code> if
-     *          this instance is to be created without an underlying stream.
+     * @param in 基础的输入流, 或者 <code>null</code> 当这个实例没有作为基础的输入流时.
      */
     protected FilterInputStream(InputStream in) {
         this.in = in;
     }
 
     /**
-     * Reads the next byte of data from this input stream. The value
-     * byte is returned as an <code>int</code> in the range
-     * <code>0</code> to <code>255</code>. If no byte is available
-     * because the end of the stream has been reached, the value
-     * <code>-1</code> is returned. This method blocks until input data
-     * is available, the end of the stream is detected, or an exception
-     * is thrown.
+     * 从输入流中读取下一个字节. 字节返回一个 <code>0</code> 到 <code>255</code> 的 <code>int</code> 类型的值. 如果因为
+     * 到达了流的结尾而导致了没有字节可读, 应该返回<code>-1</code>. 此方法阻塞,直到输入数据可用、检测到流的结尾或者抛出
+     * 异常.
      * <p>
-     * This method
-     * simply performs <code>in.read()</code> and returns the result.
+     * 这个方法简单的执行 <code>in.read()</code> 并且返回它的结果.
      *
-     * @return     the next byte of data, or <code>-1</code> if the end of the
-     *             stream is reached.
-     * @exception  IOException  if an I/O error occurs.
-     * @see        java.io.FilterInputStream#in
+     * @return 下一个字节, 或者当流到达结尾时返回 <code>-1</code>
+     * @throws IOException 发生 I/O 错误.
+     * @see java.io.FilterInputStream#in
      */
     @Override
     public int read() throws IOException {
@@ -85,70 +41,55 @@ class FilterInputStream extends InputStream {
     }
 
     /**
-     * Reads up to <code>byte.length</code> bytes of data from this
-     * input stream into an array of bytes. This method blocks until some
-     * input is available.
+     * 从输入流中读取一些字节并将它们保存到缓冲数组 <code>b</code> 中. 此方法阻塞知道输入流中有数据可读.
      * <p>
-     * This method simply performs the call
-     * <code>read(b, 0, b.length)</code> and returns
-     * the  result. It is important that it does
-     * <i>not</i> do <code>in.read(b)</code> instead;
-     * certain subclasses of  <code>FilterInputStream</code>
-     * depend on the implementation strategy actually
-     * used.
+     * 这个方法只是简单的执行调用 <code>read(b, 0, b.length)</code> 并返回它的结果. 重要的一点: 它 <i>不</i> 执行 <code>
+     * in.read(b)</code> 来代替; 实际上 <code>FilterInputStream</code> 的子类主要取决于它子类所使用的实现策略.
      *
-     * @param      b   the buffer into which the data is read.
-     * @return     the total number of bytes read into the buffer, or
-     *             <code>-1</code> if there is no more data because the end of
-     *             the stream has been reached.
-     * @exception  IOException  if an I/O error occurs.
-     * @see        java.io.FilterInputStream#read(byte[], int, int)
+     * @param b 读取到的数据存储的缓冲数组.
+     * @return 读取到的字节长度, 或者<code>-1</code>(如果因为流到达了末端而没有更多的数据)
+     * @throws IOException 发生 I/O 错误.
+     * @see java.io.FilterInputStream#read(byte[], int, int)
      */
     @Override
-    public int read(byte b[]) throws IOException {
+    public int read(byte[] b) throws IOException {
         return read(b, 0, b.length);
     }
 
     /**
-     * Reads up to <code>len</code> bytes of data from this input stream
-     * into an array of bytes. If <code>len</code> is not zero, the method
-     * blocks until some input is available; otherwise, no
-     * bytes are read and <code>0</code> is returned.
+     * 从输入流中读取 <code> len </code>个字节数据保存到一个字节数组中去. 尝试读取 <code> len </code>个字节的数量,
+     * 但是可以读取较小的数字. 实际读取的字节数以整数形式返回.
+     * wttch: 即可读取的字节数并没有 <code> len </code> 那么多.
      * <p>
-     * This method simply performs <code>in.read(b, off, len)</code>
-     * and returns the result.
+     * 这个方法只是简单的调用 <code>in.read(b, off, len)</code> 并返回它的结果.
      *
-     * @param      b     the buffer into which the data is read.
-     * @param      off   the start offset in the destination array <code>b</code>
-     * @param      len   the maximum number of bytes read.
-     * @return     the total number of bytes read into the buffer, or
-     *             <code>-1</code> if there is no more data because the end of
-     *             the stream has been reached.
-     * @exception  NullPointerException If <code>b</code> is <code>null</code>.
-     * @exception  IndexOutOfBoundsException If <code>off</code> is negative,
-     * <code>len</code> is negative, or <code>len</code> is greater than
-     * <code>b.length - off</code>
-     * @exception  IOException  if an I/O error occurs.
-     * @see        java.io.FilterInputStream#in
+     * @param b   字节数据读取到之后缓存的位置.
+     * @param off 数据写入的数组<code> b </code>中的起始偏移量.
+     * @param len 要读取的最大字节数.
+     * @return 读入缓冲区的总字节数, 如果由于已到达流末尾而没有更多数据, 则为<code> -1 </ code>.
+     * @throws IOException               如果由于文件结尾以外的任何原因无法读取第一个字节,
+     *                                   或者输入流已关闭,或者发生其他一些 I/O 错误.
+     * @throws NullPointerException      如果 <code>b</code> 是 <code>null</code>.
+     * @throws IndexOutOfBoundsException 如果 <code>off</code> 是负值, <code>len</code> 是负值, 或者 <code>len</code>
+     *                                   大于 <code>b.length - off</code> .
+     * @see java.io.FilterInputStream#in
      */
     @Override
-    public int read(byte b[], int off, int len) throws IOException {
+    public int read(byte[] b, int off, int len) throws IOException {
         return in.read(b, off, len);
     }
 
     /**
-     * Skips over and discards <code>n</code> bytes of data from the
-     * input stream. The <code>skip</code> method may, for a variety of
-     * reasons, end up skipping over some smaller number of bytes,
-     * possibly <code>0</code>. The actual number of bytes skipped is
-     * returned.
+     * 跳过并丢弃此输入流中的<code> n </code>字节数据. 由于各种原因, <code> skip </code>方法最终可能会跳过一些较小的字节
+     * 数,可能是 <code> 0 </code>. 这可能是由许多条件造成的;在跳过<code> n </code> 字节之前到达文件末尾只有一种可能性.
+     * 返回跳过的实际字节数. 如果{@code n}为负数,则类{@code InputStream}的{@code skip}方法始终返回0, 并且不会跳过任何字
+     * 节. 子类可以不同地处理负值.
      * <p>
-     * This method simply performs <code>in.skip(n)</code>.
+     * 这个方法只是简单的执行 <code>in.skip(n)</code>.
      *
-     * @param      n   the number of bytes to be skipped.
-     * @return     the actual number of bytes skipped.
-     * @exception  IOException  if the stream does not support seek,
-     *                          or if some other I/O error occurs.
+     * @param n 要跳过的字节数
+     * @return 实际上跳过的字节数
+     * @throws IOException 这个流不支持 skip, 或者发生了其他的 I/O 错误.
      */
     @Override
     public long skip(long n) throws IOException {
@@ -156,17 +97,13 @@ class FilterInputStream extends InputStream {
     }
 
     /**
-     * Returns an estimate of the number of bytes that can be read (or
-     * skipped over) from this input stream without blocking by the next
-     * caller of a method for this input stream. The next caller might be
-     * the same thread or another thread.  A single read or skip of this
-     * many bytes will not block, but may read or skip fewer bytes.
+     * 返回可以从此输入流中读取（或跳过）的字节数的估计值, 而不会被下一次调用此输入流的方法阻塞. 下一次调用可能是同一个
+     * 线程或另一个线程. 单个读取或跳过这么多字节不会阻塞, 但可以读取或跳过更少的字节.
      * <p>
-     * This method returns the result of {@link #in in}.available().
+     * 这个方法只是简单的调用 {@link #in in}.available().
      *
-     * @return     an estimate of the number of bytes that can be read (or skipped
-     *             over) from this input stream without blocking.
-     * @exception  IOException  if an I/O error occurs.
+     * @return 估计可以从此输入流中无阻塞地读取（或跳过）的字节数, 或者当到达输入流末尾时{@code 0}.
+     * @throws IOException 如果发生 I/O 错误.
      */
     @Override
     public int available() throws IOException {
@@ -174,13 +111,11 @@ class FilterInputStream extends InputStream {
     }
 
     /**
-     * Closes this input stream and releases any system resources
-     * associated with the stream.
-     * This
-     * method simply performs <code>in.close()</code>.
+     * 关闭这个输入流并且释放任何和这个流相关的系统资源.
+     * 这个方法只是简单的执行 <code>in.close()</code>.
      *
-     * @exception  IOException  if an I/O error occurs.
-     * @see        java.io.FilterInputStream#in
+     * @throws IOException 发生 I/O 错误.
+     * @see java.io.FilterInputStream#in
      */
     @Override
     public void close() throws IOException {
@@ -188,20 +123,17 @@ class FilterInputStream extends InputStream {
     }
 
     /**
-     * Marks the current position in this input stream. A subsequent
-     * call to the <code>reset</code> method repositions this stream at
-     * the last marked position so that subsequent reads re-read the same bytes.
+     * 标记输入流当前的位置, 一个后续的 <code>reset</code> 方法调用将复位这个流到标记的位置, 以便后续读取重新读取相同的
+     * 字节.
      * <p>
-     * The <code>readlimit</code> argument tells this input stream to
-     * allow that many bytes to be read before the mark position gets
-     * invalidated.
+     * <code>readlimit</code> 参数告诉了此输入流允许在标记位置失效之前读取许多字节.
      * <p>
-     * This method simply performs <code>in.mark(readlimit)</code>.
+     * 这个方法只是简单的执行 <code>in.mark(readlimit)</code>方法.
      *
-     * @param   readlimit   the maximum limit of bytes that can be read before
-     *                      the mark position becomes invalid.
-     * @see     java.io.FilterInputStream#in
-     * @see     java.io.FilterInputStream#reset()
+     * @param readlimit the maximum limit of bytes that can be read before
+     *                  the mark position becomes invalid.
+     * @see java.io.FilterInputStream#in
+     * @see java.io.FilterInputStream#reset()
      */
     @Override
     public synchronized void mark(int readlimit) {
@@ -209,25 +141,18 @@ class FilterInputStream extends InputStream {
     }
 
     /**
-     * Repositions this stream to the position at the time the
-     * <code>mark</code> method was last called on this input stream.
+     * 复位这个流到上次调用 <code>mark</code> 方法时当时这个输入流的位置.
      * <p>
-     * This method
-     * simply performs <code>in.reset()</code>.
+     * 这个方法只是简单的执行 <code>in.reset()</code>.
      * <p>
-     * Stream marks are intended to be used in
-     * situations where you need to read ahead a little to see what's in
-     * the stream. Often this is most easily done by invoking some
-     * general parser. If the stream is of the type handled by the
-     * parse, it just chugs along happily. If the stream is not of
-     * that type, the parser should toss an exception when it fails.
-     * If this happens within readlimit bytes, it allows the outer
-     * code to reset the stream and try another parser.
+     * 流标记用于需要提前阅读以查看流中的内容的情况. 通常, 这最容易通过调用一些通用解析器来实现. 如果流是解析所处理的类
+     * 型, 那么它就会很愉快地继续工作. 如果流不是这种类型的, 则解析器应该在流失败时抛出异常. 如果这发生在
+     * <code>readlimit</code>字节内, 则允许外部代码重置流并尝试另一个解析器.
      *
-     * @exception  IOException  if the stream has not been marked or if the
-     *               mark has been invalidated.
-     * @see        java.io.FilterInputStream#in
-     * @see        java.io.FilterInputStream#mark(int)
+     * @throws IOException 如果这个流不可被标记或者标记无效了. wttch: 无效可能是读取的字节数已经超过了 readlimit 的
+     *                     限制, 此时以无法通过 <code>reset</code> 方法恢复流的状态了.
+     * @see java.io.FilterInputStream#in
+     * @see java.io.FilterInputStream#mark(int)
      */
     @Override
     public synchronized void reset() throws IOException {
@@ -235,17 +160,13 @@ class FilterInputStream extends InputStream {
     }
 
     /**
-     * Tests if this input stream supports the <code>mark</code>
-     * and <code>reset</code> methods.
-     * This method
-     * simply performs <code>in.markSupported()</code>.
+     * 测试输入流是否支持 <code>mark</code>和 <code>reset</code> 方法. 这个方法只是简单的执行
+     * <code>in.markSupported()</code>.
      *
-     * @return  <code>true</code> if this stream type supports the
-     *          <code>mark</code> and <code>reset</code> method;
-     *          <code>false</code> otherwise.
-     * @see     java.io.FilterInputStream#in
-     * @see     java.io.InputStream#mark(int)
-     * @see     java.io.InputStream#reset()
+     * @return <code>true</code> 如果这个流支持 <code>mark</code> 和 <code>reset</code> 方法; 否则 <code>false</code>.
+     * @see java.io.FilterInputStream#in
+     * @see java.io.InputStream#mark(int)
+     * @see java.io.InputStream#reset()
      */
     @Override
     public boolean markSupported() {
