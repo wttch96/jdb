@@ -1,47 +1,20 @@
-/*
- * Copyright (c) 2003, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang.annotation;
 
 /**
- * Indicates the contexts in which an annotation type is applicable. The
- * declaration contexts and type contexts in which an annotation type may be
- * applicable are specified in JLS 9.6.4.1, and denoted in source code by enum
- * constants of {@link ElementType java.lang.annotation.ElementType}.
+ * 指示注解类型适用的上下文. 在 JLS 9.6.4.1 中指定了可以应用注解类型的声明上下文
+ * 和类型上下文, 并在源代码中用 {@link ElementType java.lang.annotation.ElementType}
+ * 的枚举常量表示.
  *
- * <p>If an {@code @Target} meta-annotation is not present on an annotation type
- * {@code T} , then an annotation of type {@code T} may be written as a
- * modifier for any declaration except a type parameter declaration.
+ * <p>如果注解类型 {@code T} 上不存在 {@code @Target} 元注解,
+ * 则可以将类型为 {@code T} 的注解写为除类型参数声明之外的
+ * 任何声明的修饰符.
  *
- * <p>If an {@code @Target} meta-annotation is present, the compiler will enforce
- * the usage restrictions indicated by {@code ElementType}
- * enum constants, in line with JLS 9.7.4.
+ * <p>如果存在 {@code @Target} 元注解, 编译器将根据
+ * JLS 9.7.4强制执行 {@code ElementType} 枚举常量指示的使用限制.
+ * 如果不正确使用, 将会出现编译错误.
  *
- * <p>For example, this {@code @Target} meta-annotation indicates that the
- * declared type is itself a meta-annotation type.  It can only be used on
- * annotation type declarations:
+ * <p>例如, 这个 {@code @Target} 元注解表明声明的类型本身就是元注解类型.
+ * 它只能用于注解类型声明:
  * <pre>
  *    &#064;Target(ElementType.ANNOTATION_TYPE)
  *    public &#064;interface MetaAnnotationType {
@@ -49,9 +22,8 @@ package java.lang.annotation;
  *    }
  * </pre>
  *
- * <p>This {@code @Target} meta-annotation indicates that the declared type is
- * intended solely for use as a member type in complex annotation type
- * declarations.  It cannot be used to annotate anything directly:
+ * <p>此{@code @Target}元注解表示声明类型仅用作复杂注解类型声明中的成员类型.
+ * 它不能直接注释任何东西:
  * <pre>
  *    &#064;Target({})
  *    public &#064;interface MemberType {
@@ -59,9 +31,8 @@ package java.lang.annotation;
  *    }
  * </pre>
  *
- * <p>It is a compile-time error for a single {@code ElementType} constant to
- * appear more than once in an {@code @Target} annotation.  For example, the
- * following {@code @Target} meta-annotation is illegal:
+ * <p>单个{@code ElementType}常量在{@code @Target}注解中出现多次是一个编译时错误.
+ * 例如, 以下{@code @Target} 元注解是非法的:
  * <pre>
  *    &#064;Target({ElementType.FIELD, ElementType.METHOD, ElementType.FIELD})
  *    public &#064;interface Bogus {
@@ -78,11 +49,9 @@ package java.lang.annotation;
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface Target {
     /**
-     * Returns an array of the kinds of elements an annotation type
-     * can be applied to.
+     * 返回可以应用注解类型的元素种类的数组.
      *
-     * @return an array of the kinds of elements an annotation type
-     * can be applied to
+     * @return 可以应用注解类型的元素种类的数组
      */
     ElementType[] value();
 }
