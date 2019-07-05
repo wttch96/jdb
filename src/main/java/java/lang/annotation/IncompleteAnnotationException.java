@@ -1,38 +1,9 @@
-/*
- * Copyright (c) 2003, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang.annotation;
 
 /**
- * Thrown to indicate that a program has attempted to access an element of
- * an annotation type that was added to the annotation type definition after
- * the annotation was compiled (or serialized).  This exception will not be
- * thrown if the new element has a default value.
- * This exception can be thrown by the {@linkplain
- * java.lang.reflect.AnnotatedElement API used to read annotations
- * reflectively}.
+ * 抛出以指示程序在尝试访问一个编译(或序列化)之后添加到注解类型声明
+ * 的注解类型元素. {@linkplain java.lang.reflect.AnnotatedElement
+ * API 通过反射用来读取注解}会抛出此异常.
  *
  * @author Josh Bloch
  * @see java.lang.reflect.AnnotatedElement
@@ -45,38 +16,35 @@ public class IncompleteAnnotationException extends RuntimeException {
     private String elementName;
 
     /**
-     * Constructs an IncompleteAnnotationException to indicate that
-     * the named element was missing from the specified annotation type.
+     * 构造一个 IncompleteAnnotationException 以指示指定的注释类型中缺少指定的元素.
      *
-     * @param annotationType the Class object for the annotation type
-     * @param elementName    the name of the missing element
-     * @throws NullPointerException if either parameter is {@code null}
+     * @param annotationType 注释类型的Class对象
+     * @param elementName    缺失元素的名字
+     * @throws NullPointerException 任一参数为 {@code null}
      */
     public IncompleteAnnotationException(
             Class<? extends Annotation> annotationType,
             String elementName) {
         super(annotationType.getName() + " missing element " +
-                elementName.toString());
+                elementName);
 
         this.annotationType = annotationType;
         this.elementName = elementName;
     }
 
     /**
-     * Returns the Class object for the annotation type with the
-     * missing element.
+     * 返回具有缺少元素的注释类型的Class对象.
      *
-     * @return the Class object for the annotation type with the
-     * missing element
+     * @return 具有缺少元素的注释类型的Class对象
      */
     public Class<? extends Annotation> annotationType() {
         return annotationType;
     }
 
     /**
-     * Returns the name of the missing element.
+     * 返回缺失元素的名字.
      *
-     * @return the name of the missing element
+     * @return 缺失元素的名字
      */
     public String elementName() {
         return elementName;
