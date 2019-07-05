@@ -1,50 +1,24 @@
-/*
- * Copyright (c) 1997, 2003, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang.ref;
 
 
 /**
- * Phantom reference objects, which are enqueued after the collector
- * determines that their referents may otherwise be reclaimed.  Phantom
- * references are most often used for scheduling pre-mortem cleanup actions in
- * a more flexible way than is possible with the Java finalization mechanism.
+ * 虚引用对象, 在收集者确定他们的指示物可能以其他方式被收回之后排队.
+ * 虚引用最常用于以比 Java 终结机制更灵活的方式调度预先清理操作.
  *
- * <p> If the garbage collector determines at a certain point in time that the
- * referent of a phantom reference is <a
- * href="package-summary.html#reachability">phantom reachable</a>, then at that
- * time or at some later time it will enqueue the reference.
+ * <p> 如果垃圾收集器在某个时间点确定虚引用的引用是
+ * <a href="package-summary.html#reachability">phantom 可达</a>,
+ * 那么在那时或稍后它将入队引用.
  *
- * <p> In order to ensure that a reclaimable object remains so, the referent of
- * a phantom reference may not be retrieved: The <code>get</code> method of a
- * phantom reference always returns <code>null</code>.
+ * <p> 为了确保可回收对象保持不变, 可能无法检索虚引用的引用;
+ * 虚引用的 <code>get</code> 方法始终返回 <code>null</code>.
  *
- * <p> Unlike soft and weak references, phantom references are not
- * automatically cleared by the garbage collector as they are enqueued.  An
- * object that is reachable via phantom references will remain so until all
- * such references are cleared or themselves become unreachable.
+ * <p> 与软引用和弱引用不同, 垃圾收集器在排队时不会自动清除虚引用.
+ * 通过虚引用可访问的对象将保持不变, 直到所有此类引用都被清除或自身无法访问.
+ * <p>
+ * 虚引用 (PhantomReference), 这是一个最虚幻的引用类型.无论是从哪里都无法
+ * 再次返回被虚引用所引用的对象. 虚引用在系统垃圾回收器开始回收对象时,
+ * 将直接调用 finalize() 方法, 但不会立即将其加入回收队列. 只有在真正
+ * 对象被 GC 清除时, 才会将其加入 Reference 队列中去.
  *
  * @author Mark Reinhold
  * @since 1.2
@@ -53,9 +27,8 @@ package java.lang.ref;
 public class PhantomReference<T> extends Reference<T> {
 
     /**
-     * Returns this reference object's referent.  Because the referent of a
-     * phantom reference is always inaccessible, this method always returns
-     * <code>null</code>.
+     * 返回此引用对象的引用对象. 由于虚引用的引用始终不可访问,
+     * 因此此方法始终返回 <code>null</code>.
      *
      * @return <code>null</code>
      */
@@ -64,17 +37,13 @@ public class PhantomReference<T> extends Reference<T> {
     }
 
     /**
-     * Creates a new phantom reference that refers to the given object and
-     * is registered with the given queue.
+     * 使用给定的引用对象和引用队列创建一个虚引用.
      *
-     * <p> It is possible to create a phantom reference with a <tt>null</tt>
-     * queue, but such a reference is completely useless: Its <tt>get</tt>
-     * method will always return null and, since it does not have a queue, it
-     * will never be enqueued.
+     * <p>可以使用 <tt>null</tt>队列创建一个虚引用, 但这样的引用完全没用：
+     * 它的 <tt>get</tt>方法将始终返回 null，因为它没有队列，它永远不会排队.
      *
-     * @param referent the object the new phantom reference will refer to
-     * @param q        the queue with which the reference is to be registered,
-     *                 or <tt>null</tt> if registration is not required
+     * @param referent 新虚引用将引用的对象
+     * @param q        要注册引用的队列, 如果不需要注册, 则 <tt>null</tt>
      */
     public PhantomReference(T referent, ReferenceQueue<? super T> q) {
         super(referent, q);
