@@ -1,50 +1,19 @@
-/*
- * Copyright (c) 2003, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang.annotation;
 
 /**
- * Indicates that an annotation type is automatically inherited.  If
- * an Inherited meta-annotation is present on an annotation type
- * declaration, and the user queries the annotation type on a class
- * declaration, and the class declaration has no annotation for this type,
- * then the class's superclass will automatically be queried for the
- * annotation type.  This process will be repeated until an annotation for this
- * type is found, or the top of the class hierarchy (Object)
- * is reached.  If no superclass has an annotation for this type, then
- * the query will indicate that the class in question has no such annotation.
+ * 标示自动继承注解类型. 如果注解类型声明中存在 Inherited 元注解,
+ * 并且用户在类声明上查询注解类型, 并且类声明没有此类型的注解,
+ * 则将自动查询类的超类以获取注解类型. 将重复此过程, 直到找到此
+ * 类型的注解, 或者到达类层次结构(对象)的顶部. 如果没有超类具有
+ * 此类型的注解, 则查询将标示相关类没有此类注解.
  *
- * <p>Note that this meta-annotation type has no effect if the annotated
- * type is used to annotate anything other than a class.  Note also
- * that this meta-annotation only causes annotations to be inherited
- * from superclasses; annotations on implemented interfaces have no
- * effect.
+ * <p>请注意, 如果使用带注解的类型来注释除类以外的任何内容, 则
+ * 元注解类型不起作用. 另请注意, 此元注解仅导致注解从超类继承;
+ * 已实现接口上的注解无效.
  *
- * @author  Joshua Bloch
- * @since 1.5
+ * @author Joshua Bloch
  * @jls 9.6.3.3 @Inherited
+ * @since 1.5
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
