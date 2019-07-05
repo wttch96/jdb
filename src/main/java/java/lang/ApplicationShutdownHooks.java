@@ -37,15 +37,16 @@ import java.util.*;
 class ApplicationShutdownHooks {
     /* The set of registered hooks */
     private static IdentityHashMap<Thread, Thread> hooks;
+
     static {
         try {
             Shutdown.add(1 /* shutdown hook invocation order */,
-                false /* not registered if shutdown in progress */,
-                new Runnable() {
-                    public void run() {
-                        runHooks();
+                    false /* not registered if shutdown in progress */,
+                    new Runnable() {
+                        public void run() {
+                            runHooks();
+                        }
                     }
-                }
             );
             hooks = new IdentityHashMap<>();
         } catch (IllegalStateException e) {
@@ -56,13 +57,14 @@ class ApplicationShutdownHooks {
     }
 
 
-    private ApplicationShutdownHooks() {}
+    private ApplicationShutdownHooks() {
+    }
 
     /* Add a new shutdown hook.  Checks the shutdown state and the hook itself,
      * but does not do any security checks.
      */
     static synchronized void add(Thread hook) {
-        if(hooks == null)
+        if (hooks == null)
             throw new IllegalStateException("Shutdown in progress");
 
         if (hook.isAlive())
@@ -78,7 +80,7 @@ class ApplicationShutdownHooks {
      * does not do any security checks.
      */
     static synchronized boolean remove(Thread hook) {
-        if(hooks == null)
+        if (hooks == null)
             throw new IllegalStateException("Shutdown in progress");
 
         if (hook == null)
@@ -93,7 +95,7 @@ class ApplicationShutdownHooks {
      */
     static void runHooks() {
         Collection<Thread> threads;
-        synchronized(ApplicationShutdownHooks.class) {
+        synchronized (ApplicationShutdownHooks.class) {
             threads = hooks.keySet();
             hooks = null;
         }

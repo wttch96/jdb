@@ -35,8 +35,8 @@ package java.lang;
  * executing class was compiled, but the definition can no longer be
  * found.
  *
- * @author  unascribed
- * @since   JDK1.0
+ * @author unascribed
+ * @since JDK1.0
  */
 public
 class NoClassDefFoundError extends LinkageError {
@@ -53,7 +53,7 @@ class NoClassDefFoundError extends LinkageError {
      * Constructs a <code>NoClassDefFoundError</code> with the specified
      * detail message.
      *
-     * @param   s   the detail message.
+     * @param s the detail message.
      */
     public NoClassDefFoundError(String s) {
         super(s);

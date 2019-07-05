@@ -30,8 +30,8 @@ package java.lang;
  * reference to the {@code Class} object representing the Java keyword
  * void.
  *
- * @author  unascribed
- * @since   JDK1.1
+ * @author unascribed
+ * @since JDK1.1
  */
 public final
 class Void {
@@ -46,5 +46,6 @@ class Void {
     /*
      * The Void class cannot be instantiated.
      */
-    private Void() {}
+    private Void() {
+    }
 }

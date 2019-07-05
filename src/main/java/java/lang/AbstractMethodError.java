@@ -32,8 +32,8 @@ package java.lang;
  * incompatibly changed since the currently executing method was last
  * compiled.
  *
- * @author  unascribed
- * @since   JDK1.0
+ * @author unascribed
+ * @since JDK1.0
  */
 public
 class AbstractMethodError extends IncompatibleClassChangeError {
@@ -50,7 +50,7 @@ class AbstractMethodError extends IncompatibleClassChangeError {
      * Constructs an <code>AbstractMethodError</code> with the specified
      * detail message.
      *
-     * @param   s   the detail message.
+     * @param s the detail message.
      */
     public AbstractMethodError(String s) {
         super(s);

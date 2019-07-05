@@ -29,8 +29,8 @@ package java.lang;
  * Thrown to indicate that a method has been passed an illegal or
  * inappropriate argument.
  *
- * @author  unascribed
- * @since   JDK1.0
+ * @author unascribed
+ * @since JDK1.0
  */
 public
 class IllegalArgumentException extends RuntimeException {
@@ -46,7 +46,7 @@ class IllegalArgumentException extends RuntimeException {
      * Constructs an <code>IllegalArgumentException</code> with the
      * specified detail message.
      *
-     * @param   s   the detail message.
+     * @param s the detail message.
      */
     public IllegalArgumentException(String s) {
         super(s);
@@ -60,12 +60,12 @@ class IllegalArgumentException extends RuntimeException {
      * <i>not</i> automatically incorporated in this exception's detail
      * message.
      *
-     * @param  message the detail message (which is saved for later retrieval
-     *         by the {@link Throwable#getMessage()} method).
-     * @param  cause the cause (which is saved for later retrieval by the
-     *         {@link Throwable#getCause()} method).  (A <tt>null</tt> value
-     *         is permitted, and indicates that the cause is nonexistent or
-     *         unknown.)
+     * @param message the detail message (which is saved for later retrieval
+     *                by the {@link Throwable#getMessage()} method).
+     * @param cause   the cause (which is saved for later retrieval by the
+     *                {@link Throwable#getCause()} method).  (A <tt>null</tt> value
+     *                is permitted, and indicates that the cause is nonexistent or
+     *                unknown.)
      * @since 1.5
      */
     public IllegalArgumentException(String message, Throwable cause) {
@@ -80,11 +80,11 @@ class IllegalArgumentException extends RuntimeException {
      * wrappers for other throwables (for example, {@link
      * java.security.PrivilegedActionException}).
      *
-     * @param  cause the cause (which is saved for later retrieval by the
-     *         {@link Throwable#getCause()} method).  (A <tt>null</tt> value is
-     *         permitted, and indicates that the cause is nonexistent or
-     *         unknown.)
-     * @since  1.5
+     * @param cause the cause (which is saved for later retrieval by the
+     *              {@link Throwable#getCause()} method).  (A <tt>null</tt> value is
+     *              permitted, and indicates that the cause is nonexistent or
+     *              unknown.)
+     * @since 1.5
      */
     public IllegalArgumentException(Throwable cause) {
         super(cause);

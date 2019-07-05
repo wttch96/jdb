@@ -30,9 +30,9 @@ package java.lang;
  * a string to one of the numeric types, but that the string does not
  * have the appropriate format.
  *
- * @author  unascribed
- * @see     java.lang.Integer#parseInt(String)
- * @since   JDK1.0
+ * @author unascribed
+ * @see java.lang.Integer#parseInt(String)
+ * @since JDK1.0
  */
 public
 class NumberFormatException extends IllegalArgumentException {
@@ -41,7 +41,7 @@ class NumberFormatException extends IllegalArgumentException {
     /**
      * Constructs a <code>NumberFormatException</code> with no detail message.
      */
-    public NumberFormatException () {
+    public NumberFormatException() {
         super();
     }
 
@@ -49,17 +49,17 @@ class NumberFormatException extends IllegalArgumentException {
      * Constructs a <code>NumberFormatException</code> with the
      * specified detail message.
      *
-     * @param   s   the detail message.
+     * @param s the detail message.
      */
-    public NumberFormatException (String s) {
-        super (s);
+    public NumberFormatException(String s) {
+        super(s);
     }
 
     /**
      * Factory method for making a <code>NumberFormatException</code>
      * given the specified input which caused the error.
      *
-     * @param   s   the input causing the error
+     * @param s the input causing the error
      */
     static NumberFormatException forInputString(String s) {
         return new NumberFormatException("For input string: \"" + s + "\"");

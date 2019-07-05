@@ -27,13 +27,13 @@ package java.lang;
 
 /**
  * Thrown to indicate that the requested operation is not supported.<p>
- *
+ * <p>
  * This class is a member of the
  * <a href="{@docRoot}/../technotes/guides/collections/index.html">
  * Java Collections Framework</a>.
  *
- * @author  Josh Bloch
- * @since   1.2
+ * @author Josh Bloch
+ * @since 1.2
  */
 public class UnsupportedOperationException extends RuntimeException {
     /**
@@ -60,12 +60,12 @@ public class UnsupportedOperationException extends RuntimeException {
      * <i>not</i> automatically incorporated in this exception's detail
      * message.
      *
-     * @param  message the detail message (which is saved for later retrieval
-     *         by the {@link Throwable#getMessage()} method).
-     * @param  cause the cause (which is saved for later retrieval by the
-     *         {@link Throwable#getCause()} method).  (A <tt>null</tt> value
-     *         is permitted, and indicates that the cause is nonexistent or
-     *         unknown.)
+     * @param message the detail message (which is saved for later retrieval
+     *                by the {@link Throwable#getMessage()} method).
+     * @param cause   the cause (which is saved for later retrieval by the
+     *                {@link Throwable#getCause()} method).  (A <tt>null</tt> value
+     *                is permitted, and indicates that the cause is nonexistent or
+     *                unknown.)
      * @since 1.5
      */
     public UnsupportedOperationException(String message, Throwable cause) {
@@ -80,11 +80,11 @@ public class UnsupportedOperationException extends RuntimeException {
      * wrappers for other throwables (for example, {@link
      * java.security.PrivilegedActionException}).
      *
-     * @param  cause the cause (which is saved for later retrieval by the
-     *         {@link Throwable#getCause()} method).  (A <tt>null</tt> value is
-     *         permitted, and indicates that the cause is nonexistent or
-     *         unknown.)
-     * @since  1.5
+     * @param cause the cause (which is saved for later retrieval by the
+     *              {@link Throwable#getCause()} method).  (A <tt>null</tt> value is
+     *              permitted, and indicates that the cause is nonexistent or
+     *              unknown.)
+     * @since 1.5
      */
     public UnsupportedOperationException(Throwable cause) {
         super(cause);

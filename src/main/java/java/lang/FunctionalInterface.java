@@ -31,7 +31,7 @@ import java.lang.annotation.*;
  * An informative annotation type used to indicate that an interface
  * type declaration is intended to be a <i>functional interface</i> as
  * defined by the Java Language Specification.
- *
+ * <p>
  * Conceptually, a functional interface has exactly one abstract
  * method.  Since {@linkplain java.lang.reflect.Method#isDefault()
  * default methods} have an implementation, they are not abstract.  If
@@ -65,4 +65,5 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface FunctionalInterface {}
+public @interface FunctionalInterface {
+}

@@ -30,7 +30,7 @@ package java.lang;
  * file and determines that the major and minor version numbers
  * in the file are not supported.
  *
- * @since   1.2
+ * @since 1.2
  */
 public
 class UnsupportedClassVersionError extends ClassFormatError {
@@ -48,7 +48,7 @@ class UnsupportedClassVersionError extends ClassFormatError {
      * Constructs a <code>UnsupportedClassVersionError</code> with
      * the specified detail message.
      *
-     * @param   s   the detail message.
+     * @param s the detail message.
      */
     public UnsupportedClassVersionError(String s) {
         super(s);

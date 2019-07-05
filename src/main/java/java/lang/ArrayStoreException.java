@@ -34,8 +34,8 @@ package java.lang;
  *     x[0] = new Integer(0);
  * </pre></blockquote>
  *
- * @author  unascribed
- * @since   JDK1.0
+ * @author unascribed
+ * @since JDK1.0
  */
 public
 class ArrayStoreException extends RuntimeException {
@@ -52,7 +52,7 @@ class ArrayStoreException extends RuntimeException {
      * Constructs an <code>ArrayStoreException</code> with the specified
      * detail message.
      *
-     * @param   s   the detail message.
+     * @param s the detail message.
      */
     public ArrayStoreException(String s) {
         super(s);

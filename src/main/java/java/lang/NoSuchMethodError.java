@@ -34,8 +34,8 @@ package java.lang;
  * only occur at run time if the definition of a class has
  * incompatibly changed.
  *
- * @author  unascribed
- * @since   JDK1.0
+ * @author unascribed
+ * @since JDK1.0
  */
 public
 class NoSuchMethodError extends IncompatibleClassChangeError {
@@ -52,7 +52,7 @@ class NoSuchMethodError extends IncompatibleClassChangeError {
      * Constructs a <code>NoSuchMethodError</code> with the
      * specified detail message.
      *
-     * @param   s   the detail message.
+     * @param s the detail message.
      */
     public NoSuchMethodError(String s) {
         super(s);

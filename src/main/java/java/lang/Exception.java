@@ -37,10 +37,10 @@ package java.lang;
  * by the execution of the method or constructor and propagate outside
  * the method or constructor boundary.
  *
- * @author  Frank Yellin
- * @see     java.lang.Error
+ * @author Frank Yellin
  * @jls 11.2 Compile-Time Checking of Exceptions
- * @since   JDK1.0
+ * @see java.lang.Error
+ * @since JDK1.0
  */
 public class Exception extends Throwable {
     static final long serialVersionUID = -3387516993124229948L;
@@ -59,8 +59,8 @@ public class Exception extends Throwable {
      * cause is not initialized, and may subsequently be initialized by
      * a call to {@link #initCause}.
      *
-     * @param   message   the detail message. The detail message is saved for
-     *          later retrieval by the {@link #getMessage()} method.
+     * @param message the detail message. The detail message is saved for
+     *                later retrieval by the {@link #getMessage()} method.
      */
     public Exception(String message) {
         super(message);
@@ -72,13 +72,13 @@ public class Exception extends Throwable {
      * {@code cause} is <i>not</i> automatically incorporated in
      * this exception's detail message.
      *
-     * @param  message the detail message (which is saved for later retrieval
-     *         by the {@link #getMessage()} method).
-     * @param  cause the cause (which is saved for later retrieval by the
-     *         {@link #getCause()} method).  (A <tt>null</tt> value is
-     *         permitted, and indicates that the cause is nonexistent or
-     *         unknown.)
-     * @since  1.4
+     * @param message the detail message (which is saved for later retrieval
+     *                by the {@link #getMessage()} method).
+     * @param cause   the cause (which is saved for later retrieval by the
+     *                {@link #getCause()} method).  (A <tt>null</tt> value is
+     *                permitted, and indicates that the cause is nonexistent or
+     *                unknown.)
+     * @since 1.4
      */
     public Exception(String message, Throwable cause) {
         super(message, cause);
@@ -92,11 +92,11 @@ public class Exception extends Throwable {
      * wrappers for other throwables (for example, {@link
      * java.security.PrivilegedActionException}).
      *
-     * @param  cause the cause (which is saved for later retrieval by the
-     *         {@link #getCause()} method).  (A <tt>null</tt> value is
-     *         permitted, and indicates that the cause is nonexistent or
-     *         unknown.)
-     * @since  1.4
+     * @param cause the cause (which is saved for later retrieval by the
+     *              {@link #getCause()} method).  (A <tt>null</tt> value is
+     *              permitted, and indicates that the cause is nonexistent or
+     *              unknown.)
+     * @since 1.4
      */
     public Exception(Throwable cause) {
         super(cause);
@@ -107,11 +107,11 @@ public class Exception extends Throwable {
      * cause, suppression enabled or disabled, and writable stack
      * trace enabled or disabled.
      *
-     * @param  message the detail message.
-     * @param cause the cause.  (A {@code null} value is permitted,
-     * and indicates that the cause is nonexistent or unknown.)
-     * @param enableSuppression whether or not suppression is enabled
-     *                          or disabled
+     * @param message            the detail message.
+     * @param cause              the cause.  (A {@code null} value is permitted,
+     *                           and indicates that the cause is nonexistent or unknown.)
+     * @param enableSuppression  whether or not suppression is enabled
+     *                           or disabled
      * @param writableStackTrace whether or not the stack trace should
      *                           be writable
      * @since 1.7

@@ -41,8 +41,8 @@ import java.lang.annotation.*;
  * any public method declared in {@linkplain Object}.
  * </li></ul>
  *
- * @author  Peter von der Ah&eacute;
- * @author  Joshua Bloch
+ * @author Peter von der Ah&eacute;
+ * @author Joshua Bloch
  * @jls 9.6.1.4 @Override
  * @since 1.5
  */

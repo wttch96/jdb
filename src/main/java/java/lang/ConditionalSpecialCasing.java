@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Locale;
+
 import sun.text.Normalizer;
 
 
@@ -47,52 +48,53 @@ import sun.text.Normalizer;
 final class ConditionalSpecialCasing {
 
     // context conditions.
-    final static int FINAL_CASED =              1;
-    final static int AFTER_SOFT_DOTTED =        2;
-    final static int MORE_ABOVE =               3;
-    final static int AFTER_I =                  4;
-    final static int NOT_BEFORE_DOT =           5;
+    final static int FINAL_CASED = 1;
+    final static int AFTER_SOFT_DOTTED = 2;
+    final static int MORE_ABOVE = 3;
+    final static int AFTER_I = 4;
+    final static int NOT_BEFORE_DOT = 5;
 
     // combining class definitions
     final static int COMBINING_CLASS_ABOVE = 230;
 
     // Special case mapping entries
     static Entry[] entry = {
-        //# ================================================================================
-        //# Conditional mappings
-        //# ================================================================================
-        new Entry(0x03A3, new char[]{0x03C2}, new char[]{0x03A3}, null, FINAL_CASED), // # GREEK CAPITAL LETTER SIGMA
-        new Entry(0x0130, new char[]{0x0069, 0x0307}, new char[]{0x0130}, null, 0), // # LATIN CAPITAL LETTER I WITH DOT ABOVE
+            //# ================================================================================
+            //# Conditional mappings
+            //# ================================================================================
+            new Entry(0x03A3, new char[]{0x03C2}, new char[]{0x03A3}, null, FINAL_CASED), // # GREEK CAPITAL LETTER SIGMA
+            new Entry(0x0130, new char[]{0x0069, 0x0307}, new char[]{0x0130}, null, 0), // # LATIN CAPITAL LETTER I WITH DOT ABOVE
 
-        //# ================================================================================
-        //# Locale-sensitive mappings
-        //# ================================================================================
-        //# Lithuanian
-        new Entry(0x0307, new char[]{0x0307}, new char[]{}, "lt",  AFTER_SOFT_DOTTED), // # COMBINING DOT ABOVE
-        new Entry(0x0049, new char[]{0x0069, 0x0307}, new char[]{0x0049}, "lt", MORE_ABOVE), // # LATIN CAPITAL LETTER I
-        new Entry(0x004A, new char[]{0x006A, 0x0307}, new char[]{0x004A}, "lt", MORE_ABOVE), // # LATIN CAPITAL LETTER J
-        new Entry(0x012E, new char[]{0x012F, 0x0307}, new char[]{0x012E}, "lt", MORE_ABOVE), // # LATIN CAPITAL LETTER I WITH OGONEK
-        new Entry(0x00CC, new char[]{0x0069, 0x0307, 0x0300}, new char[]{0x00CC}, "lt", 0), // # LATIN CAPITAL LETTER I WITH GRAVE
-        new Entry(0x00CD, new char[]{0x0069, 0x0307, 0x0301}, new char[]{0x00CD}, "lt", 0), // # LATIN CAPITAL LETTER I WITH ACUTE
-        new Entry(0x0128, new char[]{0x0069, 0x0307, 0x0303}, new char[]{0x0128}, "lt", 0), // # LATIN CAPITAL LETTER I WITH TILDE
+            //# ================================================================================
+            //# Locale-sensitive mappings
+            //# ================================================================================
+            //# Lithuanian
+            new Entry(0x0307, new char[]{0x0307}, new char[]{}, "lt", AFTER_SOFT_DOTTED), // # COMBINING DOT ABOVE
+            new Entry(0x0049, new char[]{0x0069, 0x0307}, new char[]{0x0049}, "lt", MORE_ABOVE), // # LATIN CAPITAL LETTER I
+            new Entry(0x004A, new char[]{0x006A, 0x0307}, new char[]{0x004A}, "lt", MORE_ABOVE), // # LATIN CAPITAL LETTER J
+            new Entry(0x012E, new char[]{0x012F, 0x0307}, new char[]{0x012E}, "lt", MORE_ABOVE), // # LATIN CAPITAL LETTER I WITH OGONEK
+            new Entry(0x00CC, new char[]{0x0069, 0x0307, 0x0300}, new char[]{0x00CC}, "lt", 0), // # LATIN CAPITAL LETTER I WITH GRAVE
+            new Entry(0x00CD, new char[]{0x0069, 0x0307, 0x0301}, new char[]{0x00CD}, "lt", 0), // # LATIN CAPITAL LETTER I WITH ACUTE
+            new Entry(0x0128, new char[]{0x0069, 0x0307, 0x0303}, new char[]{0x0128}, "lt", 0), // # LATIN CAPITAL LETTER I WITH TILDE
 
-        //# ================================================================================
-        //# Turkish and Azeri
-        new Entry(0x0130, new char[]{0x0069}, new char[]{0x0130}, "tr", 0), // # LATIN CAPITAL LETTER I WITH DOT ABOVE
-        new Entry(0x0130, new char[]{0x0069}, new char[]{0x0130}, "az", 0), // # LATIN CAPITAL LETTER I WITH DOT ABOVE
-        new Entry(0x0307, new char[]{}, new char[]{0x0307}, "tr", AFTER_I), // # COMBINING DOT ABOVE
-        new Entry(0x0307, new char[]{}, new char[]{0x0307}, "az", AFTER_I), // # COMBINING DOT ABOVE
-        new Entry(0x0049, new char[]{0x0131}, new char[]{0x0049}, "tr", NOT_BEFORE_DOT), // # LATIN CAPITAL LETTER I
-        new Entry(0x0049, new char[]{0x0131}, new char[]{0x0049}, "az", NOT_BEFORE_DOT), // # LATIN CAPITAL LETTER I
-        new Entry(0x0069, new char[]{0x0069}, new char[]{0x0130}, "tr", 0), // # LATIN SMALL LETTER I
-        new Entry(0x0069, new char[]{0x0069}, new char[]{0x0130}, "az", 0)  // # LATIN SMALL LETTER I
+            //# ================================================================================
+            //# Turkish and Azeri
+            new Entry(0x0130, new char[]{0x0069}, new char[]{0x0130}, "tr", 0), // # LATIN CAPITAL LETTER I WITH DOT ABOVE
+            new Entry(0x0130, new char[]{0x0069}, new char[]{0x0130}, "az", 0), // # LATIN CAPITAL LETTER I WITH DOT ABOVE
+            new Entry(0x0307, new char[]{}, new char[]{0x0307}, "tr", AFTER_I), // # COMBINING DOT ABOVE
+            new Entry(0x0307, new char[]{}, new char[]{0x0307}, "az", AFTER_I), // # COMBINING DOT ABOVE
+            new Entry(0x0049, new char[]{0x0131}, new char[]{0x0049}, "tr", NOT_BEFORE_DOT), // # LATIN CAPITAL LETTER I
+            new Entry(0x0049, new char[]{0x0131}, new char[]{0x0049}, "az", NOT_BEFORE_DOT), // # LATIN CAPITAL LETTER I
+            new Entry(0x0069, new char[]{0x0069}, new char[]{0x0130}, "tr", 0), // # LATIN SMALL LETTER I
+            new Entry(0x0069, new char[]{0x0069}, new char[]{0x0130}, "az", 0)  // # LATIN SMALL LETTER I
     };
 
     // A hash table that contains the above entries
     static Hashtable<Integer, HashSet<Entry>> entryTable = new Hashtable<>();
+
     static {
         // create hashtable from the entry
-        for (int i = 0; i < entry.length; i ++) {
+        for (int i = 0; i < entry.length; i++) {
             Entry cur = entry[i];
             Integer cp = new Integer(cur.getCodePoint());
             HashSet<Entry> set = entryTable.get(cp);
@@ -172,35 +174,35 @@ final class ConditionalSpecialCasing {
 
     private static boolean isConditionMet(String src, int index, Locale locale, int condition) {
         switch (condition) {
-        case FINAL_CASED:
-            return isFinalCased(src, index, locale);
+            case FINAL_CASED:
+                return isFinalCased(src, index, locale);
 
-        case AFTER_SOFT_DOTTED:
-            return isAfterSoftDotted(src, index);
+            case AFTER_SOFT_DOTTED:
+                return isAfterSoftDotted(src, index);
 
-        case MORE_ABOVE:
-            return isMoreAbove(src, index);
+            case MORE_ABOVE:
+                return isMoreAbove(src, index);
 
-        case AFTER_I:
-            return isAfterI(src, index);
+            case AFTER_I:
+                return isAfterI(src, index);
 
-        case NOT_BEFORE_DOT:
-            return !isBeforeDot(src, index);
+            case NOT_BEFORE_DOT:
+                return !isBeforeDot(src, index);
 
-        default:
-            return true;
+            default:
+                return true;
         }
     }
 
     /**
      * Implements the "Final_Cased" condition
-     *
+     * <p>
      * Specification: Within the closest word boundaries containing C, there is a cased
      * letter before C, and there is no cased letter after C.
-     *
+     * <p>
      * Regular Expression:
-     *   Before C: [{cased==true}][{wordBoundary!=true}]*
-     *   After C: !([{wordBoundary!=true}]*[{cased}])
+     * Before C: [{cased==true}][{wordBoundary!=true}]*
+     * After C: !([{wordBoundary!=true}]*[{cased}])
      */
     private static boolean isFinalCased(String src, int index, Locale locale) {
         BreakIterator wordBoundary = BreakIterator.getWordInstance(locale);
@@ -209,7 +211,7 @@ final class ConditionalSpecialCasing {
 
         // Look for a preceding 'cased' letter
         for (int i = index; (i >= 0) && !wordBoundary.isBoundary(i);
-                i -= Character.charCount(ch)) {
+             i -= Character.charCount(ch)) {
 
             ch = src.codePointBefore(i);
             if (isCased(ch)) {
@@ -217,8 +219,8 @@ final class ConditionalSpecialCasing {
                 int len = src.length();
                 // Check that there is no 'cased' letter after the index
                 for (i = index + Character.charCount(src.codePointAt(index));
-                        (i < len) && !wordBoundary.isBoundary(i);
-                        i += Character.charCount(ch)) {
+                     (i < len) && !wordBoundary.isBoundary(i);
+                     i += Character.charCount(ch)) {
 
                     ch = src.codePointAt(i);
                     if (isCased(ch)) {
@@ -235,12 +237,12 @@ final class ConditionalSpecialCasing {
 
     /**
      * Implements the "After_I" condition
-     *
+     * <p>
      * Specification: The last preceding base character was an uppercase I,
      * and there is no intervening combining character class 230 (ABOVE).
-     *
+     * <p>
      * Regular Expression:
-     *   Before C: [I]([{cc!=230}&{cc!=0}])*
+     * Before C: [I]([{cc!=230}&{cc!=0}])*
      */
     private static boolean isAfterI(String src, int index) {
         int ch;
@@ -266,13 +268,13 @@ final class ConditionalSpecialCasing {
 
     /**
      * Implements the "After_Soft_Dotted" condition
-     *
+     * <p>
      * Specification: The last preceding character with combining class
      * of zero before C was Soft_Dotted, and there is no intervening
      * combining character class 230 (ABOVE).
-     *
+     * <p>
      * Regular Expression:
-     *   Before C: [{Soft_Dotted==true}]([{cc!=230}&{cc!=0}])*
+     * Before C: [{Soft_Dotted==true}]([{cc!=230}&{cc!=0}])*
      */
     private static boolean isAfterSoftDotted(String src, int index) {
         int ch;
@@ -298,12 +300,12 @@ final class ConditionalSpecialCasing {
 
     /**
      * Implements the "More_Above" condition
-     *
+     * <p>
      * Specification: C is followed by one or more characters of combining
      * class 230 (ABOVE) in the combining character sequence.
-     *
+     * <p>
      * Regular Expression:
-     *   After C: [{cc!=0}]*[{cc==230}]
+     * After C: [{cc!=0}]*[{cc==230}]
      */
     private static boolean isMoreAbove(String src, int index) {
         int ch;
@@ -312,7 +314,7 @@ final class ConditionalSpecialCasing {
 
         // Look for a following ABOVE combining class character
         for (int i = index + Character.charCount(src.codePointAt(index));
-                i < len; i += Character.charCount(ch)) {
+             i < len; i += Character.charCount(ch)) {
 
             ch = src.codePointAt(i);
             cc = Normalizer.getCombiningClass(ch);
@@ -329,14 +331,14 @@ final class ConditionalSpecialCasing {
 
     /**
      * Implements the "Before_Dot" condition
-     *
+     * <p>
      * Specification: C is followed by <code>U+0307 COMBINING DOT ABOVE</code>.
      * Any sequence of characters with a combining class that is
      * neither 0 nor 230 may intervene between the current character
      * and the combining dot above.
-     *
+     * <p>
      * Regular Expression:
-     *   After C: ([{cc!=230}&{cc!=0}])*[\u0307]
+     * After C: ([{cc!=230}&{cc!=0}])*[\u0307]
      */
     private static boolean isBeforeDot(String src, int index) {
         int ch;
@@ -345,7 +347,7 @@ final class ConditionalSpecialCasing {
 
         // Look for a following COMBINING DOT ABOVE
         for (int i = index + Character.charCount(src.codePointAt(index));
-                i < len; i += Character.charCount(ch)) {
+             i < len; i += Character.charCount(ch)) {
 
             ch = src.codePointAt(i);
 
@@ -364,11 +366,11 @@ final class ConditionalSpecialCasing {
 
     /**
      * Examines whether a character is 'cased'.
-     *
+     * <p>
      * A character C is defined to be 'cased' if and only if at least one of
      * following are true for C: uppercase==true, or lowercase==true, or
      * general_category==titlecase_letter.
-     *
+     * <p>
      * The uppercase and lowercase property values are specified in the data
      * file DerivedCoreProperties.txt in the Unicode Character Database.
      */
@@ -415,19 +417,19 @@ final class ConditionalSpecialCasing {
 
     private static boolean isSoftDotted(int ch) {
         switch (ch) {
-        case 0x0069: // Soft_Dotted # L&       LATIN SMALL LETTER I
-        case 0x006A: // Soft_Dotted # L&       LATIN SMALL LETTER J
-        case 0x012F: // Soft_Dotted # L&       LATIN SMALL LETTER I WITH OGONEK
-        case 0x0268: // Soft_Dotted # L&       LATIN SMALL LETTER I WITH STROKE
-        case 0x0456: // Soft_Dotted # L&       CYRILLIC SMALL LETTER BYELORUSSIAN-UKRAINIAN I
-        case 0x0458: // Soft_Dotted # L&       CYRILLIC SMALL LETTER JE
-        case 0x1D62: // Soft_Dotted # L&       LATIN SUBSCRIPT SMALL LETTER I
-        case 0x1E2D: // Soft_Dotted # L&       LATIN SMALL LETTER I WITH TILDE BELOW
-        case 0x1ECB: // Soft_Dotted # L&       LATIN SMALL LETTER I WITH DOT BELOW
-        case 0x2071: // Soft_Dotted # L&       SUPERSCRIPT LATIN SMALL LETTER I
-            return true;
-        default:
-            return false;
+            case 0x0069: // Soft_Dotted # L&       LATIN SMALL LETTER I
+            case 0x006A: // Soft_Dotted # L&       LATIN SMALL LETTER J
+            case 0x012F: // Soft_Dotted # L&       LATIN SMALL LETTER I WITH OGONEK
+            case 0x0268: // Soft_Dotted # L&       LATIN SMALL LETTER I WITH STROKE
+            case 0x0456: // Soft_Dotted # L&       CYRILLIC SMALL LETTER BYELORUSSIAN-UKRAINIAN I
+            case 0x0458: // Soft_Dotted # L&       CYRILLIC SMALL LETTER JE
+            case 0x1D62: // Soft_Dotted # L&       LATIN SUBSCRIPT SMALL LETTER I
+            case 0x1E2D: // Soft_Dotted # L&       LATIN SMALL LETTER I WITH TILDE BELOW
+            case 0x1ECB: // Soft_Dotted # L&       LATIN SMALL LETTER I WITH DOT BELOW
+            case 0x2071: // Soft_Dotted # L&       SUPERSCRIPT LATIN SMALL LETTER I
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -436,8 +438,8 @@ final class ConditionalSpecialCasing {
      */
     static class Entry {
         int ch;
-        char [] lower;
-        char [] upper;
+        char[] lower;
+        char[] upper;
         String lang;
         int condition;
 

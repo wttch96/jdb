@@ -32,8 +32,8 @@ package java.lang;
  * the <tt>java</tt> command line flags <tt>-enableassertions</tt>
  * (<tt>-ea</tt>) and <tt>-disableassertions</tt> (<tt>-da</tt>).
  *
- * @since  1.4
  * @author Josh Bloch
+ * @since 1.4
  */
 class AssertionStatusDirectives {
     /**
@@ -75,7 +75,7 @@ class AssertionStatusDirectives {
      * enabled; a value of <tt>false</tt> indicates that it should have
      * assertions disabled.  This array must have the same number of
      * elements as <tt>packages</tt>.
-     *
+     * <p>
      * In the case of conflicting directives for the same package-tree, the
      * last directive for a given package-tree wins.  In other words, if a
      * string <tt>s</tt> appears multiple times in the <tt>packages</tt> array

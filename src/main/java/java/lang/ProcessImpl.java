@@ -36,13 +36,14 @@ import java.lang.ProcessBuilder.Redirect;
  * create new processes.
  *
  * @author Martin Buchholz
- * @since   1.5
+ * @since 1.5
  */
 final class ProcessImpl {
     private static final sun.misc.JavaIOFileDescriptorAccess fdAccess
-        = sun.misc.SharedSecrets.getJavaIOFileDescriptorAccess();
+            = sun.misc.SharedSecrets.getJavaIOFileDescriptorAccess();
 
-    private ProcessImpl() {}    // Not instantiable
+    private ProcessImpl() {
+    }    // Not instantiable
 
     private static byte[] toCString(String s) {
         if (s == null)
@@ -50,28 +51,27 @@ final class ProcessImpl {
         byte[] bytes = s.getBytes();
         byte[] result = new byte[bytes.length + 1];
         System.arraycopy(bytes, 0,
-                         result, 0,
-                         bytes.length);
-        result[result.length-1] = (byte)0;
+                result, 0,
+                bytes.length);
+        result[result.length - 1] = (byte) 0;
         return result;
     }
 
     // Only for use by ProcessBuilder.start()
     static Process start(String[] cmdarray,
-                         java.util.Map<String,String> environment,
+                         java.util.Map<String, String> environment,
                          String dir,
                          ProcessBuilder.Redirect[] redirects,
                          boolean redirectErrorStream)
-        throws IOException
-    {
+            throws IOException {
         assert cmdarray != null && cmdarray.length > 0;
 
         // Convert arguments to a contiguous block; it's easier to do
         // memory management in Java than in C.
-        byte[][] args = new byte[cmdarray.length-1][];
+        byte[][] args = new byte[cmdarray.length - 1][];
         int size = args.length; // For added NUL bytes
         for (int i = 0; i < args.length; i++) {
-            args[i] = cmdarray[i+1].getBytes();
+            args[i] = cmdarray[i + 1].getBytes();
             size += args[i].length;
         }
         byte[] argBlock = new byte[size];
@@ -87,13 +87,13 @@ final class ProcessImpl {
 
         int[] std_fds;
 
-        FileInputStream  f0 = null;
+        FileInputStream f0 = null;
         FileOutputStream f1 = null;
         FileOutputStream f2 = null;
 
         try {
             if (redirects == null) {
-                std_fds = new int[] { -1, -1, -1 };
+                std_fds = new int[]{-1, -1, -1};
             } else {
                 std_fds = new int[3];
 
@@ -112,7 +112,7 @@ final class ProcessImpl {
                     std_fds[1] = 1;
                 else {
                     f1 = new FileOutputStream(redirects[1].file(),
-                                              redirects[1].append());
+                            redirects[1].append());
                     std_fds[1] = fdAccess.get(f1.getFD());
                 }
 
@@ -122,25 +122,29 @@ final class ProcessImpl {
                     std_fds[2] = 2;
                 else {
                     f2 = new FileOutputStream(redirects[2].file(),
-                                              redirects[2].append());
+                            redirects[2].append());
                     std_fds[2] = fdAccess.get(f2.getFD());
                 }
             }
 
-        return new UNIXProcess
-            (toCString(cmdarray[0]),
-             argBlock, args.length,
-             envBlock, envc[0],
-             toCString(dir),
-                 std_fds,
-             redirectErrorStream);
+            return new UNIXProcess
+                    (toCString(cmdarray[0]),
+                            argBlock, args.length,
+                            envBlock, envc[0],
+                            toCString(dir),
+                            std_fds,
+                            redirectErrorStream);
         } finally {
             // In theory, close() can throw IOException
             // (although it is rather unlikely to happen here)
-            try { if (f0 != null) f0.close(); }
-            finally {
-                try { if (f1 != null) f1.close(); }
-                finally { if (f2 != null) f2.close(); }
+            try {
+                if (f0 != null) f0.close();
+            } finally {
+                try {
+                    if (f1 != null) f1.close();
+                } finally {
+                    if (f2 != null) f2.close();
+                }
             }
         }
     }

@@ -30,8 +30,8 @@ package java.lang;
  * file and determines that the file is malformed or otherwise cannot
  * be interpreted as a class file.
  *
- * @author  unascribed
- * @since   JDK1.0
+ * @author unascribed
+ * @since JDK1.0
  */
 public
 class ClassFormatError extends LinkageError {
@@ -48,7 +48,7 @@ class ClassFormatError extends LinkageError {
      * Constructs a <code>ClassFormatError</code> with the specified
      * detail message.
      *
-     * @param   s   the detail message.
+     * @param s the detail message.
      */
     public ClassFormatError(String s) {
         super(s);

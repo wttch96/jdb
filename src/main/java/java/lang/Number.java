@@ -30,11 +30,11 @@ package java.lang;
  * classes representing numeric values that are convertible to the
  * primitive types {@code byte}, {@code double}, {@code float}, {@code
  * int}, {@code long}, and {@code short}.
- *
+ * <p>
  * The specific semantics of the conversion from the numeric value of
  * a particular {@code Number} implementation to a given primitive
  * type is defined by the {@code Number} implementation in question.
- *
+ * <p>
  * For platform classes, the conversion is often analogous to a
  * narrowing primitive conversion or a widening primitive conversion
  * as defining in <cite>The Java&trade; Language Specification</cite>
@@ -42,23 +42,23 @@ package java.lang;
  * lose information about the overall magnitude of a numeric value, may
  * lose precision, and may even return a result of a different sign
  * than the input.
- *
+ * <p>
  * See the documentation of a given {@code Number} implementation for
  * conversion details.
  *
- * @author      Lee Boynton
- * @author      Arthur van Hoff
+ * @author Lee Boynton
+ * @author Arthur van Hoff
  * @jls 5.1.2 Widening Primitive Conversions
  * @jls 5.1.3 Narrowing Primitive Conversions
- * @since   JDK1.0
+ * @since JDK1.0
  */
 public abstract class Number implements java.io.Serializable {
     /**
      * Returns the value of the specified number as an {@code int},
      * which may involve rounding or truncation.
      *
-     * @return  the numeric value represented by this object after conversion
-     *          to type {@code int}.
+     * @return the numeric value represented by this object after conversion
+     * to type {@code int}.
      */
     public abstract int intValue();
 
@@ -66,8 +66,8 @@ public abstract class Number implements java.io.Serializable {
      * Returns the value of the specified number as a {@code long},
      * which may involve rounding or truncation.
      *
-     * @return  the numeric value represented by this object after conversion
-     *          to type {@code long}.
+     * @return the numeric value represented by this object after conversion
+     * to type {@code long}.
      */
     public abstract long longValue();
 
@@ -75,8 +75,8 @@ public abstract class Number implements java.io.Serializable {
      * Returns the value of the specified number as a {@code float},
      * which may involve rounding.
      *
-     * @return  the numeric value represented by this object after conversion
-     *          to type {@code float}.
+     * @return the numeric value represented by this object after conversion
+     * to type {@code float}.
      */
     public abstract float floatValue();
 
@@ -84,8 +84,8 @@ public abstract class Number implements java.io.Serializable {
      * Returns the value of the specified number as a {@code double},
      * which may involve rounding.
      *
-     * @return  the numeric value represented by this object after conversion
-     *          to type {@code double}.
+     * @return the numeric value represented by this object after conversion
+     * to type {@code double}.
      */
     public abstract double doubleValue();
 
@@ -96,12 +96,12 @@ public abstract class Number implements java.io.Serializable {
      * <p>This implementation returns the result of {@link #intValue} cast
      * to a {@code byte}.
      *
-     * @return  the numeric value represented by this object after conversion
-     *          to type {@code byte}.
-     * @since   JDK1.1
+     * @return the numeric value represented by this object after conversion
+     * to type {@code byte}.
+     * @since JDK1.1
      */
     public byte byteValue() {
-        return (byte)intValue();
+        return (byte) intValue();
     }
 
     /**
@@ -111,14 +111,16 @@ public abstract class Number implements java.io.Serializable {
      * <p>This implementation returns the result of {@link #intValue} cast
      * to a {@code short}.
      *
-     * @return  the numeric value represented by this object after conversion
-     *          to type {@code short}.
-     * @since   JDK1.1
+     * @return the numeric value represented by this object after conversion
+     * to type {@code short}.
+     * @since JDK1.1
      */
     public short shortValue() {
-        return (short)intValue();
+        return (short) intValue();
     }
 
-    /** use serialVersionUID from JDK 1.0.2 for interoperability */
+    /**
+     * use serialVersionUID from JDK 1.0.2 for interoperability
+     */
     private static final long serialVersionUID = -8742448824652078965L;
 }

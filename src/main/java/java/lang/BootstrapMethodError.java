@@ -59,7 +59,7 @@ public class BootstrapMethodError extends LinkageError {
      * Constructs a {@code BootstrapMethodError} with the specified
      * detail message and cause.
      *
-     * @param s the detail message.
+     * @param s     the detail message.
      * @param cause the cause, may be {@code null}.
      */
     public BootstrapMethodError(String s, Throwable cause) {

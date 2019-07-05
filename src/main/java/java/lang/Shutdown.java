@@ -30,8 +30,8 @@ package java.lang;
  * Package-private utility class containing data structures and logic
  * governing the virtual-machine shutdown sequence.
  *
- * @author   Mark Reinhold
- * @since    1.3
+ * @author Mark Reinhold
+ * @since 1.3
  */
 
 class Shutdown {
@@ -57,7 +57,10 @@ class Shutdown {
     private static int currentRunningHook = 0;
 
     /* The preceding static fields are protected by this lock */
-    private static class Lock { };
+    private static class Lock {
+    }
+
+    ;
     private static Object lock = new Lock();
 
     /* Lock object for the native halt method */
@@ -74,22 +77,21 @@ class Shutdown {
     /**
      * Add a new shutdown hook.  Checks the shutdown state and the hook itself,
      * but does not do any security checks.
-     *
+     * <p>
      * The registerShutdownInProgress parameter should be false except
      * registering the DeleteOnExitHook since the first file may
      * be added to the delete on exit list by the application shutdown
      * hooks.
      *
      * @params slot  the slot in the shutdown hook array, whose element
-     *               will be invoked in order during shutdown
+     * will be invoked in order during shutdown
      * @params registerShutdownInProgress true to allow the hook
-     *               to be registered even if the shutdown is in progress.
+     * to be registered even if the shutdown is in progress.
      * @params hook  the hook to be registered
-     *
      * @throw IllegalStateException
-     *        if registerShutdownInProgress is false and shutdown is in progress; or
-     *        if registerShutdownInProgress is true and the shutdown process
-     *           already passes the given slot
+     * if registerShutdownInProgress is false and shutdown is in progress; or
+     * if registerShutdownInProgress is true and the shutdown process
+     * already passes the given slot
      */
     static void add(int slot, boolean registerShutdownInProgress, Runnable hook) {
         synchronized (lock) {
@@ -111,7 +113,7 @@ class Shutdown {
     /* Run all registered shutdown hooks
      */
     private static void runHooks() {
-        for (int i=0; i < MAX_SYSTEM_HOOKS; i++) {
+        for (int i = 0; i < MAX_SYSTEM_HOOKS; i++) {
             try {
                 Runnable hook;
                 synchronized (lock) {
@@ -121,9 +123,9 @@ class Shutdown {
                     hook = hooks[i];
                 }
                 if (hook != null) hook.run();
-            } catch(Throwable t) {
+            } catch (Throwable t) {
                 if (t instanceof ThreadDeath) {
-                    ThreadDeath td = (ThreadDeath)t;
+                    ThreadDeath td = (ThreadDeath) t;
                     throw td;
                 }
             }
@@ -183,22 +185,22 @@ class Shutdown {
         synchronized (lock) {
             if (status != 0) runFinalizersOnExit = false;
             switch (state) {
-            case RUNNING:       /* Initiate shutdown */
-                state = HOOKS;
-                break;
-            case HOOKS:         /* Stall and halt */
-                break;
-            case FINALIZERS:
-                if (status != 0) {
-                    /* Halt immediately on nonzero status */
-                    halt(status);
-                } else {
-                    /* Compatibility with old behavior:
-                     * Run more finalizers and then halt
-                     */
-                    runMoreFinalizers = runFinalizersOnExit;
-                }
-                break;
+                case RUNNING:       /* Initiate shutdown */
+                    state = HOOKS;
+                    break;
+                case HOOKS:         /* Stall and halt */
+                    break;
+                case FINALIZERS:
+                    if (status != 0) {
+                        /* Halt immediately on nonzero status */
+                        halt(status);
+                    } else {
+                        /* Compatibility with old behavior:
+                         * Run more finalizers and then halt
+                         */
+                        runMoreFinalizers = runFinalizersOnExit;
+                    }
+                    break;
             }
         }
         if (runMoreFinalizers) {
@@ -222,12 +224,12 @@ class Shutdown {
     static void shutdown() {
         synchronized (lock) {
             switch (state) {
-            case RUNNING:       /* Initiate shutdown */
-                state = HOOKS;
-                break;
-            case HOOKS:         /* Stall and then return */
-            case FINALIZERS:
-                break;
+                case RUNNING:       /* Initiate shutdown */
+                    state = HOOKS;
+                    break;
+                case HOOKS:         /* Stall and then return */
+                case FINALIZERS:
+                    break;
             }
         }
         synchronized (Shutdown.class) {

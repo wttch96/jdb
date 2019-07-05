@@ -30,8 +30,8 @@ package java.lang;
  * though well formed, contains some sort of internal inconsistency
  * or security problem.
  *
- * @author  unascribed
- * @since   JDK1.0
+ * @author unascribed
+ * @since JDK1.0
  */
 public
 class VerifyError extends LinkageError {
@@ -47,7 +47,7 @@ class VerifyError extends LinkageError {
     /**
      * Constructs an <code>VerifyError</code> with the specified detail message.
      *
-     * @param   s   the detail message.
+     * @param s the detail message.
      */
     public VerifyError(String s) {
         super(s);

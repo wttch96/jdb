@@ -30,7 +30,7 @@ package java.lang;
  * recurses too deeply.
  *
  * @author unascribed
- * @since   JDK1.0
+ * @since JDK1.0
  */
 public
 class StackOverflowError extends VirtualMachineError {
@@ -47,7 +47,7 @@ class StackOverflowError extends VirtualMachineError {
      * Constructs a <code>StackOverflowError</code> with the specified
      * detail message.
      *
-     * @param   s   the detail message.
+     * @param s the detail message.
      */
     public StackOverflowError(String s) {
         super(s);

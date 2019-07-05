@@ -37,14 +37,14 @@ package java.lang;
  * clause any subclasses of {@code Error} that might be thrown
  * during the execution of the method but not caught, since these
  * errors are abnormal conditions that should never occur.
- *
+ * <p>
  * That is, {@code Error} and its subclasses are regarded as unchecked
  * exceptions for the purposes of compile-time checking of exceptions.
  *
- * @author  Frank Yellin
- * @see     java.lang.ThreadDeath
+ * @author Frank Yellin
  * @jls 11.2 Compile-Time Checking of Exceptions
- * @since   JDK1.0
+ * @see java.lang.ThreadDeath
+ * @since JDK1.0
  */
 public class Error extends Throwable {
     static final long serialVersionUID = 4980196508277280342L;
@@ -63,8 +63,8 @@ public class Error extends Throwable {
      * cause is not initialized, and may subsequently be initialized by
      * a call to {@link #initCause}.
      *
-     * @param   message   the detail message. The detail message is saved for
-     *          later retrieval by the {@link #getMessage()} method.
+     * @param message the detail message. The detail message is saved for
+     *                later retrieval by the {@link #getMessage()} method.
      */
     public Error(String message) {
         super(message);
@@ -76,13 +76,13 @@ public class Error extends Throwable {
      * {@code cause} is <i>not</i> automatically incorporated in
      * this error's detail message.
      *
-     * @param  message the detail message (which is saved for later retrieval
-     *         by the {@link #getMessage()} method).
-     * @param  cause the cause (which is saved for later retrieval by the
-     *         {@link #getCause()} method).  (A {@code null} value is
-     *         permitted, and indicates that the cause is nonexistent or
-     *         unknown.)
-     * @since  1.4
+     * @param message the detail message (which is saved for later retrieval
+     *                by the {@link #getMessage()} method).
+     * @param cause   the cause (which is saved for later retrieval by the
+     *                {@link #getCause()} method).  (A {@code null} value is
+     *                permitted, and indicates that the cause is nonexistent or
+     *                unknown.)
+     * @since 1.4
      */
     public Error(String message, Throwable cause) {
         super(message, cause);
@@ -95,11 +95,11 @@ public class Error extends Throwable {
      * This constructor is useful for errors that are little more than
      * wrappers for other throwables.
      *
-     * @param  cause the cause (which is saved for later retrieval by the
-     *         {@link #getCause()} method).  (A {@code null} value is
-     *         permitted, and indicates that the cause is nonexistent or
-     *         unknown.)
-     * @since  1.4
+     * @param cause the cause (which is saved for later retrieval by the
+     *              {@link #getCause()} method).  (A {@code null} value is
+     *              permitted, and indicates that the cause is nonexistent or
+     *              unknown.)
+     * @since 1.4
      */
     public Error(Throwable cause) {
         super(cause);
@@ -110,14 +110,13 @@ public class Error extends Throwable {
      * cause, suppression enabled or disabled, and writable stack
      * trace enabled or disabled.
      *
-     * @param  message the detail message.
-     * @param cause the cause.  (A {@code null} value is permitted,
-     * and indicates that the cause is nonexistent or unknown.)
-     * @param enableSuppression whether or not suppression is enabled
-     *                          or disabled
+     * @param message            the detail message.
+     * @param cause              the cause.  (A {@code null} value is permitted,
+     *                           and indicates that the cause is nonexistent or unknown.)
+     * @param enableSuppression  whether or not suppression is enabled
+     *                           or disabled
      * @param writableStackTrace whether or not the stack trace should
      *                           be writable
-     *
      * @since 1.7
      */
     protected Error(String message, Throwable cause,

@@ -32,9 +32,9 @@ package java.lang;
  * java.lang.reflect.AnnotatedElement API used to read annotations
  * reflectively}.
  *
- * @author  Josh Bloch
- * @see     java.lang.reflect.AnnotatedElement
- * @since   1.5
+ * @author Josh Bloch
+ * @see java.lang.reflect.AnnotatedElement
+ * @since 1.5
  */
 @SuppressWarnings("rawtypes") /* rawtypes are part of the public api */
 public class EnumConstantNotPresentException extends RuntimeException {
@@ -54,14 +54,14 @@ public class EnumConstantNotPresentException extends RuntimeException {
      * Constructs an <tt>EnumConstantNotPresentException</tt> for the
      * specified constant.
      *
-     * @param enumType the type of the missing enum constant
+     * @param enumType     the type of the missing enum constant
      * @param constantName the name of the missing enum constant
      */
     public EnumConstantNotPresentException(Class<? extends Enum> enumType,
                                            String constantName) {
         super(enumType.getName() + "." + constantName);
         this.enumType = enumType;
-        this.constantName  = constantName;
+        this.constantName = constantName;
     }
 
     /**
@@ -69,12 +69,16 @@ public class EnumConstantNotPresentException extends RuntimeException {
      *
      * @return the type of the missing enum constant
      */
-    public Class<? extends Enum> enumType() { return enumType; }
+    public Class<? extends Enum> enumType() {
+        return enumType;
+    }
 
     /**
      * Returns the name of the missing enum constant.
      *
      * @return the name of the missing enum constant
      */
-    public String constantName() { return constantName; }
+    public String constantName() {
+        return constantName;
+    }
 }

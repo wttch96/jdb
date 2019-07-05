@@ -30,8 +30,8 @@ package java.lang;
  * native-language definition of a method declared <code>native</code>.
  *
  * @author unascribed
- * @see     java.lang.Runtime
- * @since   JDK1.0
+ * @see java.lang.Runtime
+ * @since JDK1.0
  */
 public
 class UnsatisfiedLinkError extends LinkageError {
@@ -48,7 +48,7 @@ class UnsatisfiedLinkError extends LinkageError {
      * Constructs an <code>UnsatisfiedLinkError</code> with the
      * specified detail message.
      *
-     * @param   s   the detail message.
+     * @param s the detail message.
      */
     public UnsatisfiedLinkError(String s) {
         super(s);

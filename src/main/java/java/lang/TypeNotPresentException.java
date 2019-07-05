@@ -39,8 +39,8 @@ package java.lang;
  * java.lang.reflect.AnnotatedElement API used to read annotations
  * reflectively}.
  *
- * @author  Josh Bloch
- * @see     java.lang.reflect.AnnotatedElement
+ * @author Josh Bloch
+ * @see java.lang.reflect.AnnotatedElement
  * @since 1.5
  */
 public class TypeNotPresentException extends RuntimeException {
@@ -53,8 +53,8 @@ public class TypeNotPresentException extends RuntimeException {
      * with the specified cause.
      *
      * @param typeName the fully qualified name of the unavailable type
-     * @param cause the exception that was thrown when the system attempted to
-     *    load the named type, or <tt>null</tt> if unavailable or inapplicable
+     * @param cause    the exception that was thrown when the system attempted to
+     *                 load the named type, or <tt>null</tt> if unavailable or inapplicable
      */
     public TypeNotPresentException(String typeName, Throwable cause) {
         super("Type " + typeName + " not present", cause);
@@ -66,5 +66,7 @@ public class TypeNotPresentException extends RuntimeException {
      *
      * @return the fully qualified name of the unavailable type
      */
-    public String typeName() { return typeName;}
+    public String typeName() {
+        return typeName;
+    }
 }

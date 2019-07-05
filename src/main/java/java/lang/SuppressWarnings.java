@@ -26,6 +26,7 @@
 package java.lang;
 
 import java.lang.annotation.*;
+
 import static java.lang.annotation.ElementType.*;
 
 /**
@@ -42,12 +43,12 @@ import static java.lang.annotation.ElementType.*;
  * method rather than its class.
  *
  * @author Josh Bloch
- * @since 1.5
  * @jls 4.8 Raw Types
  * @jls 4.12.2 Variables of Reference Type
  * @jls 5.1.9 Unchecked Conversion
  * @jls 5.5.2 Checked Casts and Unchecked Casts
  * @jls 9.6.3.5 @SuppressWarnings
+ * @since 1.5
  */
 @Target({TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE})
 @Retention(RetentionPolicy.SOURCE)
@@ -66,6 +67,7 @@ public @interface SuppressWarnings {
      * additional warning names they support in conjunction with this
      * annotation type. They are encouraged to cooperate to ensure
      * that the same names work across multiple compilers.
+     *
      * @return the set of warnings to be suppressed
      */
     String[] value();

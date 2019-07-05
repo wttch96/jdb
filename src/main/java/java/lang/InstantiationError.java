@@ -33,8 +33,8 @@ package java.lang;
  * only occur at run time if the definition of a class has
  * incompatibly changed.
  *
- * @author  unascribed
- * @since   JDK1.0
+ * @author unascribed
+ * @since JDK1.0
  */
 
 
@@ -53,7 +53,7 @@ class InstantiationError extends IncompatibleClassChangeError {
      * Constructs an <code>InstantiationError</code> with the specified
      * detail message.
      *
-     * @param   s   the detail message.
+     * @param s the detail message.
      */
     public InstantiationError(String s) {
         super(s);

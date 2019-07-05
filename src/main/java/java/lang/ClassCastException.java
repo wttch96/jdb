@@ -34,8 +34,8 @@ package java.lang;
  *     System.out.println((String)x);
  * </pre></blockquote>
  *
- * @author  unascribed
- * @since   JDK1.0
+ * @author unascribed
+ * @since JDK1.0
  */
 public
 class ClassCastException extends RuntimeException {
@@ -52,7 +52,7 @@ class ClassCastException extends RuntimeException {
      * Constructs a <code>ClassCastException</code> with the specified
      * detail message.
      *
-     * @param   s   the detail message.
+     * @param s the detail message.
      */
     public ClassCastException(String s) {
         super(s);

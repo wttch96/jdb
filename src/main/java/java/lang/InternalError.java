@@ -29,8 +29,8 @@ package java.lang;
  * Thrown to indicate some unexpected internal error has occurred in
  * the Java Virtual Machine.
  *
- * @author  unascribed
- * @since   JDK1.0
+ * @author unascribed
+ * @since JDK1.0
  */
 public class InternalError extends VirtualMachineError {
     private static final long serialVersionUID = -9062593416125562365L;
@@ -46,7 +46,7 @@ public class InternalError extends VirtualMachineError {
      * Constructs an <code>InternalError</code> with the specified
      * detail message.
      *
-     * @param   message   the detail message.
+     * @param message the detail message.
      */
     public InternalError(String message) {
         super(message);
@@ -59,13 +59,13 @@ public class InternalError extends VirtualMachineError {
      * with {@code cause} is <i>not</i> automatically incorporated in
      * this error's detail message.
      *
-     * @param  message the detail message (which is saved for later retrieval
-     *         by the {@link #getMessage()} method).
-     * @param  cause the cause (which is saved for later retrieval by the
-     *         {@link #getCause()} method).  (A {@code null} value is
-     *         permitted, and indicates that the cause is nonexistent or
-     *         unknown.)
-     * @since  1.8
+     * @param message the detail message (which is saved for later retrieval
+     *                by the {@link #getMessage()} method).
+     * @param cause   the cause (which is saved for later retrieval by the
+     *                {@link #getCause()} method).  (A {@code null} value is
+     *                permitted, and indicates that the cause is nonexistent or
+     *                unknown.)
+     * @since 1.8
      */
     public InternalError(String message, Throwable cause) {
         super(message, cause);
@@ -77,11 +77,11 @@ public class InternalError extends VirtualMachineError {
      * cause.toString())} (which typically contains the class and
      * detail message of {@code cause}).
      *
-     * @param  cause the cause (which is saved for later retrieval by the
-     *         {@link #getCause()} method).  (A {@code null} value is
-     *         permitted, and indicates that the cause is nonexistent or
-     *         unknown.)
-     * @since  1.8
+     * @param cause the cause (which is saved for later retrieval by the
+     *              {@link #getCause()} method).  (A {@code null} value is
+     *              permitted, and indicates that the cause is nonexistent or
+     *              unknown.)
+     * @since 1.8
      */
     public InternalError(Throwable cause) {
         super(cause);
