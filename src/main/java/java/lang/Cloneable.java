@@ -1,49 +1,18 @@
-/*
- * Copyright (c) 1995, 2004, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang;
 
 /**
- * A class implements the <code>Cloneable</code> interface to
- * indicate to the {@link java.lang.Object#clone()} method that it
- * is legal for that method to make a
- * field-for-field copy of instances of that class.
+ * 类实现 <code>Cloneable</code> 接口, 以指示{@link java.lang.Object#clone()}方法,
+ * 该方法对于那个类的实例的字段实地复制是合法的.
  * <p>
- * Invoking Object's clone method on an instance that does not implement the
- * <code>Cloneable</code> interface results in the exception
- * <code>CloneNotSupportedException</code> being thrown.
+ * 在未实现 <code>Cloneable</code> 接口的实例上调用 Object 的 clone 方法会导致
+ * 抛出异常 <code>CloneNotSupportedException </code>.
  * <p>
- * By convention, classes that implement this interface should override
- * <tt>Object.clone</tt> (which is protected) with a public method.
- * See {@link java.lang.Object#clone()} for details on overriding this
- * method.
+ * 按照惯例, 实现此接口的类应使用公共方法覆盖 <tt>Object.clone</tt>(受保护).
+ * 有关重写此方法的详细信息, 请参阅{@link java.lang.Object#clone()}.
  * <p>
- * Note that this interface does <i>not</i> contain the <tt>clone</tt> method.
- * Therefore, it is not possible to clone an object merely by virtue of the
- * fact that it implements this interface.  Even if the clone method is invoked
- * reflectively, there is no guarantee that it will succeed.
+ * 请注意, 此接口<i>不</i>包含<tt>clone</tt>方法.
+ * 因此, 仅仅通过实现该接口的事实来克隆对象是不可能的.
+ * 即使有效地调用clone方法, 也无法保证它会成功.
  *
  * @author unascribed
  * @see java.lang.CloneNotSupportedException
