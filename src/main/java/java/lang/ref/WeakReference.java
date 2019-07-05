@@ -41,8 +41,8 @@ package java.lang.ref;
  * later time it will enqueue those newly-cleared weak references that are
  * registered with reference queues.
  *
- * @author   Mark Reinhold
- * @since    1.2
+ * @author Mark Reinhold
+ * @since 1.2
  */
 
 public class WeakReference<T> extends Reference<T> {
@@ -62,8 +62,8 @@ public class WeakReference<T> extends Reference<T> {
      * registered with the given queue.
      *
      * @param referent object the new weak reference will refer to
-     * @param q the queue with which the reference is to be registered,
-     *          or <tt>null</tt> if registration is not required
+     * @param q        the queue with which the reference is to be registered,
+     *                 or <tt>null</tt> if registration is not required
      */
     public WeakReference(T referent, ReferenceQueue<? super T> q) {
         super(referent, q);

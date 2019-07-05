@@ -57,8 +57,8 @@ package java.lang.ref;
  * strong referents to those entries, leaving the remaining entries to be
  * discarded at the discretion of the garbage collector.
  *
- * @author   Mark Reinhold
- * @since    1.2
+ * @author Mark Reinhold
+ * @since 1.2
  */
 
 public class SoftReference<T> extends Reference<T> {
@@ -91,9 +91,8 @@ public class SoftReference<T> extends Reference<T> {
      * registered with the given queue.
      *
      * @param referent object the new soft reference will refer to
-     * @param q the queue with which the reference is to be registered,
-     *          or <tt>null</tt> if registration is not required
-     *
+     * @param q        the queue with which the reference is to be registered,
+     *                 or <tt>null</tt> if registration is not required
      */
     public SoftReference(T referent, ReferenceQueue<? super T> q) {
         super(referent, q);
@@ -105,8 +104,8 @@ public class SoftReference<T> extends Reference<T> {
      * been cleared, either by the program or by the garbage collector, then
      * this method returns <code>null</code>.
      *
-     * @return   The object to which this reference refers, or
-     *           <code>null</code> if this reference object has been cleared
+     * @return The object to which this reference refers, or
+     * <code>null</code> if this reference object has been cleared
      */
     public T get() {
         T o = super.get();
