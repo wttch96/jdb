@@ -1,137 +1,90 @@
-/*
- * Copyright (c) 2003, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang.annotation;
 
 /**
- * The common interface extended by all annotation types.  Note that an
- * interface that manually extends this one does <i>not</i> define
- * an annotation type.  Also note that this interface does not itself
- * define an annotation type.
+ * 所有注解类型扩展的公共接口. 请注意手动扩展该接口<i>不会</i>定义一个注解类型.
+ * 此外, 此接口本身不定义注解类型.
  * <p>
- * More information about annotation types can be found in section 9.6 of
- * <cite>The Java&trade; Language Specification</cite>.
+ * 有关注解类型的更多信息, 请参阅 <cite>java语言规范</cite> 的第9.6节.
  * <p>
- * The {@link java.lang.reflect.AnnotatedElement} interface discusses
- * compatibility concerns when evolving an annotation type from being
- * non-repeatable to being repeatable.
+ * {@link java.lang.reflect.AnnotatedElement}接口讨论了在将注释类型从不可重复发展为可重复时的兼容性问题.
  *
  * @author Josh Bloch
  * @since 1.5
  */
 public interface Annotation {
     /**
-     * Returns true if the specified object represents an annotation
-     * that is logically equivalent to this one.  In other words,
-     * returns true if the specified object is an instance of the same
-     * annotation type as this instance, all of whose members are equal
-     * to the corresponding member of this annotation, as defined below:
+     * 如果指定的对象表示逻辑上等于此注解的注解, 则返回 true. 换句话说,
+     * 如果指定的对象是与此实例相同的注解类型的实例, 则返回 true, 其所
+     * 有成员都等于此注解的所有成员, 如下所示:
      * <ul>
-     * <li>Two corresponding primitive typed members whose values are
-     * <tt>x</tt> and <tt>y</tt> are considered equal if <tt>x == y</tt>,
-     * unless their type is <tt>float</tt> or <tt>double</tt>.
+     * <li>两个相应的原生数据类型 <tt>x</tt> 和 <tt>y</tt> 如果 <tt>x == y</tt>
+     * 则被认定为相等的, 除非它们的类型是 <tt>float</tt> 或者 <tt>double</tt>.
      *
-     * <li>Two corresponding <tt>float</tt> members whose values
-     * are <tt>x</tt> and <tt>y</tt> are considered equal if
-     * <tt>Float.valueOf(x).equals(Float.valueOf(y))</tt>.
-     * (Unlike the <tt>==</tt> operator, NaN is considered equal
-     * to itself, and <tt>0.0f</tt> unequal to <tt>-0.0f</tt>.)
+     * <li>两个相应的 <tt>float</tt> 成员 <tt>x</tt> 和 <tt>y</tt> 如果
+     * <tt>Float.valueOf(x).equals(Float.valueOf(y))</tt> 则被认定为相等的.
+     * (不像 <tt>==</tt> 操作符, NaN 被认定为等于它自身, 并且 <tt>0.0f</tt>
+     * 不等于 <tt>-0.0f</tt>.)
      *
-     * <li>Two corresponding <tt>double</tt> members whose values
-     * are <tt>x</tt> and <tt>y</tt> are considered equal if
-     * <tt>Double.valueOf(x).equals(Double.valueOf(y))</tt>.
-     * (Unlike the <tt>==</tt> operator, NaN is considered equal
-     * to itself, and <tt>0.0</tt> unequal to <tt>-0.0</tt>.)
+     * <li>两个相应的 <tt>double</tt> 成员 <tt>x</tt> 和 <tt>y</tt> 如果满足
+     * <tt>Double.valueOf(x).equals(Double.valueOf(y))</tt> 则被认定为想等.
+     * (不像 <tt>==</tt> 操作符, NaN 被认定为等于它自身, 并且 <tt>0.0</tt>
+     * 不等于 <tt>-0.0</tt>.)
      *
-     * <li>Two corresponding <tt>String</tt>, <tt>Class</tt>, enum, or
-     * annotation typed members whose values are <tt>x</tt> and <tt>y</tt>
-     * are considered equal if <tt>x.equals(y)</tt>.  (Note that this
-     * definition is recursive for annotation typed members.)
+     * <li>两个相应的 <tt>String</tt>, <tt>Class</tt>, 枚举, 或者注解类型成员
+     * <tt>x</tt> and <tt>y</tt> 如果 <tt>x.equals(y)</tt> 则被认定为想等.
+     * (此定义对于注解类型成员是递归的.)
      *
-     * <li>Two corresponding array typed members <tt>x</tt> and <tt>y</tt>
-     * are considered equal if <tt>Arrays.equals(x, y)</tt>, for the
-     * appropriate overloading of {@link java.util.Arrays#equals}.
+     * <li>如果<tt> Arrays.equals (x, y)</tt>, 两个相应的数组类型成员
+     * <tt> x </tt>和<tt> y </tt>被认为是相等的. 当适当的重载
+     * {@link java.util.Arrays#equals}的时候.
      * </ul>
      *
-     * @return true if the specified object represents an annotation
-     * that is logically equivalent to this one, otherwise false
+     * @return true 如果指定的对象表示逻辑上等于此注解的注解, 否则false
      */
     boolean equals(Object obj);
 
     /**
-     * Returns the hash code of this annotation, as defined below:
+     * 返回此注解的哈希码, 如以下所示:
      *
-     * <p>The hash code of an annotation is the sum of the hash codes
-     * of its members (including those with default values), as defined
-     * below:
+     * <p>注解的哈希码是其成员(包含那些具有默认值的哈希码)的哈希码的总和,
+     * 定义如下:
      * <p>
-     * The hash code of an annotation member is (127 times the hash code
-     * of the member-name as computed by {@link String#hashCode()}) XOR
-     * the hash code of the member-value, as defined below:
+     * 注解成员的哈希码是 (计算成员名字{@link String#hashCode()}哈希码的 127倍)
+     * 和成员名字的哈希值做异或运算, 定义如下:
      *
-     * <p>The hash code of a member-value depends on its type:
+     * <p>成员值的哈希码取决于其类型:
      * <ul>
-     * <li>The hash code of a primitive value <tt><i>v</i></tt> is equal to
-     * <tt><i>WrapperType</i>.valueOf(<i>v</i>).hashCode()</tt>, where
-     * <tt><i>WrapperType</i></tt> is the wrapper type corresponding
-     * to the primitive type of <tt><i>v</i></tt> ({@link Byte},
+     * <li>基本类型 <tt><i>v</i></tt> 的哈希码等于 <tt><i>WrapperType</i>.valueOf(<i>v</i>).hashCode()</tt>,
+     * <tt><i>WrapperType</i></tt> 是基本类型 <tt><i>v</i></tt> 的自动装箱形式 ({@link Byte},
      * {@link Character}, {@link Double}, {@link Float}, {@link Integer},
      * {@link Long}, {@link Short}, or {@link Boolean}).
      *
-     * <li>The hash code of a string, enum, class, or annotation member-value
-     * I     <tt><i>v</i></tt> is computed as by calling
-     * <tt><i>v</i>.hashCode()</tt>.  (In the case of annotation
-     * member values, this is a recursive definition.)
+     * <li>string, enum, class, 或 annotation 成员值 <tt><i>v</i></tt>
+     * 的哈希值计算方法是通过调用 <tt><i>v</i>.hashCode()</tt>.
+     * (在注解成员值的情况下, 这是递归定义. )
      *
-     * <li>The hash code of an array member-value is computed by calling
-     * the appropriate overloading of
-     * {@link java.util.Arrays#hashCode(long[]) Arrays.hashCode}
-     * on the value.  (There is one overloading for each primitive
-     * type, and one for object reference types.)
+     * <li>数组成员值的哈希值是通过调用 {@link java.util.Arrays#hashCode(long[]) Arrays.hashCode}
+     * 计算的.  (每种基本类型都有一个重载, 一个重载用于对象引用类型.)
      * </ul>
      *
-     * @return the hash code of this annotation
+     * @return 注解的哈希值
      */
     int hashCode();
 
     /**
-     * Returns a string representation of this annotation.  The details
-     * of the representation are implementation-dependent, but the following
-     * may be regarded as typical:
+     * 返回此批注的字符串表示形式. 表示的细节依赖于实现, 但以下可能被视为典型:
      * <pre>
      *   &#064;com.acme.util.Name(first=Alfred, middle=E., last=Neuman)
      * </pre>
      *
-     * @return a string representation of this annotation
+     * @return 注解的字符串表示形式
      */
     String toString();
 
     /**
-     * Returns the annotation type of this annotation.
+     * 返回这个注解的注解类型.
      *
-     * @return the annotation type of this annotation
+     * @return 这个注解的注解类型
      */
     Class<? extends Annotation> annotationType();
 }
