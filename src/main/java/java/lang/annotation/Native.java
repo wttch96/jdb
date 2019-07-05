@@ -29,7 +29,7 @@ package java.lang.annotation;
 /**
  * Indicates that a field defining a constant value may be referenced
  * from native code.
- *
+ * <p>
  * The annotation may be used as a hint by tools that generate native
  * header files to determine whether a header file is required, and
  * if so, what declarations it should contain.

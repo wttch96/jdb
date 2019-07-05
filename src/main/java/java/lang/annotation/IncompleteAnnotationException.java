@@ -34,8 +34,8 @@ package java.lang.annotation;
  * java.lang.reflect.AnnotatedElement API used to read annotations
  * reflectively}.
  *
- * @author  Josh Bloch
- * @see     java.lang.reflect.AnnotatedElement
+ * @author Josh Bloch
+ * @see java.lang.reflect.AnnotatedElement
  * @since 1.5
  */
 public class IncompleteAnnotationException extends RuntimeException {
@@ -49,14 +49,14 @@ public class IncompleteAnnotationException extends RuntimeException {
      * the named element was missing from the specified annotation type.
      *
      * @param annotationType the Class object for the annotation type
-     * @param elementName the name of the missing element
+     * @param elementName    the name of the missing element
      * @throws NullPointerException if either parameter is {@code null}
      */
     public IncompleteAnnotationException(
             Class<? extends Annotation> annotationType,
             String elementName) {
         super(annotationType.getName() + " missing element " +
-              elementName.toString());
+                elementName.toString());
 
         this.annotationType = annotationType;
         this.elementName = elementName;
@@ -67,7 +67,7 @@ public class IncompleteAnnotationException extends RuntimeException {
      * missing element.
      *
      * @return the Class object for the annotation type with the
-     *     missing element
+     * missing element
      */
     public Class<? extends Annotation> annotationType() {
         return annotationType;

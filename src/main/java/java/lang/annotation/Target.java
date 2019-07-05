@@ -69,9 +69,9 @@ package java.lang.annotation;
  *    }
  * </pre>
  *
- * @since 1.5
  * @jls 9.6.4.1 @Target
  * @jls 9.7.4 Where Annotations May Appear
+ * @since 1.5
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -80,6 +80,7 @@ public @interface Target {
     /**
      * Returns an array of the kinds of elements an annotation type
      * can be applied to.
+     *
      * @return an array of the kinds of elements an annotation type
      * can be applied to
      */

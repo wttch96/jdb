@@ -42,9 +42,9 @@ package java.lang.annotation;
  * from superclasses; annotations on implemented interfaces have no
  * effect.
  *
- * @author  Joshua Bloch
- * @since 1.5
+ * @author Joshua Bloch
  * @jls 9.6.3.3 @Inherited
+ * @since 1.5
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

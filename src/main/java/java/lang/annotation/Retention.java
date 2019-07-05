@@ -36,9 +36,9 @@ package java.lang.annotation;
  * effect if the meta-annotated type is used as a member type in
  * another annotation type.
  *
- * @author  Joshua Bloch
- * @since 1.5
+ * @author Joshua Bloch
  * @jls 9.6.3.2 @Retention
+ * @since 1.5
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -46,6 +46,7 @@ package java.lang.annotation;
 public @interface Retention {
     /**
      * Returns the retention policy.
+     *
      * @return the retention policy
      */
     RetentionPolicy value();
