@@ -26,21 +26,17 @@
 package java.io;
 
 /**
- * Thrown when a serious I/O error has occurred.
+ * 当严重的 I/O 错误发生时抛出.
  *
- * @author  Xueming Shen
- * @since   1.6
+ * @author Xueming Shen
+ * @since 1.6
  */
 public class IOError extends Error {
     /**
-     * Constructs a new instance of IOError with the specified cause. The
-     * IOError is created with the detail message of
-     * <tt>(cause==null ? null : cause.toString())</tt> (which typically
-     * contains the class and detail message of cause).
+     * 使用指定的原因构造一个新的 IOError 实例. 使用 <tt>( cause == null ? null : cause.toString() )</tt>
+     * (通常包含cause的类和详细消息) 的详细消息创建I OError.
      *
-     * @param  cause
-     *         The cause of this error, or <tt>null</tt> if the cause
-     *         is not known
+     * @param cause 导致此错误的原因, 如果原因未知, 则为 <tt>null</tt>
      */
     public IOError(Throwable cause) {
         super(cause);
