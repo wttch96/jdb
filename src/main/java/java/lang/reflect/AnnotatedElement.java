@@ -1,115 +1,75 @@
-/*
- * Copyright (c) 2003, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang.reflect;
-
-import java.lang.annotation.Annotation;
-import java.lang.annotation.AnnotationFormatError;
-import java.lang.annotation.Repeatable;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import sun.reflect.annotation.AnnotationSupport;
 import sun.reflect.annotation.AnnotationType;
 
+import java.lang.annotation.Annotation;
+import java.lang.annotation.AnnotationFormatError;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 /**
- * Represents an annotated element of the program currently running in this
- * VM.  This interface allows annotations to be read reflectively.  All
- * annotations returned by methods in this interface are immutable and
- * serializable. The arrays returned by methods of this interface may be modified
- * by callers without affecting the arrays returned to other callers.
+ * 表示虚拟机中当前运行的程序中的一个带注解的元素. 这个接口允许注解可以通过反射被读取.
+ * 通过这个接口的方法返回的所有注解都是不可变的并且可被序列号.
+ * 通过这个接口的方法返回的数组可以被调用者修改并不影响它的返回值给其他调用者.
  *
- * <p>The {@link #getAnnotationsByType(Class)} and {@link
- * #getDeclaredAnnotationsByType(Class)} methods support multiple
- * annotations of the same type on an element. If the argument to
- * either method is a repeatable annotation type (JLS 9.6), then the
- * method will "look through" a container annotation (JLS 9.7), if
- * present, and return any annotations inside the container. Container
- * annotations may be generated at compile-time to wrap multiple
- * annotations of the argument type.
+ * <p>{@link #getAnnotationsByType(Class)} 和 {@link #getDeclaredAnnotationsByType(Class)}
+ * 方法支持元素上相同类型的多个注解. 如果任一方法的参数是可重复的注解类型(JLS 9.6),
+ * 那么该方法将"查看"一个容器注解(JLS 9.7), 如果存在的话就返回容器中的所有注解.
+ * 容器注解可以在编译是生成以包装参数类型的多个注解.
  *
- * <p>The terms <em>directly present</em>, <em>indirectly present</em>,
- * <em>present</em>, and <em>associated</em> are used throughout this
- * interface to describe precisely which annotations are returned by
- * methods:
+ * <p>此接口中使用术语<em>directly present 直接存在</em>, <em>indirectly present 间接存在</em>,
+ * <em>present 存在</em> 和 <em>associated 关联</em> 来精确描述哪些注解由方法返回:
  *
  * <ul>
  *
- * <li> An annotation <i>A</i> is <em>directly present</em> on an
- * element <i>E</i> if <i>E</i> has a {@code
- * RuntimeVisibleAnnotations} or {@code
- * RuntimeVisibleParameterAnnotations} or {@code
- * RuntimeVisibleTypeAnnotations} attribute, and the attribute
- * contains <i>A</i>.
+ * <li>
+ * 如果元素 <i>E</i> 有 {@code RuntimeVisibleAnnotations } 或者
+ * {@code RuntimeVisibleParameterAnnotations} 或者 {@code RuntimeVisibleTypeAnnotations}
+ * 属性, 并且这个属性包含 <i>A</i>, 则元素 <i>E</i> 上的注解被认为是
+ * <em>directly present 直接存在</em>的.
  *
- * <li>An annotation <i>A</i> is <em>indirectly present</em> on an
- * element <i>E</i> if <i>E</i> has a {@code RuntimeVisibleAnnotations} or
- * {@code RuntimeVisibleParameterAnnotations} or {@code RuntimeVisibleTypeAnnotations}
- * attribute, and <i>A</i> 's type is repeatable, and the attribute contains
- * exactly one annotation whose value element contains <i>A</i> and whose
- * type is the containing annotation type of <i>A</i> 's type.
+ * <li>如果元素 <i>E</i> 有 {@code RuntimeVisibleAnnotations} 或者
+ * {@code RuntimeVisibleParameterAnnotations} 或者 {@code RuntimeVisibleTypeAnnotations}
+ * 属性, <i>A</i> 的类型是可重复的, 并且这个属性包含刚好一个注解, 其值包含 <i>A</i>,
+ * 其类型是包含注解类型 <i>A</i> 的类型. 则元素 <i>E</i> 上的注解被认为是
+ * <em>indirectly present 间接存在</em>.
  *
- * <li>An annotation <i>A</i> is present on an element <i>E</i> if either:
+ * <li> 一个元素 <i>E</i> 上的注解 <i>A</i> 如果满足以下条件之一则
+ * 被认为是 <em>present 存在</em>的:
  *
  * <ul>
  *
- * <li><i>A</i> is directly present on <i>E</i>; or
+ * <li><i>A</i> 直接存在在 <i>E</i> 上; 或者
  *
- * <li>No annotation of <i>A</i> 's type is directly present on
- * <i>E</i>, and <i>E</i> is a class, and <i>A</i> 's type is
- * inheritable, and <i>A</i> is present on the superclass of <i>E</i>.
+ * <li>没有 <i>A</i> 类型的注解直接存在在 <i>E</i> 上, 并且 <i>E</i> 是一个类,
+ * 注解 <i>A</i> 的类型是可继承的注解类型,  <i>A</i> 存在于 <i>E</i>的超类.
  *
  * </ul>
  *
- * <li>An annotation <i>A</i> is <em>associated</em> with an element <i>E</i>
- * if either:
+ * <li> 一个元素 <i>E</i> 上的注解 <i>A</i> 如果满足以下条件之一则
+ * 被认为是 <em>associated 关联</em>的:
  *
  * <ul>
  *
- * <li><i>A</i> is directly or indirectly present on <i>E</i>; or
+ * <li><i>A</i> 直接或间接存在在 <i>E</i>上; 或者
  *
- * <li>No annotation of <i>A</i> 's type is directly or indirectly
- * present on <i>E</i>, and <i>E</i> is a class, and <i>A</i>'s type
- * is inheritable, and <i>A</i> is associated with the superclass of
- * <i>E</i>.
+ * <li>没有 <i>A</i> 类型的注解直接或间接存在在 <i>E</i> 上, 并且 <i>E</i> 是一个类,
+ * <i>A</i> 的类型是可继承的注解类型, 并且 <i>A</i> 和 <i>E</i> 的超类存在关联关系.
  *
  * </ul>
  *
  * </ul>
  *
- * <p>The table below summarizes which kind of annotation presence
- * different methods in this interface examine.
+ * <p>下面的表总结了这个接口检查中的不同方法的注解存在的类型.
  * <p>
  * <table border>
- * <caption>Overview of kind of presence detected by different AnnotatedElement methods</caption>
- * <tr><th colspan=2></th><th colspan=4>Kind of Presence</th>
- * <tr><th colspan=2>Method</th><th>Directly Present</th><th>Indirectly Present</th><th>Present</th><th>Associated</th>
+ * <caption>由 AnnotatedElement 不同方法检测到的存在类型的概述 </caption>
+ * <tr><th colspan=2></th><th colspan=4>存在的类型</th>
+ * <tr><th colspan=2>方法</th><th>直接存在</th><th>间接存在</th><th>存在</th><th>关联</th>
  * <tr><td align=right>{@code T}</td><td>{@link #getAnnotation(Class) getAnnotation(Class&lt;T&gt;)}
  * <td></td><td></td><td>X</td><td></td>
  * </tr>
@@ -130,103 +90,80 @@ import sun.reflect.annotation.AnnotationType;
  * </tr>
  * </table>
  *
- * <p>For an invocation of {@code get[Declared]AnnotationsByType( Class <
- * T >)}, the order of annotations which are directly or indirectly
- * present on an element <i>E</i> is computed as if indirectly present
- * annotations on <i>E</i> are directly present on <i>E</i> in place
- * of their container annotation, in the order in which they appear in
- * the value element of the container annotation.
+ * <p>对于{@code get[Declared]AnnotationsByType(Class <T>)} 的调用,
+ * 计算直接或间接存在于元素 <i>E</i> 上的注解的顺序, 就好像
+ * <i>E</i> 上的间接存在注解直接存在于 <i>E</i> 上代替其容器注解一样,
+ * 按它们出现在容器注解的value元素中的顺序.
  *
- * <p>There are several compatibility concerns to keep in mind if an
- * annotation type <i>T</i> is originally <em>not</em> repeatable and
- * later modified to be repeatable.
+ * <p>如果注解类型 <i>T</i> 最初 <em>不</em>可重复并且稍后修改为
+ * 可重复, 则需要记住几个兼容性问题.
  * <p>
- * The containing annotation type for <i>T</i> is <i>TC</i>.
+ * <i>T</i> 的包含注解类型是 <i>TC</i>.
  *
  * <ul>
  *
- * <li>Modifying <i>T</i> to be repeatable is source and binary
- * compatible with existing uses of <i>T</i> and with existing uses
- * of <i>TC</i>.
+ * <li> 在源文件和二进制文件中修改 <i>T</i> 为可重复的, 兼容 <i>T</i>
+ * 的现有用途以及 <i>TC</i> 的现有用途.
  * <p>
- * That is, for source compatibility, source code with annotations of
- * type <i>T</i> or of type <i>TC</i> will still compile. For binary
- * compatibility, class files with annotations of type <i>T</i> or of
- * type <i>TC</i> (or with other kinds of uses of type <i>T</i> or of
- * type <i>TC</i>) will link against the modified version of <i>T</i>
- * if they linked against the earlier version.
+ * 也就是说, 对于源兼容性, 注解类型为 <i>T</i> 或 <i>TC</i> 的源代码仍将编译.
+ * 对于二进制兼容性, 注解类型为 <i>T</i> 或类型为 <i>TC</i> 的类文件(或类型为
+ * <i>T</i> 或类型 <i>TC</i>）将链接到 <i>T</i>的修改版本, 如果它们与早期版本链接.
  * <p>
- * (An annotation type <i>TC</i> may informally serve as an acting
- * containing annotation type before <i>T</i> is modified to be
- * formally repeatable. Alternatively, when <i>T</i> is made
- * repeatable, <i>TC</i> can be introduced as a new type.)
+ * (在 <i>T</i> 在正式修改为可重复之前, 注解类型 <i>TC</i> 可以非正式地用在包含注解类型的
+ * 动作. 或者, 当使 <i>T</i> 可重复时, 可以引入 <i>TC</i> 作为新的类型.)
  *
- * <li>If an annotation type <i>TC</i> is present on an element, and
- * <i>T</i> is modified to be repeatable with <i>TC</i> as its
- * containing annotation type then:
+ * <li>如果一个元素上的 <i>TC</i> 类型注解存在, 并且 <i>T</i> 修改为可重复,
+ * <i>TC</i> 作为它的注解类型的容器 :
  *
  * <ul>
  *
- * <li>The change to <i>T</i> is behaviorally compatible with respect
- * to the {@code get[Declared]Annotation(Class<T>)} (called with an
- * argument of <i>T</i> or <i>TC</i>) and {@code
- * get[Declared]Annotations()} methods because the results of the
- * methods will not change due to <i>TC</i> becoming the containing
- * annotation type for <i>T</i>.
+ * <li>对于 <i>T</i> 的更改在行为上与 {@code get[Declared]Annotation(Class<T>)}
+ * (使用 <i>T</i> 或者 <i>TC</i> 做参数) 和 {@code get[Declared]Annotations()}
+ * 方法相符, 因为 <i>TC</i> 变为 <i>T</i> 的包含注解类型, 方法的结果不会改变.
  *
- * <li>The change to <i>T</i> changes the results of the {@code
- * get[Declared]AnnotationsByType(Class<T>)} methods called with an
- * argument of <i>T</i>, because those methods will now recognize an
- * annotation of type <i>TC</i> as a container annotation for <i>T</i>
- * and will "look through" it to expose annotations of type <i>T</i>.
+ * <li>对于 <i>T</i> 的更改在结果上和以 <i>T</i> 作为参数调用
+ * {@code get[Declared]AnnotationsByType(Class<T>)} 的结果是一致的,
+ * 因为这些方法将注解类型 <i>TC</i> 视为 <i>T</i> 的容器注解类型,
+ * 并将"查看"它以显示类型 <i>T</i> 的注解.
  *
  * </ul>
  *
- * <li>If an annotation of type <i>T</i> is present on an
- * element and <i>T</i> is made repeatable and more annotations of
- * type <i>T</i> are added to the element:
+ * <li>如果元素 <i>E</i> 上存在 <i>T</i> 类型的注解, 并且 <i>T</i> 可重复使用,
+ * 将更多类型为 <i>T</i> 的注解添加到 <i>E</i> 元素上:
  *
  * <ul>
  *
- * <li> The addition of the annotations of type <i>T</i> is both
- * source compatible and binary compatible.
+ * <li> <i>T</i> 类型注解的添加即使源代码兼容又是二进制兼容的.
  *
- * <li>The addition of the annotations of type <i>T</i> changes the results
- * of the {@code get[Declared]Annotation(Class<T>)} methods and {@code
- * get[Declared]Annotations()} methods, because those methods will now
- * only see a container annotation on the element and not see an
- * annotation of type <i>T</i>.
+ * <li>添加的 <i>T</i> 类型的注解改变了 {@code get[Declared]Annotation(Class<T>)}
+ * 和 {@code get[Declared]Annotations()} 方法的结果, 因为这些方法只会在元素上看到
+ * 容器注解类型, 而不会看到类型 <i>T</i> 的注解.
  *
- * <li>The addition of the annotations of type <i>T</i> changes the
- * results of the {@code get[Declared]AnnotationsByType(Class<T>)}
- * methods, because their results will expose the additional
- * annotations of type <i>T</i> whereas previously they exposed only a
- * single annotation of type <i>T</i>.
+ * <li>添加的 <i>T</i> 类型的注解改变了 {@code get[Declared]AnnotationsByType(Class<T>)}
+ * 方法的结果, 因为他们的结果将公开类型 <i>T</i> 的附加注解, 而之前它们只是公开了
+ * 类型 <i>T</i> 的单个注解.
  *
  * </ul>
  *
  * </ul>
  *
- * <p>If an annotation returned by a method in this interface contains
- * (directly or indirectly) a {@link Class}-valued member referring to
- * a class that is not accessible in this VM, attempting to read the class
- * by calling the relevant Class-returning method on the returned annotation
- * will result in a {@link TypeNotPresentException}.
+ * <p>如果此接口中的方法返回一个注解包含(直接或间接)引用此 VM 中无法访问的类的
+ * {@link Class} 值成员, 则尝试通过调用相关的类返回方法来读取该类来返回注解,
+ * 这将导致 {@link TypeNotPresentException} 异常.
+ * wttch: 注解中的参数可能包含了 VM 中无法访问的类.
  *
- * <p>Similarly, attempting to read an enum-valued member will result in
- * a {@link EnumConstantNotPresentException} if the enum constant in the
- * annotation is no longer present in the enum type.
+ * <p>同样地, 尝试读取枚举的值成员将导致 {@link EnumConstantNotPresentException} 异常,
+ * 如果注解中的枚举常量不在存在于枚举中.
  *
- * <p>If an annotation type <i>T</i> is (meta-)annotated with an
- * {@code @Repeatable} annotation whose value element indicates a type
- * <i>TC</i>, but <i>TC</i> does not declare a {@code value()} method
- * with a return type of <i>T</i>{@code []}, then an exception of type
- * {@link java.lang.annotation.AnnotationFormatError} is thrown.
+ * <p>如果一个注解 <i>T</i> 被 {@code @Repeatable} (元)注解,  元素的值被标识为  <i>TC</i>,
+ * 但是 <i>TC</i> 没有定义 {@code value()} 返回值为 <i>T</i>{@code []} 的方法, 那么
+ * 将抛出 {@link java.lang.annotation.AnnotationFormatError} 类型的异常.
  *
- * <p>Finally, attempting to read a member whose definition has evolved
- * incompatibly will result in a {@link
- * java.lang.annotation.AnnotationTypeMismatchException} or an
- * {@link java.lang.annotation.IncompleteAnnotationException}.
+ * <p>最后, 尝试阅读其定义不兼容的成员将导致抛出一个
+ * {@link java.lang.annotation.AnnotationTypeMismatchException} 或者
+ * {@link java.lang.annotation.IncompleteAnnotationException} 异常.
+ * <p>
+ * // TODO 最后合并 reflect 分支和 lang(annotation) 分支时, 对 annotation 包中的这些异常进行简单说明
  *
  * @author Josh Bloch
  * @see java.lang.EnumConstantNotPresentException
@@ -238,21 +175,17 @@ import sun.reflect.annotation.AnnotationType;
  */
 public interface AnnotatedElement {
     /**
-     * Returns true if an annotation for the specified type
-     * is <em>present</em> on this element, else false.  This method
-     * is designed primarily for convenient access to marker annotations.
+     * 返回 true 如果元素上有指定类型的注解 <em>存在</em>, 否则 false.
+     * 这个方法主要用于方便访问标记注解.
      *
-     * <p>The truth value returned by this method is equivalent to:
+     * <p>此方法返回真值等同于:
      * {@code getAnnotation(annotationClass) != null}
      *
-     * <p>The body of the default method is specified to be the code
-     * above.
+     * <p>默认方法的主体被指定为下面的代码.
      *
-     * @param annotationClass the Class object corresponding to the
-     *                        annotation type
-     * @return true if an annotation for the specified annotation
-     * type is present on this element, else false
-     * @throws NullPointerException if the given annotation class is null
+     * @param annotationClass 注解类型相应的类对象
+     * @return true 如果元素上有指定类型的注解 <em>存在</em>, 否则 false
+     * @throws NullPointerException 如果给定的类对象为空
      * @since 1.5
      */
     default boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
@@ -260,84 +193,63 @@ public interface AnnotatedElement {
     }
 
     /**
-     * Returns this element's annotation for the specified type if
-     * such an annotation is <em>present</em>, else null.
+     * 返回这个元素上指定类型的注解, 如果这样一个注解 <em>存在</em>, 否则返回 null.
      *
-     * @param <T>             the type of the annotation to query for and return if present
-     * @param annotationClass the Class object corresponding to the
-     *                        annotation type
-     * @return this element's annotation for the specified annotation type if
-     * present on this element, else null
-     * @throws NullPointerException if the given annotation class is null
+     * @param <T>             如果注解存在, 查询和返回注解的类型
+     * @param annotationClass 注解类型相应的类对象
+     * @return 这个元素上指定类型的注解, 如果这样一个注解 <em>存在</em>, 否则返回 null
+     * @throws NullPointerException 如果给定的类对象为空
      * @since 1.5
      */
     <T extends Annotation> T getAnnotation(Class<T> annotationClass);
 
     /**
-     * Returns annotations that are <em>present</em> on this element.
+     * 返回元素上 <em>存在</em> 的所有注解.
      * <p>
-     * If there are no annotations <em>present</em> on this element, the return
-     * value is an array of length 0.
+     * 如果元素上没有注解 <em>存在</em> , 将返回一个长度为 0 的数组.
      * <p>
-     * The caller of this method is free to modify the returned array; it will
-     * have no effect on the arrays returned to other callers.
+     * 这个方法的调用者可以自由修改返回的数组; 它不会影响数组的返回值给其他调用者.
      *
-     * @return annotations present on this element
+     * @return 元素上存在的注解
      * @since 1.5
      */
     Annotation[] getAnnotations();
 
     /**
-     * Returns annotations that are <em>associated</em> with this element.
+     * 返回这个元素上 <em>关联</em> 的注解.
      * <p>
-     * If there are no annotations <em>associated</em> with this element, the return
-     * value is an array of length 0.
+     * 如果元素上没有注解 <em>关联</em> , 将返回一个长度为 0 的数组.
      * <p>
-     * The difference between this method and {@link #getAnnotation(Class)}
-     * is that this method detects if its argument is a <em>repeatable
-     * annotation type</em> (JLS 9.6), and if so, attempts to find one or
-     * more annotations of that type by "looking through" a container
-     * annotation.
+     * 它和 {@link #getAnnotation(Class)} 不同的是
+     * 这个方法检测它的参数是一个 <em>可重复的注解</em> (JLS 9.6),
+     * 如果这样, 尝试查找一个或者更多这个类型的注解通过"查看"它的包含注解类型.
      * <p>
-     * The caller of this method is free to modify the returned array; it will
-     * have no effect on the arrays returned to other callers.
+     * 这个方法的调用者可以自由修改返回的数组; 它不会影响数组的返回值给其他调用者.
      *
-     * @param <T>             the type of the annotation to query for and return if present
-     * @param annotationClass the Class object corresponding to the
-     *                        annotation type
-     * @return all this element's annotations for the specified annotation type if
-     * associated with this element, else an array of length zero
-     * @throws NullPointerException if the given annotation class is null
-     * @implSpec The default implementation first calls {@link
-     * #getDeclaredAnnotationsByType(Class)} passing {@code
-     * annotationClass} as the argument. If the returned array has
-     * length greater than zero, the array is returned. If the returned
-     * array is zero-length and this {@code AnnotatedElement} is a
-     * class and the argument type is an inheritable annotation type,
-     * and the superclass of this {@code AnnotatedElement} is non-null,
-     * then the returned result is the result of calling {@link
-     * #getAnnotationsByType(Class)} on the superclass with {@code
-     * annotationClass} as the argument. Otherwise, a zero-length
-     * array is returned.
+     * @param <T>             如果注解存在, 查询和返回注解的类型
+     * @param annotationClass 注解类型相应的类对象
+     * @return 返回这个元素上所有 <em>关联</em> 的注解数组, 如果没有关联的, 则数组长度为 0
+     * @throws NullPointerException 如果指定的类对象为空
+     * @implSpec 默认实现先调用 {@link #getDeclaredAnnotationsByType(Class)} 通过
+     * {@code annotationClass} 作为参数. 如果数组大小大于 0, 则返回这个数组. 如果返回
+     * 的数组长度为 0, {@code AnnotatedElement} 是一个类并且参数类型是一个可继承的注解,
+     * {@code AnnotatedElement} 的超类不为空, 则通过调用超类的 {@link Class#getAnnotationsByType(Class)}
+     * 使用参数 {@code annotationClass}. 否则返回一个长度为 0 的数组.
      * @since 1.8
      */
     default <T extends Annotation> T[] getAnnotationsByType(Class<T> annotationClass) {
         /*
-         * Definition of associated: directly or indirectly present OR
-         * neither directly nor indirectly present AND the element is
-         * a Class, the annotation type is inheritable, and the
-         * annotation type is associated with the superclass of the
-         * element.
+         * 定义关联: 直接或间接存在 或者 直接和间接都不存在 并且 元素是个 Class, 可继承类型的注解,
+         * 并且这个注解类型和这个元素的超类是关联的.
          */
         T[] result = getDeclaredAnnotationsByType(annotationClass);
 
-        if (result.length == 0 && // Neither directly nor indirectly present
-                this instanceof Class && // the element is a class
-                AnnotationType.getInstance(annotationClass).isInherited()) { // Inheritable
+        if (result.length == 0 && // 没有直接或间接存在的关系
+                this instanceof Class && // 元素是类 (不是字段或者方法等)
+                AnnotationType.getInstance(annotationClass).isInherited()) { // 可继承的
             Class<?> superClass = ((Class<?>) this).getSuperclass();
             if (superClass != null) {
-                // Determine if the annotation is associated with the
-                // superclass
+                // 确定注解是否和超类相关联
                 result = superClass.getAnnotationsByType(annotationClass);
             }
         }
@@ -346,31 +258,25 @@ public interface AnnotatedElement {
     }
 
     /**
-     * Returns this element's annotation for the specified type if
-     * such an annotation is <em>directly present</em>, else null.
+     * 返回这个元素上的指定类型的注解, 如果这个注解是 <em>直接存在</em>, 否则 null .
      * <p>
-     * This method ignores inherited annotations. (Returns null if no
-     * annotations are directly present on this element.)
+     * 这个方法忽略继承注解. (返回 null 如果没有注解直接存在在这个元素.)
      *
-     * @param <T>             the type of the annotation to query for and return if directly present
-     * @param annotationClass the Class object corresponding to the
-     *                        annotation type
-     * @return this element's annotation for the specified annotation type if
-     * directly present on this element, else null
-     * @throws NullPointerException if the given annotation class is null
-     * @implSpec The default implementation first performs a null check
-     * and then loops over the results of {@link
-     * #getDeclaredAnnotations} returning the first annotation whose
-     * annotation type matches the argument type.
+     * @param <T>             如果注解存在, 查询和返回注解的类型
+     * @param annotationClass 注解类型相应的类对象
+     * @return 这个元素上的指定类型的注解, 如果这个注解是 <em>直接存在</em>, 否则 null .
+     * @throws NullPointerException 如果给定的类对象为空
+     * @implSpec 默认实现首先执行非空检测, 之后循环遍历 {@link #getDeclaredAnnotations}
+     * 的结果, 返回其注解类型与参数类型匹配的第一个注解.
      * @since 1.8
      */
     default <T extends Annotation> T getDeclaredAnnotation(Class<T> annotationClass) {
+        // 非空检测
         Objects.requireNonNull(annotationClass);
-        // Loop over all directly-present annotations looking for a matching one
+        // 循环遍历直接存在的注解, 直到找到相匹配的一个
         for (Annotation annotation : getDeclaredAnnotations()) {
             if (annotationClass.equals(annotation.annotationType())) {
-                // More robust to do a dynamic cast at runtime instead
-                // of compile-time only.
+                // 更强大, 可以在运行时进行动态转换, 而不仅仅是编译时.
                 return annotationClass.cast(annotation);
             }
         }
@@ -378,46 +284,28 @@ public interface AnnotatedElement {
     }
 
     /**
-     * Returns this element's annotation(s) for the specified type if
-     * such annotations are either <em>directly present</em> or
-     * <em>indirectly present</em>. This method ignores inherited
-     * annotations.
+     * 返回元素的指定类型的注解如果这个注解是 <em>直接类型</em> 或 <em>间接类型</em>.
+     * 这个方法忽略继承注解.
      * <p>
-     * If there are no specified annotations directly or indirectly
-     * present on this element, the return value is an array of length
-     * 0.
+     * 如果没有指定类型的注解直接或间接存在在这个元素上, 则返回长度为 0 的数组.
      * <p>
-     * The difference between this method and {@link
-     * #getDeclaredAnnotation(Class)} is that this method detects if its
-     * argument is a <em>repeatable annotation type</em> (JLS 9.6), and if so,
-     * attempts to find one or more annotations of that type by "looking
-     * through" a container annotation if one is present.
+     * 它和 {@link #getDeclaredAnnotation(Class)}  不同的是
+     * 这个方法检测它的参数是一个 <em>可重复的注解</em> (JLS 9.6),
+     * 如果这样, 尝试查找一个或者更多这个类型的注解通过"查看"它的包含注解类型.
      * <p>
-     * The caller of this method is free to modify the returned array; it will
-     * have no effect on the arrays returned to other callers.
+     * 这个方法的调用者可以自由修改返回的数组; 它不会影响数组的返回值给其他调用者.
      *
-     * @param <T>             the type of the annotation to query for and return
-     *                        if directly or indirectly present
-     * @param annotationClass the Class object corresponding to the
-     *                        annotation type
-     * @return all this element's annotations for the specified annotation type if
-     * directly or indirectly present on this element, else an array of length zero
-     * @throws NullPointerException if the given annotation class is null
-     * @implSpec The default implementation may call {@link
-     * #getDeclaredAnnotation(Class)} one or more times to find a
-     * directly present annotation and, if the annotation type is
-     * repeatable, to find a container annotation. If annotations of
-     * the annotation type {@code annotationClass} are found to be both
-     * directly and indirectly present, then {@link
-     * #getDeclaredAnnotations()} will get called to determine the
-     * order of the elements in the returned array.
+     * @param <T>             如果注解存在, 查询和返回注解的类型
+     * @param annotationClass 注解类型相应的类对象
+     * @return 元素的指定类型的注解如果这个注解是 <em>直接类型</em> 或 <em>间接类型</em>.
+     * @throws NullPointerException 如果给定的类对象为空
+     * @implSpec 默认实现可能调用 {@link #getDeclaredAnnotation(Class)} 一次或多次查找
+     * 直接存在的注解, 如果这个注解类型是可重复的, 查找包含注解类型. 如果注解类型 {@code annotationClass}
+     * 直接或间接存在被发现, 那么{@link #getDeclaredAnnotations()} 方法将被调用以确定返回数组中元素的顺序.
      *
-     * <p>Alternatively, the default implementation may call {@link
-     * #getDeclaredAnnotations()} a single time and the returned array
-     * examined for both directly and indirectly present
-     * annotations. The results of calling {@link
-     * #getDeclaredAnnotations()} are assumed to be consistent with the
-     * results of calling {@link #getDeclaredAnnotation(Class)}.
+     * <p>或者，默认实现可以一次调用 {@link #getDeclaredAnnotations()},
+     * 并检查返回的数组是否直接和间接地呈现注解. 调用{@link #getDeclaredAnnotations()}的结果
+     * 假定与调用{@link #getDeclaredAnnotation(Class)} 的结果一致.
      * @since 1.8
      */
     default <T extends Annotation> T[] getDeclaredAnnotationsByType(Class<T> annotationClass) {
@@ -432,16 +320,13 @@ public interface AnnotatedElement {
     }
 
     /**
-     * Returns annotations that are <em>directly present</em> on this element.
-     * This method ignores inherited annotations.
+     * 返回这个元素上 <em>直接存在</em> 的注解. 这个方法将忽略继承的注解.
      * <p>
-     * If there are no annotations <em>directly present</em> on this element,
-     * the return value is an array of length 0.
+     * 如果元素上没有注解 <em>直接存在</em> , 将返回一个长度为 0 的数组.
      * <p>
-     * The caller of this method is free to modify the returned array; it will
-     * have no effect on the arrays returned to other callers.
+     * 这个方法的调用者可以自由修改返回的数组; 它不会影响数组的返回值给其他调用者.
      *
-     * @return annotations directly present on this element
+     * @return 直接存在于元素上的所有注解
      * @since 1.5
      */
     Annotation[] getDeclaredAnnotations();
