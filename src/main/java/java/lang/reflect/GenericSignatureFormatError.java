@@ -38,7 +38,6 @@ public class GenericSignatureFormatError extends ClassFormatError {
 
     /**
      * Constructs a new {@code GenericSignatureFormatError}.
-     *
      */
     public GenericSignatureFormatError() {
         super();

@@ -29,12 +29,11 @@ package java.lang.reflect;
  * Member is an interface that reflects identifying information about
  * a single member (a field or a method) or a constructor.
  *
+ * @author Nakul Saraiya
  * @see java.lang.Class
  * @see Field
  * @see Method
  * @see Constructor
- *
- * @author Nakul Saraiya
  */
 public
 interface Member {

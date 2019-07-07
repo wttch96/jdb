@@ -28,9 +28,11 @@ package java.lang.reflect;
 import sun.reflect.MethodAccessor;
 import sun.reflect.ConstructorAccessor;
 
-/** Package-private class implementing the
-    sun.reflect.LangReflectAccess interface, allowing the java.lang
-    package to instantiate objects in this package. */
+/**
+ * Package-private class implementing the
+ * sun.reflect.LangReflectAccess interface, allowing the java.lang
+ * package to instantiate objects in this package.
+ */
 
 class ReflectAccess implements sun.reflect.LangReflectAccess {
     public Field newField(Class<?> declaringClass,
@@ -39,15 +41,14 @@ class ReflectAccess implements sun.reflect.LangReflectAccess {
                           int modifiers,
                           int slot,
                           String signature,
-                          byte[] annotations)
-    {
+                          byte[] annotations) {
         return new Field(declaringClass,
-                         name,
-                         type,
-                         modifiers,
-                         slot,
-                         signature,
-                         annotations);
+                name,
+                type,
+                modifiers,
+                slot,
+                signature,
+                annotations);
     }
 
     public Method newMethod(Class<?> declaringClass,
@@ -60,19 +61,18 @@ class ReflectAccess implements sun.reflect.LangReflectAccess {
                             String signature,
                             byte[] annotations,
                             byte[] parameterAnnotations,
-                            byte[] annotationDefault)
-    {
+                            byte[] annotationDefault) {
         return new Method(declaringClass,
-                          name,
-                          parameterTypes,
-                          returnType,
-                          checkedExceptions,
-                          modifiers,
-                          slot,
-                          signature,
-                          annotations,
-                          parameterAnnotations,
-                          annotationDefault);
+                name,
+                parameterTypes,
+                returnType,
+                checkedExceptions,
+                modifiers,
+                slot,
+                signature,
+                annotations,
+                parameterAnnotations,
+                annotationDefault);
     }
 
     public <T> Constructor<T> newConstructor(Class<T> declaringClass,
@@ -82,16 +82,15 @@ class ReflectAccess implements sun.reflect.LangReflectAccess {
                                              int slot,
                                              String signature,
                                              byte[] annotations,
-                                             byte[] parameterAnnotations)
-    {
+                                             byte[] parameterAnnotations) {
         return new Constructor<>(declaringClass,
-                                  parameterTypes,
-                                  checkedExceptions,
-                                  modifiers,
-                                  slot,
-                                  signature,
-                                  annotations,
-                                  parameterAnnotations);
+                parameterTypes,
+                checkedExceptions,
+                modifiers,
+                slot,
+                signature,
+                annotations,
+                parameterAnnotations);
     }
 
     public MethodAccessor getMethodAccessor(Method m) {
@@ -107,8 +106,7 @@ class ReflectAccess implements sun.reflect.LangReflectAccess {
     }
 
     public void setConstructorAccessor(Constructor<?> c,
-                                       ConstructorAccessor accessor)
-    {
+                                       ConstructorAccessor accessor) {
         c.setConstructorAccessor(accessor);
     }
 
@@ -136,11 +134,11 @@ class ReflectAccess implements sun.reflect.LangReflectAccess {
     // Copying routines, needed to quickly fabricate new Field,
     // Method, and Constructor objects from templates
     //
-    public Method      copyMethod(Method arg) {
+    public Method copyMethod(Method arg) {
         return arg.copy();
     }
 
-    public Field       copyField(Field arg) {
+    public Field copyField(Field arg) {
         return arg.copy();
     }
 

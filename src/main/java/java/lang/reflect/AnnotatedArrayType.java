@@ -40,5 +40,5 @@ public interface AnnotatedArrayType extends AnnotatedType {
      *
      * @return the potentially annotated generic component type of this array type
      */
-    AnnotatedType  getAnnotatedGenericComponentType();
+    AnnotatedType getAnnotatedGenericComponentType();
 }

@@ -45,13 +45,12 @@ public class InvocationTargetException extends ReflectiveOperationException {
      */
     private static final long serialVersionUID = 4085088731926701167L;
 
-     /**
+    /**
      * This field holds the target if the
      * InvocationTargetException(Throwable target) constructor was
      * used to instantiate the object
      *
      * @serial
-     *
      */
     private Throwable target;
 
@@ -60,7 +59,7 @@ public class InvocationTargetException extends ReflectiveOperationException {
      * {@code null} as the target exception.
      */
     protected InvocationTargetException() {
-        super((Throwable)null);  // Disallow initCause
+        super((Throwable) null);  // Disallow initCause
     }
 
     /**
@@ -69,7 +68,7 @@ public class InvocationTargetException extends ReflectiveOperationException {
      * @param target the target exception
      */
     public InvocationTargetException(Throwable target) {
-        super((Throwable)null);  // Disallow initCause
+        super((Throwable) null);  // Disallow initCause
         this.target = target;
     }
 
@@ -102,8 +101,8 @@ public class InvocationTargetException extends ReflectiveOperationException {
      * Returns the cause of this exception (the thrown target exception,
      * which may be {@code null}).
      *
-     * @return  the cause of this exception.
-     * @since   1.4
+     * @return the cause of this exception.
+     * @since 1.4
      */
     public Throwable getCause() {
         return target;
