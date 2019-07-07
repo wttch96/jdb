@@ -1,44 +1,18 @@
-/*
- * Copyright (c) 2012, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang.reflect;
 
 /**
- * {@code AnnotatedType} represents the potentially annotated use of a type in
- * the program currently running in this VM. The use may be of any type in the
- * Java programming language, including an array type, a parameterized type, a
- * type variable, or a wildcard type.
+ * {@code AnnotatedType} 表明此 VM 中正在运行的程序中潜在的注解运用的类型.
+ * 在 java 编程语言中它可能是任何类型, 包含数组类型, 参数化类型, 类型变量
+ * 或者通配符类型(通配符表达式, 例如: ? extends A).
  *
  * @since 1.8
  */
 public interface AnnotatedType extends AnnotatedElement {
 
     /**
-     * Returns the underlying type that this annotated type represents.
+     * 返回此带注解类型表示的基础类型.
      *
-     * @return the type this annotated type represents
+     * @return 此带注解类型表示的基础类型
      */
     public Type getType();
 }
