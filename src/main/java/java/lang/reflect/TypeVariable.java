@@ -1,99 +1,61 @@
-/*
- * Copyright (c) 2003, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang.reflect;
 
 /**
- * TypeVariable is the common superinterface for type variables of kinds.
- * A type variable is created the first time it is needed by a reflective
- * method, as specified in this package.  If a type variable t is referenced
- * by a type (i.e, class, interface or annotation type) T, and T is declared
- * by the nth enclosing class of T (see JLS 8.1.2), then the creation of t
- * requires the resolution (see JVMS 5) of the ith enclosing class of T,
- * for i = 0 to n, inclusive. Creating a type variable must not cause the
- * creation of its bounds. Repeated creation of a type variable has no effect.
+ * TypeVariable 是类型变量的公共超类接口. 一个类型变量在第一次被反射方法需要时创建, 如此包中指定的那样.
+ * 如果一个类型变量 t 一个类型 T (i.e, class, interface 或者 annotation 类型)的引用, 并且 T 由第 n 个
+ * 封闭类 T 声明(参见 JLS 8.1.2), 之后创建 t 需要的解决方案(参见 JVMS 5) 包含 T 类的第 i 个(i = [0, n]).
+ * 创建类型变量不得导致其边界的创建. 重复创建类型变量无效.
  *
- * <p>Multiple objects may be instantiated at run-time to
- * represent a given type variable. Even though a type variable is
- * created only once, this does not imply any requirement to cache
- * instances representing the type variable. However, all instances
- * representing a type variable must be equal() to each other.
- * As a consequence, users of type variables must not rely on the identity
- * of instances of classes implementing this interface.
+ * <p>可以在运行时实例化多个对象以表示给定的类型变量. 尽管类型变量只创建一次, 但这并不意味着
+ * 需要缓存表示类型变量的实例. 但是, 表示类型变量的所有实例必须彼此 equal(). 因此, 类型变量
+ * 的用户不得依赖于实现此接口的类的实例的标识.
+ * <p>
+ * wttch:它就是来保存参数化类型列表的, 其中 {@link #getGenericDeclaration()} 是保存该参数化类型的定义相关的东西,
+ * {@link GenericDeclaration#getTypeParameters()} 获取的就是该类型的数组, 包含所有的参数化类型及其边界等信息.
  *
- * @param <D> the type of generic declaration that declared the
- *            underlying type variable.
+ * @param <D> 声明基础类型变量的泛型声明的类型
  * @since 1.5
  */
 public interface TypeVariable<D extends GenericDeclaration> extends Type, AnnotatedElement {
     /**
-     * Returns an array of {@code Type} objects representing the
-     * upper bound(s) of this type variable.  Note that if no upper bound is
-     * explicitly declared, the upper bound is {@code Object}.
+     * 返回一个 {@code Type} 对象数组来表示这个类型变量的上限.
+     * 请注意, 如果未声明上限, 则上限为 {@code Object}.
      *
-     * <p>For each upper bound B: <ul> <li>if B is a parameterized
+     * <p>对于每一个上限 B: <ul> <li>如果 B 是一个参数化类型或者类型变量, 它被创造了,
+     * (参见 {@link java.lang.reflect.ParameterizedType} )
      * type or a type variable, it is created, (see {@link
-     * java.lang.reflect.ParameterizedType ParameterizedType} for the
-     * details of the creation process for parameterized types).
-     * <li>Otherwise, B is resolved.  </ul>
+     * java.lang.reflect.ParameterizedType ParameterizedType}查看有关参数化类型的创建过程的详细信息).
+     * <li>否则, B 被解决. </ul>
      *
-     * @return an array of {@code Type}s representing the upper
-     * bound(s) of this type variable
-     * @throws TypeNotPresentException             if any of the
-     *                                             bounds refers to a non-existent type declaration
-     * @throws MalformedParameterizedTypeException if any of the
-     *                                             bounds refer to a parameterized type that cannot be instantiated
-     *                                             for any reason
+     * @return 一个 {@code Type} 对象数组来表示这个类型变量的上限
+     * @throws TypeNotPresentException             如果这些边界引用了一个不存在的类型声明
+     * @throws MalformedParameterizedTypeException 如果这些边界引用了一个参数化类型,
+     *                                             并且由于某种原因, 该类型无法被实例化.
      */
     Type[] getBounds();
 
     /**
-     * Returns the {@code GenericDeclaration} object representing the
-     * generic declaration declared this type variable.
+     * 返回表示声明此类型变量的泛型声明的{@code GenericDeclaration}对象.
      *
-     * @return the generic declaration declared for this type variable.
+     * @return 表示声明此类型变量的泛型声明的对象
      * @since 1.5
      */
     D getGenericDeclaration();
 
     /**
-     * Returns the name of this type variable, as it occurs in the source code.
+     * 返回此类型变量的名称, 因为它出现在源代码中.
      *
-     * @return the name of this type variable, as it appears in the source code
+     * @return 此类型变量的名称, 因为它出现在源代码中
      */
     String getName();
 
     /**
-     * Returns an array of AnnotatedType objects that represent the use of
-     * types to denote the upper bounds of the type parameter represented by
-     * this TypeVariable. The order of the objects in the array corresponds to
-     * the order of the bounds in the declaration of the type parameter.
+     * 返回 AnnotatedType 对象的数组, 这些对象表示使用类型来表示此 TypeVariable 表示的类型参数的上限.
+     * 数组中对象的顺序对应于 type 参数声明中的边界顺序.
      * <p>
-     * Returns an array of length 0 if the type parameter declares no bounds.
+     * 如果参数声明没有边界, 则返回长度为 0 的数组.
      *
-     * @return an array of objects representing the upper bounds of the type variable
+     * @return 表示类型参数界限的对象数组
      * @since 1.8
      */
     AnnotatedType[] getAnnotatedBounds();
