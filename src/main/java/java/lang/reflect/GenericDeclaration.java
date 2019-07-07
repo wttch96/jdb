@@ -1,49 +1,18 @@
-/*
- * Copyright (c) 2003, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang.reflect;
 
 /**
- * A common interface for all entities that declare type variables.
+ * 声明类型变量的所有实体的通用接口.
  *
  * @since 1.5
  */
 public interface GenericDeclaration extends AnnotatedElement {
     /**
-     * Returns an array of {@code TypeVariable} objects that
-     * represent the type variables declared by the generic
-     * declaration represented by this {@code GenericDeclaration}
-     * object, in declaration order.  Returns an array of length 0 if
-     * the underlying generic declaration declares no type variables.
+     * 返回一个 {@code TypeVariable} 对象的数组, 这些对象表示由此
+     * {@code GenericDeclaration}对象表示的泛型声明声明的类型变量,
+     * 按声明的顺序. 如果底层泛型声明未声明的类型变量, 则返回长度为 0 的数组.
      *
-     * @return an array of {@code TypeVariable} objects that represent
-     * the type variables declared by this generic declaration
-     * @throws GenericSignatureFormatError if the generic
-     *                                     signature of this generic declaration does not conform to
-     *                                     the format specified in
-     *                                     <cite>The Java&trade; Virtual Machine Specification</cite>
+     * @return 一个 {@code TypeVariable} 对象的数组, 这些数组表示泛型声明声明的类型变量
+     * @throws GenericSignatureFormatError 如果此通用声明的通用签名不符合<cite>Java虚拟机规范</cite>中指定的格式
      */
     public TypeVariable<?>[] getTypeParameters();
 }
