@@ -1,37 +1,10 @@
-/*
- * Copyright (c) 1996, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang.reflect;
 
 /**
- * The {@code Array} class provides static methods to dynamically create and
- * access Java arrays.
+ * {@code Array} 类提供了动态创建和访问 java 数组的静态方法.
  *
- * <p>{@code Array} permits widening conversions to occur during a get or set
- * operation, but throws an {@code IllegalArgumentException} if a narrowing
- * conversion would occur.
+ * <p>{@code Array} 允许在 get 和 set 操作期间进行扩展转换, 但如果发生了缩小转换
+ * 就会抛出 {@code IllegalArgumentException} 异常.
  *
  * @author Nakul Saraiya
  */
@@ -39,16 +12,14 @@ public final
 class Array {
 
     /**
-     * Constructor.  Class Array is not instantiable.
+     * 构造器. Array 类是不可实例化的.
      */
     private Array() {
     }
 
     /**
-     * Creates a new array with the specified component type and
-     * length.
-     * Invoking this method is equivalent to creating an array
-     * as follows:
+     * 使用指定的组件类型和长度创建一个新的数组.
+     * 执行此方法创建一个数组等同于下面的操作:
      * <blockquote>
      * <pre>
      * int[] x = {length};
@@ -56,20 +27,19 @@ class Array {
      * </pre>
      * </blockquote>
      *
-     * <p>The number of dimensions of the new array must not
-     * exceed 255.
+     * <p>新数组的维度不得超过255.
+     * <p>
+     * Wttch: 只是简单的调用了本地方法 {@link #newArray(Class, int)}.
+     * 只是为了变个名字么?
      *
-     * @param componentType the {@code Class} object representing the
-     *                      component type of the new array
-     * @param length        the length of the new array
-     * @return the new array
-     * @throws NullPointerException       if the specified
-     *                                    {@code componentType} parameter is null
-     * @throws IllegalArgumentException   if componentType is {@link
-     *                                    Void#TYPE} or if the number of dimensions of the requested array
-     *                                    instance exceed 255.
-     * @throws NegativeArraySizeException if the specified {@code length}
-     *                                    is negative
+     * @param componentType {@code Class} 表示新数组的组件类型的对象
+     * @param length        新数组的长度
+     * @return 此新数组
+     * @throws NullPointerException       如果指定的 {@code componentType} 参数为空
+     * @throws IllegalArgumentException   如果 componentType 为{@link Void#TYPE},
+     *                                    或者请求的数组实例的维数超过255
+     * @throws NegativeArraySizeException 如果指定的 {@code length} 是负数
+     * @see #newArray(Class, int)
      */
     public static Object newInstance(Class<?> componentType, int length)
             throws NegativeArraySizeException {
@@ -77,35 +47,25 @@ class Array {
     }
 
     /**
-     * Creates a new array
-     * with the specified component type and dimensions.
-     * If {@code componentType}
-     * represents a non-array class or interface, the new array
-     * has {@code dimensions.length} dimensions and
-     * {@code componentType} as its component type. If
-     * {@code componentType} represents an array class, the
-     * number of dimensions of the new array is equal to the sum
-     * of {@code dimensions.length} and the number of
-     * dimensions of {@code componentType}. In this case, the
-     * component type of the new array is the component type of
-     * {@code componentType}.
+     * 用指定的组件类型和维度创建一个新的数组.
+     * 如果 {@code componentType} 表示的是一个非数组类 或者 接口,
+     * 新数组将拥有 {@code dimensions.length} 个维度 并且 {@code componentType} 作为组件类型.
+     * 如果 {@code componentType} 表示一个数组类, 新数组的维度就等于
+     * {@code dimensions.length} 和 {@code componentType} 维度大小之和.
+     * 在这种情况下, 组件类型是 {@code componentType} 的组件类型.
      *
-     * <p>The number of dimensions of the new array must not
-     * exceed 255.
+     * <p>新数组的维度不得超过255.
+     * <p>
+     * Wttch: 只是简单的调用本地方法 {@link #multiNewArray(Class, int[])} , 并返回该方法的返回值.
      *
-     * @param componentType the {@code Class} object representing the component
-     *                      type of the new array
-     * @param dimensions    an array of {@code int} representing the dimensions of
-     *                      the new array
-     * @return the new array
-     * @throws NullPointerException       if the specified
-     *                                    {@code componentType} argument is null
-     * @throws IllegalArgumentException   if the specified {@code dimensions}
-     *                                    argument is a zero-dimensional array, if componentType is {@link
-     *                                    Void#TYPE}, or if the number of dimensions of the requested array
-     *                                    instance exceed 255.
-     * @throws NegativeArraySizeException if any of the components in
-     *                                    the specified {@code dimensions} argument is negative.
+     * @param componentType {@code Class} 表示新数组的组件类型的对象
+     * @param dimensions    一个 {@code int} 类型的数组来表示新数组的维度
+     * @return 新数组
+     * @throws NullPointerException       如果指定的 {@code componentType} 参数为空
+     * @throws IllegalArgumentException   如果 componentType 为{@link Void#TYPE},
+     *                                    或者请求的数组实例的维数超过255
+     * @throws NegativeArraySizeException 如果 {@code dimensions} 数组中任意一个数值为负数
+     * @see #multiNewArray(Class, int[])
      */
     public static Object newInstance(Class<?> componentType, int... dimensions)
             throws IllegalArgumentException, NegativeArraySizeException {
@@ -113,371 +73,299 @@ class Array {
     }
 
     /**
-     * Returns the length of the specified array object, as an {@code int}.
+     * 返回指定数组对象的长度, {@code int} 类型.
+     * <p>
+     * Wttch: 本地方法
      *
-     * @param array the array
-     * @return the length of the array
-     * @throws IllegalArgumentException if the object argument is not
-     *                                  an array
+     * @param array 此数组
+     * @return 这个数组的长度
+     * @throws IllegalArgumentException 如果参数不是一个数组
      */
     public static native int getLength(Object array)
             throws IllegalArgumentException;
 
     /**
-     * Returns the value of the indexed component in the specified
-     * array object.  The value is automatically wrapped in an object
-     * if it has a primitive type.
+     * 返回指定数组对象索引组件的值.
+     * 这个值自动装箱为一个对象, 如果它是一个原始类型.
      *
-     * @param array the array
-     * @param index the index
-     * @return the (possibly wrapped) value of the indexed component in
-     * the specified array
-     * @throws NullPointerException           If the specified object is null
-     * @throws IllegalArgumentException       If the specified object is not
-     *                                        an array
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to the
-     *                                        length of the specified array
+     * @param array 数组对象
+     * @param index 索引下标
+     * @return 指定数组中索引组件的(可能装箱的)值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      */
     public static native Object get(Object array, int index)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Returns the value of the indexed component in the specified
-     * array object, as a {@code boolean}.
+     * 返回指定数组对象索引组件的值({@code boolean} 类型).
      *
-     * @param array the array
-     * @param index the index
-     * @return the value of the indexed component in the specified array
-     * @throws NullPointerException           If the specified object is null
-     * @throws IllegalArgumentException       If the specified object is not
-     *                                        an array, or if the indexed element cannot be converted to the
-     *                                        return type by an identity or widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to the
-     *                                        length of the specified array
+     * @param array 数组对象
+     * @param index 索引下标
+     * @return 指定数组中索引组件的值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为返回值的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#get
      */
     public static native boolean getBoolean(Object array, int index)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Returns the value of the indexed component in the specified
-     * array object, as a {@code byte}.
+     * 返回指定数组对象索引组件的值({@code byte} 类型).
      *
-     * @param array the array
-     * @param index the index
-     * @return the value of the indexed component in the specified array
-     * @throws NullPointerException           If the specified object is null
-     * @throws IllegalArgumentException       If the specified object is not
-     *                                        an array, or if the indexed element cannot be converted to the
-     *                                        return type by an identity or widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to the
-     *                                        length of the specified array
+     * @param array 数组对象
+     * @param index 索引下标
+     * @return 指定数组中索引组件的值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为返回值的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#get
      */
     public static native byte getByte(Object array, int index)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Returns the value of the indexed component in the specified
-     * array object, as a {@code char}.
+     * 返回指定数组对象索引组件的值({@code char} 类型).
      *
-     * @param array the array
-     * @param index the index
-     * @return the value of the indexed component in the specified array
-     * @throws NullPointerException           If the specified object is null
-     * @throws IllegalArgumentException       If the specified object is not
-     *                                        an array, or if the indexed element cannot be converted to the
-     *                                        return type by an identity or widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to the
-     *                                        length of the specified array
+     * @param array 数组对象
+     * @param index 索引下标
+     * @return 指定数组中索引组件的值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为返回值的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#get
      */
     public static native char getChar(Object array, int index)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Returns the value of the indexed component in the specified
-     * array object, as a {@code short}.
+     * 返回指定数组对象索引组件的值({@code short} 类型).
      *
-     * @param array the array
-     * @param index the index
-     * @return the value of the indexed component in the specified array
-     * @throws NullPointerException           If the specified object is null
-     * @throws IllegalArgumentException       If the specified object is not
-     *                                        an array, or if the indexed element cannot be converted to the
-     *                                        return type by an identity or widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to the
-     *                                        length of the specified array
+     * @param array 数组对象
+     * @param index 索引下标
+     * @return 指定数组中索引组件的值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为返回值的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#get
      */
     public static native short getShort(Object array, int index)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Returns the value of the indexed component in the specified
-     * array object, as an {@code int}.
+     * 返回指定数组对象索引组件的值({@code int} 类型).
      *
-     * @param array the array
-     * @param index the index
-     * @return the value of the indexed component in the specified array
-     * @throws NullPointerException           If the specified object is null
-     * @throws IllegalArgumentException       If the specified object is not
-     *                                        an array, or if the indexed element cannot be converted to the
-     *                                        return type by an identity or widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to the
-     *                                        length of the specified array
+     * @param array 数组对象
+     * @param index 索引下标
+     * @return 指定数组中索引组件的值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为返回值的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#get
      */
     public static native int getInt(Object array, int index)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Returns the value of the indexed component in the specified
-     * array object, as a {@code long}.
+     * 返回指定数组对象索引组件的值({@code long} 类型).
      *
-     * @param array the array
-     * @param index the index
-     * @return the value of the indexed component in the specified array
-     * @throws NullPointerException           If the specified object is null
-     * @throws IllegalArgumentException       If the specified object is not
-     *                                        an array, or if the indexed element cannot be converted to the
-     *                                        return type by an identity or widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to the
-     *                                        length of the specified array
+     * @param array 数组对象
+     * @param index 索引下标
+     * @return 指定数组中索引组件的值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为返回值的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#get
      */
     public static native long getLong(Object array, int index)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Returns the value of the indexed component in the specified
-     * array object, as a {@code float}.
+     * 返回指定数组对象索引组件的值({@code float} 类型).
      *
-     * @param array the array
-     * @param index the index
-     * @return the value of the indexed component in the specified array
-     * @throws NullPointerException           If the specified object is null
-     * @throws IllegalArgumentException       If the specified object is not
-     *                                        an array, or if the indexed element cannot be converted to the
-     *                                        return type by an identity or widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to the
-     *                                        length of the specified array
+     * @param array 数组对象
+     * @param index 索引下标
+     * @return 指定数组中索引组件的值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为返回值的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#get
      */
     public static native float getFloat(Object array, int index)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Returns the value of the indexed component in the specified
-     * array object, as a {@code double}.
+     * 返回指定数组对象索引组件的值({@code double} 类型).
      *
-     * @param array the array
-     * @param index the index
-     * @return the value of the indexed component in the specified array
-     * @throws NullPointerException           If the specified object is null
-     * @throws IllegalArgumentException       If the specified object is not
-     *                                        an array, or if the indexed element cannot be converted to the
-     *                                        return type by an identity or widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to the
-     *                                        length of the specified array
+     * @param array 数组对象
+     * @param index 索引下标
+     * @return 指定数组中索引组件的值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为返回值的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#get
      */
     public static native double getDouble(Object array, int index)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Sets the value of the indexed component of the specified array
-     * object to the specified new value.  The new value is first
-     * automatically unwrapped if the array has a primitive component
-     * type.
+     * 用指定的值设置定义数组对象的索引组件的值.
+     * 如果数组具有原始类型的组件, 则首先会自动拆箱.
      *
-     * @param array the array
-     * @param index the index into the array
-     * @param value the new value of the indexed component
-     * @throws NullPointerException           If the specified object argument
-     *                                        is null
-     * @throws IllegalArgumentException       If the specified object argument
-     *                                        is not an array, or if the array component type is primitive and
-     *                                        an unwrapping conversion fails
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to
-     *                                        the length of the specified array
+     * @param array 数组对象
+     * @param index 数组中的索引下标
+     * @param value 索引组件的新值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        组件类型是原始类型, 但是拆箱失败
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      */
     public static native void set(Object array, int index, Object value)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Sets the value of the indexed component of the specified array
-     * object to the specified {@code boolean} value.
+     * 用指定的值设置定义数组对象的索引组件的值({@code boolean} 类型).
      *
-     * @param array the array
-     * @param index the index into the array
-     * @param z     the new value of the indexed component
-     * @throws NullPointerException           If the specified object argument
-     *                                        is null
-     * @throws IllegalArgumentException       If the specified object argument
-     *                                        is not an array, or if the specified value cannot be converted
-     *                                        to the underlying array's component type by an identity or a
-     *                                        primitive widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to
-     *                                        the length of the specified array
+     * @param array 数组对象
+     * @param index 数组中的索引下标
+     * @param z     索引组件的新值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为需要的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#set
      */
     public static native void setBoolean(Object array, int index, boolean z)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Sets the value of the indexed component of the specified array
-     * object to the specified {@code byte} value.
+     * 用指定的值设置定义数组对象的索引组件的值({@code byte} 类型).
      *
-     * @param array the array
-     * @param index the index into the array
-     * @param b     the new value of the indexed component
-     * @throws NullPointerException           If the specified object argument
-     *                                        is null
-     * @throws IllegalArgumentException       If the specified object argument
-     *                                        is not an array, or if the specified value cannot be converted
-     *                                        to the underlying array's component type by an identity or a
-     *                                        primitive widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to
-     *                                        the length of the specified array
+     * @param array 数组对象
+     * @param index 数组中的索引下标
+     * @param b     索引组件的新值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为需要的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#set
      */
     public static native void setByte(Object array, int index, byte b)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Sets the value of the indexed component of the specified array
-     * object to the specified {@code char} value.
+     * 用指定的值设置定义数组对象的索引组件的值({@code char} 类型).
      *
-     * @param array the array
-     * @param index the index into the array
-     * @param c     the new value of the indexed component
-     * @throws NullPointerException           If the specified object argument
-     *                                        is null
-     * @throws IllegalArgumentException       If the specified object argument
-     *                                        is not an array, or if the specified value cannot be converted
-     *                                        to the underlying array's component type by an identity or a
-     *                                        primitive widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to
-     *                                        the length of the specified array
+     * @param array 数组对象
+     * @param index 数组中的索引下标
+     * @param c     索引组件的新值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为需要的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#set
      */
     public static native void setChar(Object array, int index, char c)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Sets the value of the indexed component of the specified array
-     * object to the specified {@code short} value.
+     * 用指定的值设置定义数组对象的索引组件的值({@code short} 类型).
      *
-     * @param array the array
-     * @param index the index into the array
-     * @param s     the new value of the indexed component
-     * @throws NullPointerException           If the specified object argument
-     *                                        is null
-     * @throws IllegalArgumentException       If the specified object argument
-     *                                        is not an array, or if the specified value cannot be converted
-     *                                        to the underlying array's component type by an identity or a
-     *                                        primitive widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to
-     *                                        the length of the specified array
+     * @param array 数组对象
+     * @param index 数组中的索引下标
+     * @param s     索引组件的新值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为需要的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#set
      */
     public static native void setShort(Object array, int index, short s)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Sets the value of the indexed component of the specified array
-     * object to the specified {@code int} value.
+     * 用指定的值设置定义数组对象的索引组件的值({@code int} 类型).
      *
-     * @param array the array
-     * @param index the index into the array
-     * @param i     the new value of the indexed component
-     * @throws NullPointerException           If the specified object argument
-     *                                        is null
-     * @throws IllegalArgumentException       If the specified object argument
-     *                                        is not an array, or if the specified value cannot be converted
-     *                                        to the underlying array's component type by an identity or a
-     *                                        primitive widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to
-     *                                        the length of the specified array
+     * @param array 数组对象
+     * @param index 数组中的索引下标
+     * @param i     索引组件的新值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为需要的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#set
      */
     public static native void setInt(Object array, int index, int i)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Sets the value of the indexed component of the specified array
-     * object to the specified {@code long} value.
+     * 用指定的值设置定义数组对象的索引组件的值({@code long} 类型).
      *
-     * @param array the array
-     * @param index the index into the array
-     * @param l     the new value of the indexed component
-     * @throws NullPointerException           If the specified object argument
-     *                                        is null
-     * @throws IllegalArgumentException       If the specified object argument
-     *                                        is not an array, or if the specified value cannot be converted
-     *                                        to the underlying array's component type by an identity or a
-     *                                        primitive widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to
-     *                                        the length of the specified array
+     * @param array 数组对象
+     * @param index 数组中的索引下标
+     * @param l     索引组件的新值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为需要的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#set
      */
     public static native void setLong(Object array, int index, long l)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Sets the value of the indexed component of the specified array
-     * object to the specified {@code float} value.
+     * 用指定的值设置定义数组对象的索引组件的值({@code float} 类型).
      *
-     * @param array the array
-     * @param index the index into the array
-     * @param f     the new value of the indexed component
-     * @throws NullPointerException           If the specified object argument
-     *                                        is null
-     * @throws IllegalArgumentException       If the specified object argument
-     *                                        is not an array, or if the specified value cannot be converted
-     *                                        to the underlying array's component type by an identity or a
-     *                                        primitive widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to
-     *                                        the length of the specified array
+     * @param array 数组对象
+     * @param index 数组中的索引下标
+     * @param f     索引组件的新值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为需要的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#set
      */
     public static native void setFloat(Object array, int index, float f)
             throws IllegalArgumentException, ArrayIndexOutOfBoundsException;
 
     /**
-     * Sets the value of the indexed component of the specified array
-     * object to the specified {@code double} value.
+     * 用指定的值设置定义数组对象的索引组件的值({@code double} 类型).
      *
-     * @param array the array
-     * @param index the index into the array
-     * @param d     the new value of the indexed component
-     * @throws NullPointerException           If the specified object argument
-     *                                        is null
-     * @throws IllegalArgumentException       If the specified object argument
-     *                                        is not an array, or if the specified value cannot be converted
-     *                                        to the underlying array's component type by an identity or a
-     *                                        primitive widening conversion
-     * @throws ArrayIndexOutOfBoundsException If the specified {@code index}
-     *                                        argument is negative, or if it is greater than or equal to
-     *                                        the length of the specified array
+     * @param array 数组对象
+     * @param index 数组中的索引下标
+     * @param d     索引组件的新值
+     * @throws NullPointerException           指定对象为空
+     * @throws IllegalArgumentException       指定对象不是一个数组对象, 或者
+     *                                        无法通过恒等或者加宽转换转换为需要的类型
+     * @throws ArrayIndexOutOfBoundsException 如果指定的 {@code index} 参数是负的,
+     *                                        或者它大于等于指定数组的长度
      * @see Array#set
      */
     public static native void setDouble(Object array, int index, double d)
