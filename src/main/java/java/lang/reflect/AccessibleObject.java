@@ -1,28 +1,3 @@
-/*
- * Copyright (c) 1997, 2014, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang.reflect;
 
 import java.security.AccessController;
@@ -33,21 +8,15 @@ import sun.reflect.ReflectionFactory;
 import java.lang.annotation.Annotation;
 
 /**
- * The AccessibleObject class is the base class for Field, Method and
- * Constructor objects.  It provides the ability to flag a reflected
- * object as suppressing default Java language access control checks
- * when it is used.  The access checks--for public, default (package)
- * access, protected, and private members--are performed when Fields,
- * Methods or Constructors are used to set or get fields, to invoke
- * methods, or to create and initialize new instances of classes,
- * respectively.
+ * AccessibleObject 类是 Field, Method 和 Constructor 的基类.
+ * 它提供了将反射对象标记为在使用是禁止默认的 java 语言访问控制检查的能力.
+ * 当使用 Field, Method, Constructor 设置或获取字段, 调用方法或创建和初始化类的新实例时,
+ * 将分别执行访问检查 --- public, default(package), protected, private 成员.
  *
- * <p>Setting the {@code accessible} flag in a reflected object
- * permits sophisticated applications with sufficient privilege, such
- * as Java Object Serialization or other persistence mechanisms, to
- * manipulate objects in a manner that would normally be prohibited.
+ * <p>在反射对象中设置 {@code accessible} 标志允许具有足够权限的复杂应用程序
+ * (例如Java对象序列化或其他持久性机制)以通常被禁止的方式操作对象.
  *
- * <p>By default, a reflected object is <em>not</em> accessible.
+ * <p>默认情况下, 反射对象 <em>不</em> 可访问.
  *
  * @see Field
  * @see Method
@@ -58,35 +27,26 @@ import java.lang.annotation.Annotation;
 public class AccessibleObject implements AnnotatedElement {
 
     /**
-     * The Permission object that is used to check whether a client
-     * has sufficient privilege to defeat Java language access
-     * control checks.
+     * Permission 对象, 用于检查客户端是否具有权限来阻止 java 语言访问控制检查.
      */
     static final private java.security.Permission ACCESS_PERMISSION =
             new ReflectPermission("suppressAccessChecks");
 
     /**
-     * Convenience method to set the {@code accessible} flag for an
-     * array of objects with a single security check (for efficiency).
+     * 通过单个安全检查设置对象数组的 {@code accessible} 标志的便捷方法(为了提高效率).
      *
-     * <p>First, if there is a security manager, its
-     * {@code checkPermission} method is called with a
-     * {@code ReflectPermission("suppressAccessChecks")} permission.
+     * <p>首先, 这里有一个安全管理器, 它的 {@code checkPermission} 将使用
+     * {@code ReflectPermission("suppressAccessChecks")} 权限被调用.
      *
-     * <p>A {@code SecurityException} is raised if {@code flag} is
-     * {@code true} but accessibility of any of the elements of the input
-     * {@code array} may not be changed (for example, if the element
-     * object is a {@link Constructor} object for the class {@link
-     * java.lang.Class}).  In the event of such a SecurityException, the
-     * accessibility of objects is set to {@code flag} for array elements
-     * upto (and excluding) the element for which the exception occurred; the
-     * accessibility of elements beyond (and including) the element for which
-     * the exception occurred is unchanged.
+     * <p>如果 {@code flag} 为 {@code true} 但是可能无法修改输入 {@code array}
+     * 中任何元素的可访问性(例如, 如果元素是{@link java.lang.Class} 的 {@link Constructor} 对象)
+     * 将抛出一个 {@code SecurityException} 异常. 如果出现这样的异常事件,
+     * 引发这个异常的元素之前(不包含)的数组元素将设置这些元素的可访问性为 {@code flag};
+     * 之后的元素(包含引发异常的元素)的元素可访问性不变.
      *
-     * @param array the array of AccessibleObjects
-     * @param flag  the new value for the {@code accessible} flag
-     *              in each object
-     * @throws SecurityException if the request is denied.
+     * @param array AccessibleObject 对象数组
+     * @param flag  给每一个对象的新的 {@code accessible} 标志值
+     * @throws SecurityException 如果请求被拒绝.
      * @see SecurityManager#checkPermission
      * @see java.lang.RuntimePermission
      */
@@ -100,27 +60,19 @@ public class AccessibleObject implements AnnotatedElement {
     }
 
     /**
-     * Set the {@code accessible} flag for this object to
-     * the indicated boolean value.  A value of {@code true} indicates that
-     * the reflected object should suppress Java language access
-     * checking when it is used.  A value of {@code false} indicates
-     * that the reflected object should enforce Java language access checks.
+     * 设置这个对象的 {@code accessible} 标志为给定的布尔值.
+     * 值 {@code true} 表示反射对象在使用时应禁止 Java 语言访问检查.
+     * 值 {@code false} 表示反射对象应强制执行 Java 语言访问检查.
      *
-     * <p>First, if there is a security manager, its
-     * {@code checkPermission} method is called with a
-     * {@code ReflectPermission("suppressAccessChecks")} permission.
+     * <p>首先, 这里有一个安全管理器, 它的 {@code checkPermission} 将使用
+     * {@code ReflectPermission("suppressAccessChecks")} 权限被调用.
      *
-     * <p>A {@code SecurityException} is raised if {@code flag} is
-     * {@code true} but accessibility of this object may not be changed
-     * (for example, if this element object is a {@link Constructor} object for
-     * the class {@link java.lang.Class}).
+     * <p>如果 {@code flag} 为 {@code true} 但是可能无法修改元素的可访问性
+     * (例如, 如果元素是{@link java.lang.Class} 的 {@link Constructor} 对象)
+     * 将抛出一个 {@code SecurityException} 异常.
      *
-     * <p>A {@code SecurityException} is raised if this object is a {@link
-     * java.lang.reflect.Constructor} object for the class
-     * {@code java.lang.Class}, and {@code flag} is true.
-     *
-     * @param flag the new value for the {@code accessible} flag
-     * @throws SecurityException if the request is denied.
+     * @param flag {@code accessible} 标志的新值
+     * @throws SecurityException 请求被拒绝.
      * @see SecurityManager#checkPermission
      * @see java.lang.RuntimePermission
      */
@@ -130,11 +82,10 @@ public class AccessibleObject implements AnnotatedElement {
         setAccessible0(this, flag);
     }
 
-    /* Check that you aren't exposing java.lang.Class.<init> or sensitive
-       fields in java.lang.Class. */
+    /* 检查你是否暴露了 java.lang.Class.<init> 或者 java.lang.Class 中的敏感字段 */
     private static void setAccessible0(AccessibleObject obj, boolean flag)
             throws SecurityException {
-        if (obj instanceof Constructor && flag == true) {
+        if (obj instanceof Constructor && flag) {
             Constructor<?> c = (Constructor<?>) obj;
             if (c.getDeclaringClass() == Class.class) {
                 throw new SecurityException("Cannot make a java.lang.Class" +
@@ -145,31 +96,27 @@ public class AccessibleObject implements AnnotatedElement {
     }
 
     /**
-     * Get the value of the {@code accessible} flag for this object.
+     * 获取这个对象 {@code accessible} 标志的值.
      *
-     * @return the value of the object's {@code accessible} flag
+     * @return 这个对象 {@code accessible} 标志的值
      */
     public boolean isAccessible() {
         return override;
     }
 
     /**
-     * Constructor: only used by the Java Virtual Machine.
+     * 构造器: 仅仅在 JVM 中使用.
      */
     protected AccessibleObject() {
     }
 
-    // Indicates whether language-level access checks are overridden
-    // by this object. Initializes to "false". This field is used by
-    // Field, Method, and Constructor.
+    // 指示此对象是否覆盖语言级访问检查. 初始化是 "false". Field, Method, Constructor 可以使用该字段.
     //
-    // NOTE: for security purposes, this field must not be visible
-    // outside this package.
+    // 注意: 出于安全考虑, 此字段不该在此包外访问.
     boolean override;
 
-    // Reflection factory used by subclasses for creating field,
-    // method, and constructor accessors. Note that this is called
-    // very early in the bootstrapping process.
+    // 子类用于创建字段, 方法和构造函数访问器的反射工厂.
+    // 请注意, 这在引导过程中很早就会调用.
     static final ReflectionFactory reflectionFactory =
             AccessController.doPrivileged(
                     new sun.reflect.ReflectionFactory.GetReflectionFactoryAction());
@@ -215,9 +162,7 @@ public class AccessibleObject implements AnnotatedElement {
      */
     @Override
     public <T extends Annotation> T getDeclaredAnnotation(Class<T> annotationClass) {
-        // Only annotations on classes are inherited, for all other
-        // objects getDeclaredAnnotation is the same as
-        // getAnnotation.
+        // 仅继承类上的注释, 对于所有其他对象, getDeclaredAnnotation 与 getAnnotation 相同.
         return getAnnotation(annotationClass);
     }
 
@@ -227,9 +172,7 @@ public class AccessibleObject implements AnnotatedElement {
      */
     @Override
     public <T extends Annotation> T[] getDeclaredAnnotationsByType(Class<T> annotationClass) {
-        // Only annotations on classes are inherited, for all other
-        // objects getDeclaredAnnotationsByType is the same as
-        // getAnnotationsByType.
+        // 仅继承类上的注释, 对于所有其他对象, getDeclaredAnnotationsByType 与 getAnnotationsByType 相同.
         return getAnnotationsByType(annotationClass);
     }
 
@@ -258,44 +201,75 @@ public class AccessibleObject implements AnnotatedElement {
     // The cache can be either null (empty cache), a 2-array of {caller,target},
     // or a caller (with target implicitly equal to this.clazz).
     // In the 2-array case, the target is always different from the clazz.
+
+    // 共享访问逻辑检查.
+    //
+    // 对于非公共成员或者包私有类中成员, 有必要执行稍微昂贵的安全检查.
+    // 如果给定的类检查成功, 它将始终成功(它不受授予或撤销权限的影响);
+    // 通过记住检查成功的最后一个类, 我们加快了常见情况下的检查
     volatile Object securityCheckCache;
 
+    /**
+     * 检查是否可以访问.
+     * 快速检查.
+     *
+     * @param caller    调用者
+     * @param clazz     要调用的类
+     * @param obj       要调用的类中的字段, 方法 或者 构造器
+     * @param modifiers 修饰类型 {@link Modifier}
+     * @throws IllegalAccessException
+     */
     void checkAccess(Class<?> caller, Class<?> clazz, Object obj, int modifiers)
             throws IllegalAccessException {
-        if (caller == clazz) {  // quick check
-            return;             // ACCESS IS OK
+        if (caller == clazz) {
+            // 快速检查
+            // 可以访问
+            return;
         }
-        Object cache = securityCheckCache;  // read volatile
+        // 读, 原子化操作
+        Object cache = securityCheckCache;
         Class<?> targetClass = clazz;
         if (obj != null
                 && Modifier.isProtected(modifiers)
                 && ((targetClass = obj.getClass()) != clazz)) {
-            // Must match a 2-list of { caller, targetClass }.
+            // 要同时满足 cache 中的两个类
             if (cache instanceof Class[]) {
                 Class<?>[] cache2 = (Class<?>[]) cache;
                 if (cache2[1] == targetClass &&
                         cache2[0] == caller) {
-                    return;     // ACCESS IS OK
+                    // 可以访问
+                    return;
                 }
-                // (Test cache[1] first since range check for [1]
-                // subsumes range check for [0].)
+                //(首先测试缓存[1]因为[1]的范围检查包含范围检查[0].)
             }
         } else if (cache == caller) {
-            // Non-protected case (or obj.class == this.clazz).
-            return;             // ACCESS IS OK
+            // 没有受保护类型的形式或者两个类一样.
+            // 可访问
+            return;
         }
 
-        // If no return, fall through to the slow path.
+        // 如果没有返回, 则通过慢速路径访问检查.
         slowCheckMemberAccess(caller, clazz, obj, modifiers, targetClass);
     }
 
-    // Keep all this slow stuff out of line:
+    // 保持所有这些缓慢的东西脱节:
+
+    /**
+     * 慢速类型访问检查
+     *
+     * @param caller      调用者
+     * @param clazz       被访问者
+     * @param obj         要调用的类中的字段, 方法 或者 构造器
+     * @param modifiers   修饰类型{@link Modifier}
+     * @param targetClass 要检查的目标类(具体到上面的字段, 方法, 构造器等)
+     * @throws IllegalAccessException
+     */
     void slowCheckMemberAccess(Class<?> caller, Class<?> clazz, Object obj, int modifiers,
                                Class<?> targetClass)
             throws IllegalAccessException {
         Reflection.ensureMemberAccess(caller, clazz, obj, modifiers);
 
-        // Success: Update the cache.
+        // 访问成功, 更新缓存
         Object cache = ((targetClass == clazz)
                 ? caller
                 : new Class<?>[]{caller, targetClass});
@@ -304,6 +278,11 @@ public class AccessibleObject implements AnnotatedElement {
         // but they are effectively final.  The Java memory model
         // guarantees that the initializing stores for the cache
         // elements will occur before the volatile write.
-        securityCheckCache = cache;         // write volatile
+
+        // 注意: 两个缓存元素不是易失性的, 但它们实际上是最终的.
+        // Java内存模型保证缓存元素的初始化存储将在 volatile 写入之前发生.
+
+        // 原子化写
+        securityCheckCache = cache;
     }
 }
