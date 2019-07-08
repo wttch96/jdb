@@ -1,28 +1,3 @@
-/*
- * Copyright (c) 2012, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang.reflect;
 
 import java.lang.annotation.*;
@@ -36,38 +11,43 @@ import sun.reflect.annotation.TypeAnnotation;
 import sun.reflect.generics.repository.ConstructorRepository;
 
 /**
- * A shared superclass for the common functionality of {@link Method}
- * and {@link Constructor}.
+ * {@link Method} 和 {@link Constructor} 共同功能的共享超类.
  *
  * @since 1.8
  */
 public abstract class Executable extends AccessibleObject
         implements Member, GenericDeclaration {
     /*
-     * Only grant package-visibility to the constructor.
+     * 仅授予构造函数的包可见性.
      */
     Executable() {
     }
 
     /**
-     * Accessor method to allow code sharing
+     * 访问器方法允许代码共享
      */
     abstract byte[] getAnnotationBytes();
 
     /**
-     * Accessor method to allow code sharing
+     * 访问器方法允许代码共享
      */
     abstract Executable getRoot();
 
     /**
-     * Does the Executable have generic information.
+     * Executable 是否拥有通用的信息.
      */
     abstract boolean hasGenericInformation();
 
+    /**
+     * 获取通用信息.
+     */
     abstract ConstructorRepository getGenericInfo();
 
+    /**
+     * 判断给定的两个参数数组是否完全相等.
+     */
     boolean equalParamTypes(Class<?>[] params1, Class<?>[] params2) {
-        /* Avoid unnecessary cloning */
+        /* 避免不必要的克隆 */
         if (params1.length == params2.length) {
             for (int i = 0; i < params1.length; i++) {
                 if (params1[i] != params2[i])
@@ -78,6 +58,9 @@ public abstract class Executable extends AccessibleObject
         return false;
     }
 
+    /**
+     * 解析参数化注解类型.
+     */
     Annotation[][] parseParameterAnnotations(byte[] parameterAnnotations) {
         return AnnotationParser.parseParameterAnnotations(
                 parameterAnnotations,
@@ -86,6 +69,10 @@ public abstract class Executable extends AccessibleObject
                 getDeclaringClass());
     }
 
+    /**
+     * 用逗号把给定的 Class 对象数组中的元素的类型名称分开.
+     * 使用它们的 {@link Class#getTypeName()} .
+     */
     void separateWithCommas(Class<?>[] types, StringBuilder sb) {
         for (int j = 0; j < types.length; j++) {
             sb.append(types[j].getTypeName());
@@ -95,12 +82,18 @@ public abstract class Executable extends AccessibleObject
 
     }
 
+    /**
+     * 打印修饰符到 {@code sb} 中, 如果修饰符存在
+     */
     void printModifiersIfNonzero(StringBuilder sb, int mask, boolean isDefault) {
+        // 判断是否包含 mask 类型的修饰符
         int mod = getModifiers() & mask;
 
         if (mod != 0 && !isDefault) {
             sb.append(Modifier.toString(mod)).append(' ');
         } else {
+            // mod == 0 OR isDefault
+            // 访问修饰符
             int access_mod = mod & Modifier.ACCESS_MODIFIERS;
             if (access_mod != 0)
                 sb.append(Modifier.toString(access_mod)).append(' ');
@@ -112,6 +105,9 @@ public abstract class Executable extends AccessibleObject
         }
     }
 
+    /**
+     * 返回方法或者构造器的字符串描述形式.
+     */
     String sharedToString(int modifierMask,
                           boolean isDefault,
                           Class<?>[] parameterTypes,
@@ -119,28 +115,34 @@ public abstract class Executable extends AccessibleObject
         try {
             StringBuilder sb = new StringBuilder();
 
+            // 打印修饰符到 {@code sb} 中
             printModifiersIfNonzero(sb, modifierMask, isDefault);
             specificToStringHeader(sb);
 
+            // 打印参数类型
             sb.append('(');
             separateWithCommas(parameterTypes, sb);
             sb.append(')');
+            // 打印异常信息
             if (exceptionTypes.length > 0) {
                 sb.append(" throws ");
                 separateWithCommas(exceptionTypes, sb);
             }
             return sb.toString();
         } catch (Exception e) {
+            // 如果发生异常, 则直接返回该异常
             return "<" + e + ">";
         }
     }
 
     /**
-     * Generate toString header information specific to a method or
-     * constructor.
+     * 生成特定于方法或构造函数的 toString 标头信息, (类名?).
      */
     abstract void specificToStringHeader(StringBuilder sb);
 
+    /**
+     * 返回方法或者构造器的字符串描述形式, 包含类型化参数.
+     */
     String sharedToGenericString(int modifierMask, boolean isDefault) {
         try {
             StringBuilder sb = new StringBuilder();
@@ -154,8 +156,7 @@ public abstract class Executable extends AccessibleObject
                 for (TypeVariable<?> typeparm : typeparms) {
                     if (!first)
                         sb.append(',');
-                    // Class objects can't occur here; no need to test
-                    // and call Class.getName().
+                    // 这里不能出现类对象; 无需测试并调用 Class.getName().
                     sb.append(typeparm.toString());
                     first = false;
                 }
@@ -164,17 +165,20 @@ public abstract class Executable extends AccessibleObject
 
             specificToGenericStringHeader(sb);
 
+            // 参数体
             sb.append('(');
             Type[] params = getGenericParameterTypes();
             for (int j = 0; j < params.length; j++) {
                 String param = params[j].getTypeName();
-                if (isVarArgs() && (j == params.length - 1)) // replace T[] with T...
+                if (isVarArgs() && (j == params.length - 1))
+                    // 将最后的 T[] 替换为 T...
                     param = param.replaceFirst("\\[\\]$", "...");
                 sb.append(param);
                 if (j < (params.length - 1))
                     sb.append(',');
             }
             sb.append(')');
+            // 异常
             Type[] exceptions = getGenericExceptionTypes();
             if (exceptions.length > 0) {
                 sb.append(" throws ");
@@ -193,72 +197,58 @@ public abstract class Executable extends AccessibleObject
     }
 
     /**
-     * Generate toGenericString header information specific to a
-     * method or constructor.
+     * 生成特定于方法或构造函数的 toGenericString 标头信息.
      */
     abstract void specificToGenericStringHeader(StringBuilder sb);
 
     /**
-     * Returns the {@code Class} object representing the class or interface
-     * that declares the executable represented by this object.
+     * 返回表示声明此对象表示的可执行成员的类或接口的{@code Class}对象.
      */
     public abstract Class<?> getDeclaringClass();
 
     /**
-     * Returns the name of the executable represented by this object.
+     * 返回此对象表示的可执行成员的名称.
      */
     public abstract String getName();
 
     /**
-     * Returns the Java language {@linkplain Modifier modifiers} for
-     * the executable represented by this object.
+     * 返回此对象表示的可执行成员的修饰符 {@linkplain Modifier modifiers}.
      */
     public abstract int getModifiers();
 
     /**
-     * Returns an array of {@code TypeVariable} objects that represent the
-     * type variables declared by the generic declaration represented by this
-     * {@code GenericDeclaration} object, in declaration order.  Returns an
-     * array of length 0 if the underlying generic declaration declares no type
-     * variables.
+     * 返回 {@code TypeVariable} 对象的数组， 这些对象表示由此 {@code GenericDeclaration} 对象
+     * 表示的泛型声明声明的类型变量, 按声明顺序. 如果底层泛型声明未声明类型变量, 则返回长度为 0 的数组.
      *
-     * @return an array of {@code TypeVariable} objects that represent
-     * the type variables declared by this generic declaration
-     * @throws GenericSignatureFormatError if the generic
-     *                                     signature of this generic declaration does not conform to
-     *                                     the format specified in
-     *                                     <cite>The Java&trade; Virtual Machine Specification</cite>
+     * @return {@code TypeVariable} 对象的数组， 这些对象表示由此 {@code GenericDeclaration} 对象
+     * 表示的泛型声明声明的类型变量
+     * @throws GenericSignatureFormatError 如果此通用声明的通用签名不符合
+     *                                     <cite>The Java&trade; Virtual Machine Specification</cite>中指定的格式
      */
     public abstract TypeVariable<?>[] getTypeParameters();
 
     /**
-     * Returns an array of {@code Class} objects that represent the formal
-     * parameter types, in declaration order, of the executable
-     * represented by this object.  Returns an array of length
-     * 0 if the underlying executable takes no parameters.
+     * 返回一个 {@code Class} 对象数组代表该可执行成员的正式的按声明顺序的参数类型,
+     * 如果底层可执行成员不带参数, 则返回长度为 0 的数组.
      *
-     * @return the parameter types for the executable this object
-     * represents
+     * @return 此可执行成员代表的参数类型的列表
      */
     public abstract Class<?>[] getParameterTypes();
 
     /**
-     * Returns the number of formal parameters (whether explicitly
-     * declared or implicitly declared or neither) for the executable
-     * represented by this object.
+     * 返回此对象表示的可执行成员的形式参数的数量(无论是显式声明还是隐式声明, 或两者都没有).
+     * <p>
+     * 默认实现直接抛出 {@link AbstractMethodError} 错误.
      *
-     * @return The number of formal parameters for the executable this
-     * object represents
+     * @return 此对象表示的可执行成员的形式参数的数量.
      */
     public int getParameterCount() {
         throw new AbstractMethodError();
     }
 
     /**
-     * Returns an array of {@code Type} objects that represent the formal
-     * parameter types, in declaration order, of the executable represented by
-     * this object. Returns an array of length 0 if the
-     * underlying executable takes no parameters.
+     * 返回一个 {@code Type} 对象数组代表该可执行成员的正式的按声明顺序的参数类型,
+     * 如果底层可执行成员不带参数, 则返回长度为 0 的数组.
      *
      * <p>If a formal parameter type is a parameterized type,
      * the {@code Type} object returned for it must accurately reflect
