@@ -107,6 +107,12 @@ public abstract class Executable extends AccessibleObject
 
     /**
      * 返回方法或者构造器的字符串描述形式.
+     * <p>
+     * {@link Constructor} 和 {@link Method} 的 {@code toString()} 方法
+     * 是通过直接调用该函数生成的.
+     *
+     * @see Constructor#toString()
+     * @see Method#toString()
      */
     String sharedToString(int modifierMask,
                           boolean isDefault,
