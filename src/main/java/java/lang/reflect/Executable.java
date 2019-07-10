@@ -34,12 +34,12 @@ public abstract class Executable extends AccessibleObject
     abstract Executable getRoot();
 
     /**
-     * Executable 是否拥有通用的信息.
+     * Executable 是否拥有泛型的信息.
      */
     abstract boolean hasGenericInformation();
 
     /**
-     * 获取通用信息.
+     * 获取泛型信息.
      */
     abstract ConstructorRepository getGenericInfo();
 
@@ -228,7 +228,7 @@ public abstract class Executable extends AccessibleObject
      *
      * @return {@code TypeVariable} 对象的数组， 这些对象表示由此 {@code GenericDeclaration} 对象
      * 表示的泛型声明声明的类型变量
-     * @throws GenericSignatureFormatError 如果此通用声明的通用签名不符合
+     * @throws GenericSignatureFormatError 如果此泛型声明的泛型签名不符合
      *                                     <cite>The Java&trade; Virtual Machine Specification</cite>中指定的格式
      */
     public abstract TypeVariable<?>[] getTypeParameters();
@@ -280,9 +280,7 @@ public abstract class Executable extends AccessibleObject
     Type[] getAllGenericParameterTypes() {
         final boolean genericInfo = hasGenericInformation();
 
-        // Easy case: we don't have generic parameter information.  In
-        // this case, we just return the result of
-        // getParameterTypes().
+        // 简单情况: 没有泛型信息. 这种情况下, 只需要返回 getParameterTypes() 的结果即可.
         if (!genericInfo) {
             return getParameterTypes();
         } else {
