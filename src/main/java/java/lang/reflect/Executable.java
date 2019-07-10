@@ -256,24 +256,15 @@ public abstract class Executable extends AccessibleObject
      * 返回一个 {@code Type} 对象数组代表该可执行成员的正式的按声明顺序的参数类型,
      * 如果底层可执行成员不带参数, 则返回长度为 0 的数组.
      *
-     * <p>If a formal parameter type is a parameterized type,
-     * the {@code Type} object returned for it must accurately reflect
-     * the actual type parameters used in the source code.
+     * <p>如果形式参数类型是参数化类型, 则为其返回的{@code Type}对象必须准确反映
+     * 源代码中使用的实际类型参数.
      *
-     * <p>If a formal parameter type is a type variable or a parameterized
-     * type, it is created. Otherwise, it is resolved.
+     * <p>如果形式参数类型是类型变量或参数化类型, 则创建它.否则, 它就解决了.
      *
-     * @return an array of {@code Type}s that represent the formal
-     * parameter types of the underlying executable, in declaration order
-     * @throws GenericSignatureFormatError         if the generic method signature does not conform to the format
-     *                                             specified in
-     *                                             <cite>The Java&trade; Virtual Machine Specification</cite>
-     * @throws TypeNotPresentException             if any of the parameter
-     *                                             types of the underlying executable refers to a non-existent type
-     *                                             declaration
-     * @throws MalformedParameterizedTypeException if any of
-     *                                             the underlying executable's parameter types refer to a parameterized
-     *                                             type that cannot be instantiated for any reason
+     * @return 一个{@code Type}数组, 以声明顺序表示底层可执行成员的形式参数类型
+     * @throws GenericSignatureFormatError         如果泛型方法签名不符合<cite>JVM 规范</cite>中指定的格式
+     * @throws TypeNotPresentException             如果底层可执行成员的任何参数类型引用了不存在的类型声明
+     * @throws MalformedParameterizedTypeException 如果任何底层可执行成员的参数类型引用了因任何原因无法实例化的参数化类型
      */
     public Type[] getGenericParameterTypes() {
         if (hasGenericInformation())
@@ -283,8 +274,8 @@ public abstract class Executable extends AccessibleObject
     }
 
     /**
-     * Behaves like {@code getGenericParameterTypes}, but returns type
-     * information for all parameters, including synthetic parameters.
+     * 和 {@code getGenericParameterTypes} 方法一样, 但返回所有参数的类型信息, 包括合成参数.
+     * TODO Synthetic Parameters? 以后发现了记得重现
      */
     Type[] getAllGenericParameterTypes() {
         final boolean genericInfo = hasGenericInformation();
