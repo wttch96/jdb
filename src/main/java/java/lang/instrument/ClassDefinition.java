@@ -1,75 +1,47 @@
-/*
- * Copyright (c) 2003, 2011, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang.instrument;
 
-/*
- * Copyright 2003 Wily Technology, Inc.
- */
-
 /**
- * This class serves as a parameter block to the <code>Instrumentation.redefineClasses</code> method.
- * Serves to bind the <code>Class</code> that needs redefining together with the new class file bytes.
+ * 此类充当 <code>Instrumentation.redefineClasses</code> 方法的参数快.
+ * 用于绑定需要重新定义的 <code>Class</code> 的新的类文件字节码.
+ * <p>
+ * Wttch:
+ * 在类字节码文件层次完成类似 AOP 的功能.
  *
- * @see     java.lang.instrument.Instrumentation#redefineClasses
- * @since   1.5
+ * @see java.lang.instrument.Instrumentation#redefineClasses
+ * @since 1.5
  */
 public final class ClassDefinition {
     /**
-     *  The class to redefine
+     * 需要重新定义的类
      */
     private final Class<?> mClass;
 
     /**
-     *  The replacement class file bytes
+     * 要更换的字节码
      */
-    private final byte[]   mClassFile;
+    private final byte[] mClassFile;
 
     /**
-     *  Creates a new <code>ClassDefinition</code> binding using the supplied
-     *  class and class file bytes. Does not copy the supplied buffer, just captures a reference to it.
+     * 创建一个 <code>ClassDefinition</code> 使用提供的类和类文件字节进行绑定.
+     * 不复制提供的缓冲区, 只捕获对它的引用.
      *
-     * @param theClass the <code>Class</code> that needs redefining
-     * @param theClassFile the new class file bytes
-     *
-     * @throws java.lang.NullPointerException if the supplied class or array is <code>null</code>.
+     * @param theClass     需要重新定义的 <code>Class</code>
+     * @param theClassFile 新的字节码数组
+     * @throws java.lang.NullPointerException 如果类或者字节数组为 <code>null</code>.
      */
-    public
-    ClassDefinition(    Class<?> theClass,
-                        byte[]  theClassFile) {
+    public ClassDefinition(Class<?> theClass,
+                           byte[] theClassFile) {
         if (theClass == null || theClassFile == null) {
             throw new NullPointerException();
         }
-        mClass      = theClass;
-        mClassFile  = theClassFile;
+        mClass = theClass;
+        mClassFile = theClassFile;
     }
 
     /**
      * Returns the class.
      *
-     * @return    the <code>Class</code> object referred to.
+     * @return the <code>Class</code> object referred to.
      */
     public Class<?>
     getDefinitionClass() {
@@ -79,7 +51,7 @@ public final class ClassDefinition {
     /**
      * Returns the array of bytes that contains the new class file.
      *
-     * @return    the class file bytes.
+     * @return the class file bytes.
      */
     public byte[]
     getDefinitionClassFile() {
