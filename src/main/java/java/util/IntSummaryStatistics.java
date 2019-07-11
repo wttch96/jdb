@@ -47,8 +47,8 @@ import java.util.stream.Collector;
  * <pre> {@code
  * IntSummaryStatistics stats = people.stream()
  *                                    .collect(Collectors.summarizingInt(Person::getDependents));
- *}</pre>
- *
+ * }</pre>
+ * <p>
  * This computes, in a single pass, the count of people, as well as the minimum,
  * maximum, sum, and average of their number of dependents.
  *
@@ -73,7 +73,8 @@ public class IntSummaryStatistics implements IntConsumer {
      * {@code Integer.MAX_VALUE} min, {@code Integer.MIN_VALUE} max and zero
      * average.
      */
-    public IntSummaryStatistics() { }
+    public IntSummaryStatistics() {
+    }
 
     /**
      * Records a new value into the summary information
@@ -160,12 +161,12 @@ public class IntSummaryStatistics implements IntConsumer {
      */
     public String toString() {
         return String.format(
-            "%s{count=%d, sum=%d, min=%d, average=%f, max=%d}",
-            this.getClass().getSimpleName(),
-            getCount(),
-            getSum(),
-            getMin(),
-            getAverage(),
-            getMax());
+                "%s{count=%d, sum=%d, min=%d, average=%f, max=%d}",
+                this.getClass().getSimpleName(),
+                getCount(),
+                getSum(),
+                getMin(),
+                getAverage(),
+                getMax());
     }
 }

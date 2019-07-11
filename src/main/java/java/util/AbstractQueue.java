@@ -57,13 +57,13 @@ package java.util;
  * <a href="{@docRoot}/../technotes/guides/collections/index.html">
  * Java Collections Framework</a>.
  *
- * @since 1.5
- * @author Doug Lea
  * @param <E> the type of elements held in this collection
+ * @author Doug Lea
+ * @since 1.5
  */
 public abstract class AbstractQueue<E>
-    extends AbstractCollection<E>
-    implements Queue<E> {
+        extends AbstractCollection<E>
+        implements Queue<E> {
 
     /**
      * Constructor for use by subclasses.
@@ -82,14 +82,14 @@ public abstract class AbstractQueue<E>
      *
      * @param e the element to add
      * @return <tt>true</tt> (as specified by {@link Collection#add})
-     * @throws IllegalStateException if the element cannot be added at this
-     *         time due to capacity restrictions
-     * @throws ClassCastException if the class of the specified element
-     *         prevents it from being added to this queue
-     * @throws NullPointerException if the specified element is null and
-     *         this queue does not permit null elements
+     * @throws IllegalStateException    if the element cannot be added at this
+     *                                  time due to capacity restrictions
+     * @throws ClassCastException       if the class of the specified element
+     *                                  prevents it from being added to this queue
+     * @throws NullPointerException     if the specified element is null and
+     *                                  this queue does not permit null elements
      * @throws IllegalArgumentException if some property of this element
-     *         prevents it from being added to this queue
+     *                                  prevents it from being added to this queue
      */
     public boolean add(E e) {
         if (offer(e))
@@ -165,16 +165,16 @@ public abstract class AbstractQueue<E>
      *
      * @param c collection containing elements to be added to this queue
      * @return <tt>true</tt> if this queue changed as a result of the call
-     * @throws ClassCastException if the class of an element of the specified
-     *         collection prevents it from being added to this queue
-     * @throws NullPointerException if the specified collection contains a
-     *         null element and this queue does not permit null elements,
-     *         or if the specified collection is null
+     * @throws ClassCastException       if the class of an element of the specified
+     *                                  collection prevents it from being added to this queue
+     * @throws NullPointerException     if the specified collection contains a
+     *                                  null element and this queue does not permit null elements,
+     *                                  or if the specified collection is null
      * @throws IllegalArgumentException if some property of an element of the
-     *         specified collection prevents it from being added to this
-     *         queue, or if the specified collection is this queue
-     * @throws IllegalStateException if not all the elements can be added at
-     *         this time due to insertion restrictions
+     *                                  specified collection prevents it from being added to this
+     *                                  queue, or if the specified collection is this queue
+     * @throws IllegalStateException    if not all the elements can be added at
+     *                                  this time due to insertion restrictions
      * @see #add(Object)
      */
     public boolean addAll(Collection<? extends E> c) {

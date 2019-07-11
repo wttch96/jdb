@@ -29,10 +29,10 @@ package java.util;
  * Thrown by various accessor methods to indicate that the element being requested
  * does not exist.
  *
- * @author  unascribed
- * @see     java.util.Enumeration#nextElement()
- * @see     java.util.Iterator#next()
- * @since   JDK1.0
+ * @author unascribed
+ * @see java.util.Enumeration#nextElement()
+ * @see java.util.Iterator#next()
+ * @since JDK1.0
  */
 public
 class NoSuchElementException extends RuntimeException {
@@ -51,7 +51,7 @@ class NoSuchElementException extends RuntimeException {
      * to the error message string <tt>s</tt> for later retrieval by the
      * <tt>getMessage</tt> method.
      *
-     * @param   s   the detail message.
+     * @param s the detail message.
      */
     public NoSuchElementException(String s) {
         super(s);

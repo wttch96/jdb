@@ -43,8 +43,7 @@ public class IllegalFormatFlagsException extends IllegalFormatException {
     /**
      * Constructs an instance of this class with the specified flags.
      *
-     * @param  f
-     *         The set of format flags which contain an illegal combination
+     * @param f The set of format flags which contain an illegal combination
      */
     public IllegalFormatFlagsException(String f) {
         if (f == null)
@@ -55,7 +54,7 @@ public class IllegalFormatFlagsException extends IllegalFormatException {
     /**
      * Returns the set of flags which contains an illegal combination.
      *
-     * @return  The flags
+     * @return The flags
      */
     public String getFlags() {
         return flags;

@@ -43,8 +43,7 @@ public class UnknownFormatConversionException extends IllegalFormatException {
     /**
      * Constructs an instance of this class with the unknown conversion.
      *
-     * @param  s
-     *         Unknown conversion
+     * @param s Unknown conversion
      */
     public UnknownFormatConversionException(String s) {
         if (s == null)
@@ -55,7 +54,7 @@ public class UnknownFormatConversionException extends IllegalFormatException {
     /**
      * Returns the unknown conversion.
      *
-     * @return  The unknown conversion.
+     * @return The unknown conversion.
      */
     public String getConversion() {
         return s;

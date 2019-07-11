@@ -31,34 +31,34 @@ package java.util;
  * backed by a "sequential access" data store (such as a linked list).  For
  * random access data (such as an array), <tt>AbstractList</tt> should be used
  * in preference to this class.<p>
- *
+ * <p>
  * This class is the opposite of the <tt>AbstractList</tt> class in the sense
  * that it implements the "random access" methods (<tt>get(int index)</tt>,
  * <tt>set(int index, E element)</tt>, <tt>add(int index, E element)</tt> and
  * <tt>remove(int index)</tt>) on top of the list's list iterator, instead of
  * the other way around.<p>
- *
+ * <p>
  * To implement a list the programmer needs only to extend this class and
  * provide implementations for the <tt>listIterator</tt> and <tt>size</tt>
  * methods.  For an unmodifiable list, the programmer need only implement the
  * list iterator's <tt>hasNext</tt>, <tt>next</tt>, <tt>hasPrevious</tt>,
  * <tt>previous</tt> and <tt>index</tt> methods.<p>
- *
+ * <p>
  * For a modifiable list the programmer should additionally implement the list
  * iterator's <tt>set</tt> method.  For a variable-size list the programmer
  * should additionally implement the list iterator's <tt>remove</tt> and
  * <tt>add</tt> methods.<p>
- *
+ * <p>
  * The programmer should generally provide a void (no argument) and collection
  * constructor, as per the recommendation in the <tt>Collection</tt> interface
  * specification.<p>
- *
+ * <p>
  * This class is a member of the
  * <a href="{@docRoot}/../technotes/guides/collections/index.html">
  * Java Collections Framework</a>.
  *
- * @author  Josh Bloch
- * @author  Neal Gafter
+ * @author Josh Bloch
+ * @author Neal Gafter
  * @see Collection
  * @see List
  * @see AbstractList
@@ -87,7 +87,7 @@ public abstract class AbstractSequentialList<E> extends AbstractList<E> {
         try {
             return listIterator(index).next();
         } catch (NoSuchElementException exc) {
-            throw new IndexOutOfBoundsException("Index: "+index);
+            throw new IndexOutOfBoundsException("Index: " + index);
         }
     }
 
@@ -117,7 +117,7 @@ public abstract class AbstractSequentialList<E> extends AbstractList<E> {
             e.set(element);
             return oldVal;
         } catch (NoSuchElementException exc) {
-            throw new IndexOutOfBoundsException("Index: "+index);
+            throw new IndexOutOfBoundsException("Index: " + index);
         }
     }
 
@@ -145,7 +145,7 @@ public abstract class AbstractSequentialList<E> extends AbstractList<E> {
         try {
             listIterator(index).add(element);
         } catch (NoSuchElementException exc) {
-            throw new IndexOutOfBoundsException("Index: "+index);
+            throw new IndexOutOfBoundsException("Index: " + index);
         }
     }
 
@@ -173,7 +173,7 @@ public abstract class AbstractSequentialList<E> extends AbstractList<E> {
             e.remove();
             return outCast;
         } catch (NoSuchElementException exc) {
-            throw new IndexOutOfBoundsException("Index: "+index);
+            throw new IndexOutOfBoundsException("Index: " + index);
         }
     }
 
@@ -220,7 +220,7 @@ public abstract class AbstractSequentialList<E> extends AbstractList<E> {
             }
             return modified;
         } catch (NoSuchElementException exc) {
-            throw new IndexOutOfBoundsException("Index: "+index);
+            throw new IndexOutOfBoundsException("Index: " + index);
         }
     }
 
@@ -230,7 +230,7 @@ public abstract class AbstractSequentialList<E> extends AbstractList<E> {
     /**
      * Returns an iterator over the elements in this list (in proper
      * sequence).<p>
-     *
+     * <p>
      * This implementation merely returns a list iterator over the list.
      *
      * @return an iterator over the elements in this list (in proper sequence)
@@ -243,10 +243,10 @@ public abstract class AbstractSequentialList<E> extends AbstractList<E> {
      * Returns a list iterator over the elements in this list (in proper
      * sequence).
      *
-     * @param  index index of first element to be returned from the list
-     *         iterator (by a call to the <code>next</code> method)
+     * @param index index of first element to be returned from the list
+     *              iterator (by a call to the <code>next</code> method)
      * @return a list iterator over the elements in this list (in proper
-     *         sequence)
+     * sequence)
      * @throws IndexOutOfBoundsException {@inheritDoc}
      */
     public abstract ListIterator<E> listIterator(int index);

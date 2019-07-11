@@ -42,8 +42,8 @@ package java.util;
  * <pre>   {@code
  *   Deque<Integer> stack = new ArrayDeque<Integer>();}</pre>
  *
- * @author  Jonathan Payne
- * @since   JDK1.0
+ * @author Jonathan Payne
+ * @since JDK1.0
  */
 public
 class Stack<E> extends Vector<E> {
@@ -59,9 +59,9 @@ class Stack<E> extends Vector<E> {
      * <blockquote><pre>
      * addElement(item)</pre></blockquote>
      *
-     * @param   item   the item to be pushed onto this stack.
-     * @return  the <code>item</code> argument.
-     * @see     java.util.Vector#addElement
+     * @param item the item to be pushed onto this stack.
+     * @return the <code>item</code> argument.
+     * @see java.util.Vector#addElement
      */
     public E push(E item) {
         addElement(item);
@@ -73,13 +73,13 @@ class Stack<E> extends Vector<E> {
      * Removes the object at the top of this stack and returns that
      * object as the value of this function.
      *
-     * @return  The object at the top of this stack (the last item
-     *          of the <tt>Vector</tt> object).
-     * @throws  EmptyStackException  if this stack is empty.
+     * @return The object at the top of this stack (the last item
+     * of the <tt>Vector</tt> object).
+     * @throws EmptyStackException if this stack is empty.
      */
     public synchronized E pop() {
-        E       obj;
-        int     len = size();
+        E obj;
+        int len = size();
 
         obj = peek();
         removeElementAt(len - 1);
@@ -91,12 +91,12 @@ class Stack<E> extends Vector<E> {
      * Looks at the object at the top of this stack without removing it
      * from the stack.
      *
-     * @return  the object at the top of this stack (the last item
-     *          of the <tt>Vector</tt> object).
-     * @throws  EmptyStackException  if this stack is empty.
+     * @return the object at the top of this stack (the last item
+     * of the <tt>Vector</tt> object).
+     * @throws EmptyStackException if this stack is empty.
      */
     public synchronized E peek() {
-        int     len = size();
+        int len = size();
 
         if (len == 0)
             throw new EmptyStackException();
@@ -106,8 +106,8 @@ class Stack<E> extends Vector<E> {
     /**
      * Tests if this stack is empty.
      *
-     * @return  <code>true</code> if and only if this stack contains
-     *          no items; <code>false</code> otherwise.
+     * @return <code>true</code> if and only if this stack contains
+     * no items; <code>false</code> otherwise.
      */
     public boolean empty() {
         return size() == 0;
@@ -122,10 +122,10 @@ class Stack<E> extends Vector<E> {
      * method is used to compare <tt>o</tt> to the
      * items in this stack.
      *
-     * @param   o   the desired object.
-     * @return  the 1-based position from the top of the stack where
-     *          the object is located; the return value <code>-1</code>
-     *          indicates that the object is not on the stack.
+     * @param o the desired object.
+     * @return the 1-based position from the top of the stack where
+     * the object is located; the return value <code>-1</code>
+     * indicates that the object is not on the stack.
      */
     public synchronized int search(Object o) {
         int i = lastIndexOf(o);
@@ -136,6 +136,8 @@ class Stack<E> extends Vector<E> {
         return -1;
     }
 
-    /** use serialVersionUID from JDK 1.0.2 for interoperability */
+    /**
+     * use serialVersionUID from JDK 1.0.2 for interoperability
+     */
     private static final long serialVersionUID = 1224463164541339165L;
 }

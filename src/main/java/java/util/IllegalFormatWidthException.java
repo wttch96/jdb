@@ -40,8 +40,7 @@ public class IllegalFormatWidthException extends IllegalFormatException {
     /**
      * Constructs an instance of this class with the specified width.
      *
-     * @param  w
-     *         The width
+     * @param w The width
      */
     public IllegalFormatWidthException(int w) {
         this.w = w;
@@ -50,7 +49,7 @@ public class IllegalFormatWidthException extends IllegalFormatException {
     /**
      * Returns the width
      *
-     * @return  The width
+     * @return The width
      */
     public int getWidth() {
         return w;

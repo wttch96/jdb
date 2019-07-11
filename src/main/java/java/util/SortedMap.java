@@ -62,16 +62,16 @@ package java.util;
  * though as required constructors cannot be specified by interfaces. The
  * expected "standard" constructors for all sorted map implementations are:
  * <ol>
- *   <li>A void (no arguments) constructor, which creates an empty sorted map
- *   sorted according to the natural ordering of its keys.</li>
- *   <li>A constructor with a single argument of type {@code Comparator}, which
- *   creates an empty sorted map sorted according to the specified comparator.</li>
- *   <li>A constructor with a single argument of type {@code Map}, which creates
- *   a new map with the same key-value mappings as its argument, sorted
- *   according to the keys' natural ordering.</li>
- *   <li>A constructor with a single argument of type {@code SortedMap}, which
- *   creates a new sorted map with the same key-value mappings and the same
- *   ordering as the input sorted map.</li>
+ * <li>A void (no arguments) constructor, which creates an empty sorted map
+ * sorted according to the natural ordering of its keys.</li>
+ * <li>A constructor with a single argument of type {@code Comparator}, which
+ * creates an empty sorted map sorted according to the specified comparator.</li>
+ * <li>A constructor with a single argument of type {@code Map}, which creates
+ * a new map with the same key-value mappings as its argument, sorted
+ * according to the keys' natural ordering.</li>
+ * <li>A constructor with a single argument of type {@code SortedMap}, which
+ * creates a new sorted map with the same key-value mappings and the same
+ * ordering as the input sorted map.</li>
  * </ol>
  *
  * <p><strong>Note</strong>: several methods return submaps with restricted key
@@ -85,7 +85,7 @@ package java.util;
  * containing all of the key-value mappings in {@code m} whose keys are
  * between {@code low} and {@code high}, inclusive:<pre>
  *   SortedMap&lt;String, V&gt; sub = m.subMap(low, high+"\0");</pre>
- *
+ * <p>
  * A similar technique can be used to generate an <em>open range</em>
  * (which contains neither endpoint).  The following idiom obtains a
  * view containing all of the key-value mappings in {@code m} whose keys
@@ -98,8 +98,7 @@ package java.util;
  *
  * @param <K> the type of keys maintained by this map
  * @param <V> the type of mapped values
- *
- * @author  Josh Bloch
+ * @author Josh Bloch
  * @see Map
  * @see TreeMap
  * @see SortedSet
@@ -110,15 +109,15 @@ package java.util;
  * @since 1.2
  */
 
-public interface SortedMap<K,V> extends Map<K,V> {
+public interface SortedMap<K, V> extends Map<K, V> {
     /**
      * Returns the comparator used to order the keys in this map, or
      * {@code null} if this map uses the {@linkplain Comparable
      * natural ordering} of its keys.
      *
      * @return the comparator used to order the keys in this map,
-     *         or {@code null} if this map uses the natural ordering
-     *         of its keys
+     * or {@code null} if this map uses the natural ordering
+     * of its keys
      */
     Comparator<? super K> comparator();
 
@@ -135,23 +134,23 @@ public interface SortedMap<K,V> extends Map<K,V> {
      * on an attempt to insert a key outside its range.
      *
      * @param fromKey low endpoint (inclusive) of the keys in the returned map
-     * @param toKey high endpoint (exclusive) of the keys in the returned map
+     * @param toKey   high endpoint (exclusive) of the keys in the returned map
      * @return a view of the portion of this map whose keys range from
-     *         {@code fromKey}, inclusive, to {@code toKey}, exclusive
-     * @throws ClassCastException if {@code fromKey} and {@code toKey}
-     *         cannot be compared to one another using this map's comparator
-     *         (or, if the map has no comparator, using natural ordering).
-     *         Implementations may, but are not required to, throw this
-     *         exception if {@code fromKey} or {@code toKey}
-     *         cannot be compared to keys currently in the map.
-     * @throws NullPointerException if {@code fromKey} or {@code toKey}
-     *         is null and this map does not permit null keys
+     * {@code fromKey}, inclusive, to {@code toKey}, exclusive
+     * @throws ClassCastException       if {@code fromKey} and {@code toKey}
+     *                                  cannot be compared to one another using this map's comparator
+     *                                  (or, if the map has no comparator, using natural ordering).
+     *                                  Implementations may, but are not required to, throw this
+     *                                  exception if {@code fromKey} or {@code toKey}
+     *                                  cannot be compared to keys currently in the map.
+     * @throws NullPointerException     if {@code fromKey} or {@code toKey}
+     *                                  is null and this map does not permit null keys
      * @throws IllegalArgumentException if {@code fromKey} is greater than
-     *         {@code toKey}; or if this map itself has a restricted
-     *         range, and {@code fromKey} or {@code toKey} lies
-     *         outside the bounds of the range
+     *                                  {@code toKey}; or if this map itself has a restricted
+     *                                  range, and {@code fromKey} or {@code toKey} lies
+     *                                  outside the bounds of the range
      */
-    SortedMap<K,V> subMap(K fromKey, K toKey);
+    SortedMap<K, V> subMap(K fromKey, K toKey);
 
     /**
      * Returns a view of the portion of this map whose keys are
@@ -165,20 +164,20 @@ public interface SortedMap<K,V> extends Map<K,V> {
      *
      * @param toKey high endpoint (exclusive) of the keys in the returned map
      * @return a view of the portion of this map whose keys are strictly
-     *         less than {@code toKey}
-     * @throws ClassCastException if {@code toKey} is not compatible
-     *         with this map's comparator (or, if the map has no comparator,
-     *         if {@code toKey} does not implement {@link Comparable}).
-     *         Implementations may, but are not required to, throw this
-     *         exception if {@code toKey} cannot be compared to keys
-     *         currently in the map.
-     * @throws NullPointerException if {@code toKey} is null and
-     *         this map does not permit null keys
+     * less than {@code toKey}
+     * @throws ClassCastException       if {@code toKey} is not compatible
+     *                                  with this map's comparator (or, if the map has no comparator,
+     *                                  if {@code toKey} does not implement {@link Comparable}).
+     *                                  Implementations may, but are not required to, throw this
+     *                                  exception if {@code toKey} cannot be compared to keys
+     *                                  currently in the map.
+     * @throws NullPointerException     if {@code toKey} is null and
+     *                                  this map does not permit null keys
      * @throws IllegalArgumentException if this map itself has a
-     *         restricted range, and {@code toKey} lies outside the
-     *         bounds of the range
+     *                                  restricted range, and {@code toKey} lies outside the
+     *                                  bounds of the range
      */
-    SortedMap<K,V> headMap(K toKey);
+    SortedMap<K, V> headMap(K toKey);
 
     /**
      * Returns a view of the portion of this map whose keys are
@@ -192,20 +191,20 @@ public interface SortedMap<K,V> extends Map<K,V> {
      *
      * @param fromKey low endpoint (inclusive) of the keys in the returned map
      * @return a view of the portion of this map whose keys are greater
-     *         than or equal to {@code fromKey}
-     * @throws ClassCastException if {@code fromKey} is not compatible
-     *         with this map's comparator (or, if the map has no comparator,
-     *         if {@code fromKey} does not implement {@link Comparable}).
-     *         Implementations may, but are not required to, throw this
-     *         exception if {@code fromKey} cannot be compared to keys
-     *         currently in the map.
-     * @throws NullPointerException if {@code fromKey} is null and
-     *         this map does not permit null keys
+     * than or equal to {@code fromKey}
+     * @throws ClassCastException       if {@code fromKey} is not compatible
+     *                                  with this map's comparator (or, if the map has no comparator,
+     *                                  if {@code fromKey} does not implement {@link Comparable}).
+     *                                  Implementations may, but are not required to, throw this
+     *                                  exception if {@code fromKey} cannot be compared to keys
+     *                                  currently in the map.
+     * @throws NullPointerException     if {@code fromKey} is null and
+     *                                  this map does not permit null keys
      * @throws IllegalArgumentException if this map itself has a
-     *         restricted range, and {@code fromKey} lies outside the
-     *         bounds of the range
+     *                                  restricted range, and {@code fromKey} lies outside the
+     *                                  bounds of the range
      */
-    SortedMap<K,V> tailMap(K fromKey);
+    SortedMap<K, V> tailMap(K fromKey);
 
     /**
      * Returns the first (lowest) key currently in this map.
@@ -238,7 +237,7 @@ public interface SortedMap<K,V> extends Map<K,V> {
      * operations.
      *
      * @return a set view of the keys contained in this map, sorted in
-     *         ascending order
+     * ascending order
      */
     Set<K> keySet();
 
@@ -258,7 +257,7 @@ public interface SortedMap<K,V> extends Map<K,V> {
      * support the {@code add} or {@code addAll} operations.
      *
      * @return a collection view of the values contained in this map,
-     *         sorted in ascending key order
+     * sorted in ascending key order
      */
     Collection<V> values();
 
@@ -278,7 +277,7 @@ public interface SortedMap<K,V> extends Map<K,V> {
      * {@code add} or {@code addAll} operations.
      *
      * @return a set view of the mappings contained in this map,
-     *         sorted in ascending key order
+     * sorted in ascending key order
      */
     Set<Map.Entry<K, V>> entrySet();
 }

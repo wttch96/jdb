@@ -70,7 +70,7 @@ public class IllformedLocaleException extends RuntimeException {
      * parse first detected an error.  A negative error index value indicates
      * either the error index is not applicable or unknown.
      *
-     * @param message the message
+     * @param message    the message
      * @param errorIndex the index
      */
     public IllformedLocaleException(String message, int errorIndex) {

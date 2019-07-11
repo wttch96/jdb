@@ -78,7 +78,7 @@ class Comparators {
             if (a == null) {
                 return (b == null) ? 0 : (nullFirst ? -1 : 1);
             } else if (b == null) {
-                return nullFirst ? 1: -1;
+                return nullFirst ? 1 : -1;
             } else {
                 return (real == null) ? 0 : real.compare(a, b);
             }
