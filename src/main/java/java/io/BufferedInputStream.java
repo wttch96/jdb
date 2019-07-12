@@ -1,49 +1,15 @@
-/*
- * Copyright (c) 1994, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.io;
 
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
 /**
- * A <code>BufferedInputStream</code> adds
- * functionality to another input stream-namely,
- * the ability to buffer the input and to
- * support the <code>mark</code> and <code>reset</code>
- * methods. When  the <code>BufferedInputStream</code>
- * is created, an internal buffer array is
- * created. As bytes  from the stream are read
- * or skipped, the internal buffer is refilled
- * as necessary  from the contained input stream,
- * many bytes at a time. The <code>mark</code>
- * operation  remembers a point in the input
- * stream and the <code>reset</code> operation
- * causes all the  bytes read since the most
- * recent <code>mark</code> operation to be
- * reread before new bytes are  taken from
- * the contained input stream.
+ * <code>BufferedInputStream</code> 添加一些新的功能到另一个输入流 - 即
+ * 换缓冲输入并支持 <code>mark</code> 和 <code>reset</code> 方法的功能.
+ * 创建 <code>BufferedInputStream</code> 时, 会创建一个内部缓冲区数组.
+ * 当读取或跳过来自流的字节时, 内部缓冲区根据需要从包含的输入流中重新填充,
+ * 一次多个字节. <code>mark</code> 操作会记住输入流中的一个点, <code>reset</code>
+ * 操作会导致自最近的 <code>mark</code> 操作以来读取所有的字节被重读从包含的
+ * 输入流中获取新的字节.
  *
  * @author Arthur van Hoff
  * @since JDK1.0
@@ -51,28 +17,28 @@ import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 public
 class BufferedInputStream extends FilterInputStream {
 
+    /**
+     * 默认的最大缓冲区大小
+     */
     private static int DEFAULT_BUFFER_SIZE = 8192;
 
     /**
-     * The maximum size of array to allocate.
-     * Some VMs reserve some header words in an array.
-     * Attempts to allocate larger arrays may result in
-     * OutOfMemoryError: Requested array size exceeds VM limit
+     * 要分配的最大数组大小. 一些 VM 在阵列中保留了一些标题字.
+     * 尝试分配更大的数组可能会导致 OutOfMemoryError:
+     * Requested array size exceeds VM limit
      */
     private static int MAX_BUFFER_SIZE = Integer.MAX_VALUE - 8;
 
     /**
-     * The internal buffer array where the data is stored. When necessary,
-     * it may be replaced by another array of
-     * a different size.
+     * 存储数据的内部缓冲数组. 必要时, 它可以被另一个不同大小的数组替换.
      */
     protected volatile byte buf[];
 
     /**
-     * Atomic updater to provide compareAndSet for buf. This is
-     * necessary because closes can be asynchronous. We use nullness
-     * of buf[] as primary indicator that this stream is closed. (The
-     * "in" field is also nulled out on close.)
+     * 原子更新器为 buf 提供了 CAS 的功能.
+     * 这是必要的, 因为关闭可以是异步的.
+     * 我们使用 buf[] 的 null 值作为此流关闭的主要指标.
+     * (关闭时, "in"字段也会被删除.)
      */
     private static final
     AtomicReferenceFieldUpdater<BufferedInputStream, byte[]> bufUpdater =
@@ -80,13 +46,10 @@ class BufferedInputStream extends FilterInputStream {
                     (BufferedInputStream.class, byte[].class, "buf");
 
     /**
-     * The index one greater than the index of the last valid byte in
-     * the buffer.
-     * This value is always
-     * in the range <code>0</code> through <code>buf.length</code>;
-     * elements <code>buf[0]</code>  through <code>buf[count-1]
-     * </code>contain buffered input data obtained
-     * from the underlying  input stream.
+     * 大于缓冲区中最后一个有效字节的索引.
+     * 这个值一直在 <code>0</code> 到 <code>buf.length</code> 之间;
+     * 元素 <code>buf[0]</code> 到 <code>buf[count-1]</code> 包含从底层输入流获得的
+     * 缓冲输入数据.
      */
     protected int count;
 
@@ -151,8 +114,7 @@ class BufferedInputStream extends FilterInputStream {
     protected int marklimit;
 
     /**
-     * Check to make sure that underlying input stream has not been
-     * nulled out due to close; if not return it;
+     * 检测以确保输入流由于关闭而未被清除;如果没被清除则返回它;
      */
     private InputStream getInIfOpen() throws IOException {
         InputStream input = in;
@@ -163,8 +125,7 @@ class BufferedInputStream extends FilterInputStream {
     }
 
     /**
-     * Check to make sure that buffer has not been nulled out due to
-     * close; if not return it;
+     * 检测以确保缓冲区由于关闭而未被清除;如果没被清除则返回它;
      */
     private byte[] getBufIfOpen() throws IOException {
         byte[] buffer = buf;
@@ -470,13 +431,11 @@ class BufferedInputStream extends FilterInputStream {
     }
 
     /**
-     * Tests if this input stream supports the <code>mark</code>
-     * and <code>reset</code> methods. The <code>markSupported</code>
-     * method of <code>BufferedInputStream</code> returns
-     * <code>true</code>.
+     * 测试这个输入流是否支持 <code>mark</code> 和 <code>reset</code> 方法.
+     * <code>BufferedInputStream</code> 的 <code>markSupported</code> 方法
+     * 返回 <code>true</code> .
      *
-     * @return a <code>boolean</code> indicating if this stream type supports
-     * the <code>mark</code> and <code>reset</code> methods.
+     * @return 一个 <code>boolean</code> 值表明此输入流是否支持 <code>mark</code> 和 <code>reset</code> 方法.
      * @see java.io.InputStream#mark(int)
      * @see java.io.InputStream#reset()
      */
@@ -486,18 +445,18 @@ class BufferedInputStream extends FilterInputStream {
     }
 
     /**
-     * Closes this input stream and releases any system resources
-     * associated with the stream.
-     * Once the stream has been closed, further read(), available(), reset(),
-     * or skip() invocations will throw an IOException.
-     * Closing a previously closed stream has no effect.
+     * 关闭输入流并且释放与流相关的所有系统资源.
+     * 一旦流被关闭, 进一步的 read(), available(), reset() 或 skip() 调用将抛出 IOException.
+     * close() 已经关闭的流不受影响, Wttch: 即幂等性.
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException 如果一个 I/O 错误发生了.
      */
     @Override
     public void close() throws IOException {
         byte[] buffer;
+        // 保证了 close 的幂等性
         while ((buffer = buf) != null) {
+            // 删除 buf 数组
             if (bufUpdater.compareAndSet(this, buffer, null)) {
                 InputStream input = in;
                 in = null;
@@ -506,7 +465,7 @@ class BufferedInputStream extends FilterInputStream {
                 }
                 return;
             }
-            // Else retry in case a new buf was CASed in fill()
+            // 如果新的buf在fill() 中被 CAS 化, 则重试
         }
     }
 }
