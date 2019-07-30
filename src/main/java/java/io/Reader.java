@@ -36,10 +36,9 @@ public abstract class Reader implements Readable, Closeable {
     }
 
     /**
-     * Creates a new character-stream reader whose critical sections will
-     * synchronize on the given object.
+     * 创建一个新的字符流阅读器, 其关键部分将在给定对象上同步.
      *
-     * @param lock The Object to synchronize on.
+     * @param lock 同步时要使用的对象.
      */
     protected Reader(Object lock) {
         if (lock == null) {
@@ -49,21 +48,20 @@ public abstract class Reader implements Readable, Closeable {
     }
 
     /**
-     * Attempts to read characters into the specified character buffer.
-     * The buffer is used as a repository of characters as-is: the only
-     * changes made are the results of a put operation. No flipping or
-     * rewinding of the buffer is performed.
+     * 试图读取字符到指定的字符缓冲区. 缓冲区按原样用作字符存储库:
+     * 唯一的更改是 put 操作的结果. 不执行缓冲区的翻转或逆序.
      *
-     * @param target the buffer to read characters into
-     * @return The number of characters added to the buffer, or
-     * -1 if this source of characters is at its end
-     * @throws IOException                      if an I/O error occurs
-     * @throws NullPointerException             if target is null
-     * @throws java.nio.ReadOnlyBufferException if target is a read only buffer
+     * @param target 用于读取字符的缓冲区
+     * @return 添加到缓冲区的字符数, 如果此字符源位于其末尾, 则返回-1
+     * @throws IOException                      如果一个 I/O 错误发生
+     * @throws NullPointerException             目标为空
+     * @throws java.nio.ReadOnlyBufferException 目标只读
+     * @see #read(char[], int, int)
      * @since 1.5
      */
     @Override
     public int read(java.nio.CharBuffer target) throws IOException {
+        // buffer 可以容纳的字符数
         int len = target.remaining();
         char[] cbuf = new char[len];
         int n = read(cbuf, 0, len);
@@ -74,16 +72,14 @@ public abstract class Reader implements Readable, Closeable {
     }
 
     /**
-     * Reads a single character.  This method will block until a character is
-     * available, an I/O error occurs, or the end of the stream is reached.
+     * 读一个字符. 此方法将阻塞, 直到字符可用, 发生 I/O 错误或到达流的末尾.
      *
-     * <p> Subclasses that intend to support efficient single-character input
-     * should override this method.
+     * <p> 打算支持高效单字符输入的子类应该重写此方法.
      *
-     * @return The character read, as an integer in the range 0 to 65535
-     * (<tt>0x00-0xffff</tt>), or -1 if the end of the stream has
-     * been reached
-     * @throws IOException If an I/O error occurs
+     * @return 读到的字符, 一个 0 到 65535 大小的整型(<tt>0x00-0xFFFF</tt>),
+     * 或者流到达末尾时返回 -1
+     * @throws IOException 如果发生了一个 I/O 错误
+     * @see #read(char[], int, int)
      */
     public int read() throws IOException {
         char cb[] = new char[1];
@@ -95,30 +91,27 @@ public abstract class Reader implements Readable, Closeable {
     }
 
     /**
-     * Reads characters into an array.  This method will block until some input
-     * is available, an I/O error occurs, or the end of the stream is reached.
+     * 读一个字符数组. 此方法将阻塞, 直到字符可用, 发生 I/O 错误或到达流的末尾.
      *
-     * @param cbuf Destination buffer
-     * @return The number of characters read, or -1
-     * if the end of the stream
-     * has been reached
-     * @throws IOException If an I/O error occurs
+     * @param cbuf 目标缓冲区
+     * @return 添加到缓冲区的字符数, 如果此字符源位于其末尾, 则返回-1
+     * @throws IOException 如果发生了一个 I/O 错误
+     * @see #read(char[], int, int)
      */
     public int read(char cbuf[]) throws IOException {
         return read(cbuf, 0, cbuf.length);
     }
 
     /**
-     * Reads characters into a portion of an array.  This method will block
-     * until some input is available, an I/O error occurs, or the end of the
-     * stream is reached.
+     * 读取字符到数组的指定位置. 此方法将阻塞, 直到字符可用, 发生 I/O 错误或到达流的末尾.
+     * wttch: 该抽象类必须实现的方法, 不像输入流那样, Reader 的 {@link #read()} {@link #read(char[])}
+     * 等方法都是通过该函数实现的(读取数组长度为1的字符数组, 或不指定偏移量).
      *
-     * @param cbuf Destination buffer
-     * @param off  Offset at which to start storing characters
-     * @param len  Maximum number of characters to read
-     * @return The number of characters read, or -1 if the end of the
-     * stream has been reached
-     * @throws IOException If an I/O error occurs
+     * @param cbuf 目标缓冲区
+     * @param off  开始存储字符的偏移量
+     * @param len  读取到的字符数量
+     * @return 添加到缓冲区的字符数, 如果此字符源位于其末尾, 则返回-1
+     * @throws IOException 如果发生了一个 I/O 错误
      */
     abstract public int read(char cbuf[], int off, int len) throws IOException;
 
