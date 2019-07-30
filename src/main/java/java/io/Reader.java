@@ -3,7 +3,7 @@ package java.io;
 
 /**
  * 读取字符流的抽象类. 子类必须实现的唯一方法是 read(char[], int, int) 和 close().
- * 但是, 大多数子类讲覆盖此处定义的一些方法，以便提供更高的效率, 添加附加功能或者两者.
+ * 但是, 大多数子类讲覆盖此处定义的一些方法, 以便提供更高的效率, 添加附加功能或者两者.
  *
  * @author Mark Reinhold
  * @see BufferedReader
@@ -116,34 +116,36 @@ public abstract class Reader implements Readable, Closeable {
     abstract public int read(char cbuf[], int off, int len) throws IOException;
 
     /**
-     * Maximum skip-buffer size
+     * 最大的可跳过 buffer 的大小
      */
     private static final int maxSkipBufferSize = 8192;
 
     /**
-     * Skip buffer, null until allocated
+     * 跳过缓冲区, 在分配之前为 null
      */
     private char skipBuffer[] = null;
 
     /**
-     * Skips characters.  This method will block until some characters are
-     * available, an I/O error occurs, or the end of the stream is reached.
+     * 跳过一些字符. 此方法将阻塞, 直到字符可用, 发生 I/O 错误或到达流的末尾.
+     * wttch: 还是用 {@link #read(char[], int, int)} 方法, 直接抛弃所读到的东西.
      *
-     * @param n The number of characters to skip
-     * @return The number of characters actually skipped
-     * @throws IllegalArgumentException If <code>n</code> is negative.
-     * @throws IOException              If an I/O error occurs
+     * @param n 要跳过的字符数
+     * @return 实际跳过的字符数
+     * @throws IllegalArgumentException 如果 <code>n</code> 为负数.
+     * @throws IOException              如果发生 I/O 错误
      */
     public long skip(long n) throws IOException {
         if (n < 0L) {
             throw new IllegalArgumentException("skip value is negative");
         }
-        int nn = (int) Math.min(n, maxSkipBufferSize);
+        int nn = (int) Math.min(n, maxSkipBufferSize); // 不能超过最大可跳过数
         synchronized (lock) {
+            // 加锁
             if ((skipBuffer == null) || (skipBuffer.length < nn)) {
+                // skip buffer 不够用
                 skipBuffer = new char[nn];
             }
-            long r = n;
+            long r = n; // 反向计数
             while (r > 0) {
                 int nc = read(skipBuffer, 0, (int) Math.min(r, nn));
                 if (nc == -1) {
@@ -156,11 +158,10 @@ public abstract class Reader implements Readable, Closeable {
     }
 
     /**
-     * Tells whether this stream is ready to be read.
+     * 判断此流是否可以读取.
      *
-     * @return True if the next read() is guaranteed not to block for input,
-     * false otherwise.  Note that returning false does not guarantee that the
-     * next read will block.
+     * @return 如果保证下一个 read() 不阻止输入, 则返回 true, 否则返回 false.
+     * 请注意, 返回 false 并不能保证下一次读取将一定被阻止.
      * @throws IOException If an I/O error occurs
      */
     public boolean ready() throws IOException {
@@ -168,56 +169,46 @@ public abstract class Reader implements Readable, Closeable {
     }
 
     /**
-     * Tells whether this stream supports the mark() operation. The default
-     * implementation always returns false. Subclasses should override this
-     * method.
+     * 判断此流是否支持 mark() 操作.
+     * 默认实现始终返回 false. 子类应该重写此方法.
      *
-     * @return true if and only if this stream supports the mark operation.
+     * @return 如果此流支持 mark() 操作则返回 true.
      */
     public boolean markSupported() {
         return false;
     }
 
     /**
-     * Marks the present position in the stream.  Subsequent calls to reset()
-     * will attempt to reposition the stream to this point.  Not all
-     * character-input streams support the mark() operation.
+     * 标记流中的当前位置. 对 reset() 的后续调用将尝试将流重新定位到此点.
+     * 并非所有字符输入流都支持 mark() 操作.
      *
-     * @param readAheadLimit Limit on the number of characters that may be
-     *                       read while still preserving the mark.  After
-     *                       reading this many characters, attempting to
-     *                       reset the stream may fail.
-     * @throws IOException If the stream does not support mark(),
-     *                     or if some other I/O error occurs
+     * @param readAheadLimit 在保留标记的同时限制可以读取的字符数. 读取这么多字符后,
+     *                       reset 此流可能会失败.
+     * @throws IOException 如果此流不支持 mark() 操作, 或者发生了 I/O 错误.
      */
     public void mark(int readAheadLimit) throws IOException {
         throw new IOException("mark() not supported");
     }
 
     /**
-     * Resets the stream.  If the stream has been marked, then attempt to
-     * reposition it at the mark.  If the stream has not been marked, then
-     * attempt to reset it in some way appropriate to the particular stream,
-     * for example by repositioning it to its starting point.  Not all
-     * character-input streams support the reset() operation, and some support
-     * reset() without supporting mark().
+     * 重置此流. 如果流被标记, 尝试在标记位置复位它. 如果流没有被标记, 然后尝试以某种
+     * 适合于特定流的方式重置它, 例如通过将其重新定位到其起始点.
+     * wttch: 主要看子类如何实现它.
+     * 不是所有的字符输入流都支持 reset() 操作, 并且有些 reset() 操作并不需要 mark().
      *
-     * @throws IOException If the stream has not been marked,
-     *                     or if the mark has been invalidated,
-     *                     or if the stream does not support reset(),
-     *                     or if some other I/O error occurs
+     * @throws IOException 如果流没有被标记, 或者标记无效, 或者流不支持 reset(),
+     *                     或者发生了什么 I/O 错误
      */
     public void reset() throws IOException {
         throw new IOException("reset() not supported");
     }
 
     /**
-     * Closes the stream and releases any system resources associated with
-     * it.  Once the stream has been closed, further read(), ready(),
-     * mark(), reset(), or skip() invocations will throw an IOException.
-     * Closing a previously closed stream has no effect.
+     * 关闭流并释放相关的系统资源. 流一旦关闭, 进一步的 read(), ready(), mark(),
+     * reset() 和 skip() 调用将会抛出 IOException.
+     * 关闭一个已经关闭的流没有影响.
      *
-     * @throws IOException If an I/O error occurs
+     * @throws IOException 如果发生 I/O 错误
      */
     @Override
     abstract public void close() throws IOException;
