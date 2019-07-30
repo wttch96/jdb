@@ -1,62 +1,33 @@
-/*
- * Copyright (c) 1996, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.io;
 
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+
 import sun.nio.cs.StreamDecoder;
 
 
 /**
- * An InputStreamReader is a bridge from byte streams to character streams: It
- * reads bytes and decodes them into characters using a specified {@link
- * java.nio.charset.Charset charset}.  The charset that it uses
- * may be specified by name or may be given explicitly, or the platform's
- * default charset may be accepted.
+ * InputStreamReader 是字节流和字符流之间的桥梁: 它读取字节并使用指定的 {@link
+ * java.nio.charset.Charset charest} 编码来解码它们. 字符集的使用可以通过名称
+ * 指定或者可以明确的给出, 或者可以接受平台的默认字符集.
  *
- * <p> Each invocation of one of an InputStreamReader's read() methods may
- * cause one or more bytes to be read from the underlying byte-input stream.
- * To enable the efficient conversion of bytes to characters, more bytes may
- * be read ahead from the underlying stream than are necessary to satisfy the
- * current read operation.
+ * <p> 每次调用一个 InputStreamReader 的 read() 方法都可能导致从底层输入流中读取
+ * 一个或者多个字节. 为了能过有效地将字节转换为字符, 可以从基础流中提取可以满足当前操作
+ * 所需的更多字节.
  *
- * <p> For top efficiency, consider wrapping an InputStreamReader within a
- * BufferedReader.  For example:
+ * <p> 为了获得更高的效率, 请考虑在 BufferedReader 中包装 InputStreamReader.
+ * 例如:
  *
  * <pre>
  * BufferedReader in
  *   = new BufferedReader(new InputStreamReader(System.in));
  * </pre>
  *
+ * @author Mark Reinhold
  * @see BufferedReader
  * @see InputStream
  * @see java.nio.charset.Charset
- *
- * @author      Mark Reinhold
- * @since       JDK1.1
+ * @since JDK1.1
  */
 
 public class InputStreamReader extends Reader {
@@ -64,36 +35,31 @@ public class InputStreamReader extends Reader {
     private final StreamDecoder sd;
 
     /**
-     * Creates an InputStreamReader that uses the default charset.
+     * 使用默认的字符集创建一个 InputStreamReader.
      *
-     * @param  in   An InputStream
+     * @param in 一个输入流
      */
     public InputStreamReader(InputStream in) {
         super(in);
         try {
-            sd = StreamDecoder.forInputStreamReader(in, this, (String)null); // ## check lock object
+            // 流编码器, 它也是一个 Reader 的子类
+            sd = StreamDecoder.forInputStreamReader(in, this, (String) null); // ## check lock object
         } catch (UnsupportedEncodingException e) {
-            // The default encoding should always be available
+            // 默认编码应始终可用
             throw new Error(e);
         }
     }
 
     /**
-     * Creates an InputStreamReader that uses the named charset.
+     * 使用指定的字符集创建一个 InputStreamReader.
      *
-     * @param  in
-     *         An InputStream
-     *
-     * @param  charsetName
-     *         The name of a supported
-     *         {@link java.nio.charset.Charset charset}
-     *
-     * @exception  UnsupportedEncodingException
-     *             If the named charset is not supported
+     * @param in          一个输入流
+     * @param charsetName 支持的字符集
+     *                    {@link java.nio.charset.Charset charset} 的名字
+     * @throws UnsupportedEncodingException 如果字符集不支持
      */
     public InputStreamReader(InputStream in, String charsetName)
-        throws UnsupportedEncodingException
-    {
+            throws UnsupportedEncodingException {
         super(in);
         if (charsetName == null) {
             throw new NullPointerException("charsetName");
@@ -102,13 +68,12 @@ public class InputStreamReader extends Reader {
     }
 
     /**
-     * Creates an InputStreamReader that uses the given charset.
+     * 使用指定的字符集创建一个 InputStreamReader.
      *
-     * @param  in       An InputStream
-     * @param  cs       A charset
-     *
-     * @since 1.4
+     * @param in 输入流
+     * @param cs 一个字符集
      * @spec JSR-51
+     * @since 1.4
      */
     public InputStreamReader(InputStream in, Charset cs) {
         super(in);
@@ -119,13 +84,12 @@ public class InputStreamReader extends Reader {
     }
 
     /**
-     * Creates an InputStreamReader that uses the given charset decoder.
+     * 使用给定的字符集解码器创建一个 InputStreamReader.
      *
-     * @param  in       An InputStream
-     * @param  dec      A charset decoder
-     *
-     * @since 1.4
+     * @param in  输入流
+     * @param dec 字符集解码器
      * @spec JSR-51
+     * @since 1.4
      */
     public InputStreamReader(InputStream in, CharsetDecoder dec) {
         super(in);
@@ -136,36 +100,29 @@ public class InputStreamReader extends Reader {
     }
 
     /**
-     * Returns the name of the character encoding being used by this stream.
+     * 返回这个流使用的字符集解码器的名字.
      *
-     * <p> If the encoding has an historical name then that name is returned;
-     * otherwise the encoding's canonical name is returned.
+     * <p> 如果编码具有历史名字, 则返回该名称; 否则, 返回编码的规范名称.
      *
-     * <p> If this instance was created with the {@link
-     * #InputStreamReader(InputStream, String)} constructor then the returned
-     * name, being unique for the encoding, may differ from the name passed to
-     * the constructor. This method will return <code>null</code> if the
-     * stream has been closed.
+     * <p> 如果此实例使用 {@link #InputStreamReader(InputStream, String)}
+     * 创建则返回传入的字符集名称, 对于编码而言是唯一的, 可能与传递给构造函数的名称不同.
+     * 这个方法将会返回 null, 如果流已经关闭了.
      * </p>
-     * @return The historical name of this encoding, or
-     *         <code>null</code> if the stream has been closed
      *
-     * @see java.nio.charset.Charset
-     *
+     * @return 编码的历史名字, 如果流已经关闭了则返回 null .
      * @revised 1.4
      * @spec JSR-51
+     * @see java.nio.charset.Charset
      */
     public String getEncoding() {
         return sd.getEncoding();
     }
 
     /**
-     * Reads a single character.
+     * 读取一个单一的字符.
      *
-     * @return The character read, or -1 if the end of the stream has been
-     *         reached
-     *
-     * @exception  IOException  If an I/O error occurs
+     * @return 读取到的字符, 或者流到达末尾返回 -1.
+     * @throws IOException 如果发生 I/O 错误
      */
     @Override
     public int read() throws IOException {
@@ -173,16 +130,13 @@ public class InputStreamReader extends Reader {
     }
 
     /**
-     * Reads characters into a portion of an array.
+     * 读取一些字符到数组的指定位置.
      *
-     * @param      cbuf     Destination buffer
-     * @param      offset   Offset at which to start storing characters
-     * @param      length   Maximum number of characters to read
-     *
-     * @return     The number of characters read, or -1 if the end of the
-     *             stream has been reached
-     *
-     * @exception  IOException  If an I/O error occurs
+     * @param cbuf   目标缓冲区
+     * @param offset 开始存储字符的偏移量
+     * @param length 读取到的字符数量
+     * @return 添加到缓冲区的字符数, 如果此字符源位于其末尾, 则返回-1
+     * @throws IOException 如果发生了一个 I/O 错误
      */
     @Override
     public int read(char cbuf[], int offset, int length) throws IOException {
@@ -190,11 +144,10 @@ public class InputStreamReader extends Reader {
     }
 
     /**
-     * Tells whether this stream is ready to be read.  An InputStreamReader is
-     * ready if its input buffer is not empty, or if bytes are available to be
-     * read from the underlying byte stream.
+     * 判断此流是否可以读取. 如果 InputSteamReader 的输入缓冲区不为空, 或者可以从
+     * 底层字节流中读取字节, 则它就准备就绪, 可以被读取.
      *
-     * @exception  IOException  If an I/O error occurs
+     * @throws IOException 如果发生 I/O 错误
      */
     @Override
     public boolean ready() throws IOException {
