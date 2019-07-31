@@ -1,110 +1,49 @@
-/*
- * Copyright (c) 1994, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang;
 
 import java.io.*;
 import java.util.*;
 
 /**
- * The {@code Throwable} class is the superclass of all errors and
- * exceptions in the Java language. Only objects that are instances of this
- * class (or one of its subclasses) are thrown by the Java Virtual Machine or
- * can be thrown by the Java {@code throw} statement. Similarly, only
- * this class or one of its subclasses can be the argument type in a
- * {@code catch} clause.
+ * {@code Throwable} 是 Java 语言中所有错误和异常的超类.
+ * 只有作为此类(或其子类之一)的实例对象才能被 JVM 抛出, 或者可被 Java {@code throw} 语句抛出.
+ * 同样, 只有作为此类(或器子类之一)才可以作为 {@code catch} 的参数类型.
  * <p>
- * For the purposes of compile-time checking of exceptions, {@code
- * Throwable} and any subclass of {@code Throwable} that is not also a
- * subclass of either {@link RuntimeException} or {@link Error} are
- * regarded as checked exceptions.
+ * 出于编译时检查异常的目的, {@code Throwable} 和任何 {@code Throwable} 的子类
+ * (但不是 {@link RuntimeException} 或 {@link Error} 的子类) 都被视为受检异常.
  *
- * <p>Instances of two subclasses, {@link java.lang.Error} and
- * {@link java.lang.Exception}, are conventionally used to indicate
- * that exceptional situations have occurred. Typically, these instances
- * are freshly created in the context of the exceptional situation so
- * as to include relevant information (such as stack trace data).
+ * <p>{@link java.lang.Error} 和 {@link java.lang.Exception} 两者之一的子类,
+ * 通常用于表示发生了特殊情况. 通常, 这些事例是在特殊情况下新创建的, 以便包含相关信息
+ * (例如, 堆栈跟踪数据).
  *
- * <p>A throwable contains a snapshot of the execution stack of its
- * thread at the time it was created. It can also contain a message
- * string that gives more information about the error. Over time, a
- * throwable can {@linkplain Throwable#addSuppressed suppress} other
- * throwables from being propagated.  Finally, the throwable can also
- * contain a <i>cause</i>: another throwable that caused this
- * throwable to be constructed.  The recording of this causal information
- * is referred to as the <i>chained exception</i> facility, as the
- * cause can, itself, have a cause, and so on, leading to a "chain" of
- * exceptions, each caused by another.
+ * <p>Throwable 包含其创建时线程执行堆栈的快照. 它也可以包含一条关于错误信息的字符串.
+ * 随着时间的推移, Throwable 可以{@linkplain Throwable#addSuppressed(Throwable)}抑制
+ * 其他 Throwable 的传播. 最后, Throwable 还可以包含 <i>cause</i>: 另一个 Throwable 导致
+ * 构造了这个 Throwable. 这种因果信息的记录被称为 <i>链式异常</i>, 因为原因本身可能有原因等等,
+ * 导致一个异常链, 每一个异常都有另一个引起.
  *
- * <p>One reason that a throwable may have a cause is that the class that
- * throws it is built atop a lower layered abstraction, and an operation on
- * the upper layer fails due to a failure in the lower layer.  It would be bad
- * design to let the throwable thrown by the lower layer propagate outward, as
- * it is generally unrelated to the abstraction provided by the upper layer.
- * Further, doing so would tie the API of the upper layer to the details of
- * its implementation, assuming the lower layer's exception was a checked
- * exception.  Throwing a "wrapped exception" (i.e., an exception containing a
- * cause) allows the upper layer to communicate the details of the failure to
- * its caller without incurring either of these shortcomings.  It preserves
- * the flexibility to change the implementation of the upper layer without
- * changing its API (in particular, the set of exceptions thrown by its
- * methods).
+ * <p>Throwable 被抛出的一个原因是抛出它的类是在较低的分层抽象上构建的, 并且由于下层的故障而导致上层的操作失败.
+ * 让下层抛出的 Throwable 向外传播是不好的设计, 因为它通常与上层提供的抽象无关.
+ * 此外, 假设下层的异常是一个受检异常, 这样做会将上层的 API 与其实现的细节联系起来.
+ * 抛出"包装异常"(即包含原因的异常)允许上层将故障的细节传达给其调用者, 而不会产生这些缺点中的任何一个.
+ * 它保留了更改上层实现的灵活性, 而无需更改其API(特别是方法抛出的异常集).
  *
- * <p>A second reason that a throwable may have a cause is that the method
- * that throws it must conform to a general-purpose interface that does not
- * permit the method to throw the cause directly.  For example, suppose
- * a persistent collection conforms to the {@link java.util.Collection
- * Collection} interface, and that its persistence is implemented atop
- * {@code java.io}.  Suppose the internals of the {@code add} method
- * can throw an {@link java.io.IOException IOException}.  The implementation
- * can communicate the details of the {@code IOException} to its caller
- * while conforming to the {@code Collection} interface by wrapping the
- * {@code IOException} in an appropriate unchecked exception.  (The
- * specification for the persistent collection should indicate that it is
- * capable of throwing such exceptions.)
+ * <p>Throwable 被抛出的第二个原因是抛出它的方法必须符合通用接口, 该接口不允许该方法直接抛出异常的原因.
+ * 例如, 假设持久化集合符合 {@link java.util.Collection Collection} 接口, 并且其持久性在
+ * {@code java.io} 上实现. 假设 {@code add} 方法的内部可以抛出 {@link java.io.IOException IOException}.
+ * 通过将 {@code IOException} 包装在适当的未经检查的异常中, 实现可以将 {@code IOException} 的详细信息
+ * 传递给其调用者, 同时符合 {@code Collection} 接口. (持久化集合的操作规范应该表明它能够抛出这样的例外.)
  *
- * <p>A cause can be associated with a throwable in two ways: via a
- * constructor that takes the cause as an argument, or via the
- * {@link #initCause(Throwable)} method.  New throwable classes that
- * wish to allow causes to be associated with them should provide constructors
- * that take a cause and delegate (perhaps indirectly) to one of the
- * {@code Throwable} constructors that takes a cause.
+ * <p>原因可以通过两种方式与 Throwable 相关联: 通过将原因作为参数的构造函数, 或通过
+ * {@link #initCause(Throwable)} 方法. 希望允许原因和它们相关联的新的可抛出类应该提供构造函数,
+ * 这些构造函数将一个原因和委托(可能是间接的)带到一个 {@code Throwable} 构造函数中.
  * <p>
- * Because the {@code initCause} method is public, it allows a cause to be
- * associated with any throwable, even a "legacy throwable" whose
- * implementation predates the addition of the exception chaining mechanism to
- * {@code Throwable}.
+ * 因为 {@code initCause} 方法是公共的, S所以它允许一个原因与任何 Throwable 相关联, 甚至是一个
+ * "遗产 Throwable", 其实早于 {@code Throwable} 添加异常链机制.
  *
- * <p>By convention, class {@code Throwable} and its subclasses have two
- * constructors, one that takes no arguments and one that takes a
- * {@code String} argument that can be used to produce a detail message.
- * Further, those subclasses that might likely have a cause associated with
- * them should have two more constructors, one that takes a
- * {@code Throwable} (the cause), and one that takes a
- * {@code String} (the detail message) and a {@code Throwable} (the
- * cause).
+ * <p>按照惯例, 类 {@code Throwable} 及其子类有两个构造函数, 一个不带参数,
+ * 另一个带有 {@code String} 参数, 可用于生成详细消息.
+ * 此外, 那些可能与它们相关的原因的子类应该有两个构造函数, 一个带有 {@code Throwable}(原因),
+ * 另一个带有 {@code String}(详细消息)和 {@code Throwable}(原因).
  *
  * @author unascribed
  * @author Josh Bloch (Added exception chaining and programmatic access to
@@ -114,19 +53,18 @@ import java.util.*;
  */
 public class Throwable implements Serializable {
     /**
-     * use serialVersionUID from JDK 1.0.2 for interoperability
+     * 使用 JDK1.0.2 中的 serialVersionUID 实现互操作性.
      */
     private static final long serialVersionUID = -3042686055658047285L;
 
     /**
-     * Native code saves some indication of the stack backtrace in this slot.
+     * 本机代码在此插槽中保存了堆栈回溯的一些指示.
      */
     private transient Object backtrace;
 
     /**
-     * Specific details about the Throwable.  For example, for
-     * {@code FileNotFoundException}, this contains the name of
-     * the file that could not be found.
+     * 关于 Throwable 的具体细节.  例如, 对于 {@code FileNotFoundException},
+     * 它包含无法找到的文件的名称.
      *
      * @serial
      */
@@ -134,8 +72,7 @@ public class Throwable implements Serializable {
 
 
     /**
-     * Holder class to defer initializing sentinel objects only used
-     * for serialization.
+     * Holder 类推迟初始化仅用于序列化的 sentinel 对象.
      */
     private static class SentinelHolder {
         /**
