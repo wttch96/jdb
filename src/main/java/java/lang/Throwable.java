@@ -37,7 +37,7 @@ import java.util.*;
  * {@link #initCause(Throwable)} 方法. 希望允许原因和它们相关联的新的可抛出类应该提供构造函数,
  * 这些构造函数将一个原因和委托(可能是间接的)带到一个 {@code Throwable} 构造函数中.
  * <p>
- * 因为 {@code initCause} 方法是公共的, S所以它允许一个原因与任何 Throwable 相关联, 甚至是一个
+ * 因为 {@code initCause} 方法是公共的, 所以它允许一个原因与任何 Throwable 相关联, 甚至是一个
  * "遗产 Throwable", 其实早于 {@code Throwable} 添加异常链机制.
  *
  * <p>按照惯例, 类 {@code Throwable} 及其子类有两个构造函数, 一个不带参数,
@@ -72,64 +72,49 @@ public class Throwable implements Serializable {
 
 
     /**
-     * Holder 类推迟初始化仅用于序列化的 sentinel 对象.
+     * Holder 类推迟初始化仅用于序列化的哨兵(标记)对象.
      */
     private static class SentinelHolder {
         /**
-         * {@linkplain #setStackTrace(StackTraceElement[]) Setting the
-         * stack trace} to a one-element array containing this sentinel
-         * value indicates future attempts to set the stack trace will be
-         * ignored.  The sentinal is equal to the result of calling:<br>
-         * {@code new StackTraceElement("", "", null, Integer.MIN_VALUE)}
+         * {@linkplain #setStackTrace(StackTraceElement[]) 设置堆栈跟踪}
+         * 到包含此哨兵(标记)值的单元素数组表示将忽略将来设置堆栈跟踪的尝试.
+         * 哨兵(标记)等于调用 {@code new StackTraceElement("", "", null, Integer.MIN_VALUE)} 的结果.
          */
         public static final StackTraceElement STACK_TRACE_ELEMENT_SENTINEL =
                 new StackTraceElement("", "", null, Integer.MIN_VALUE);
 
         /**
-         * Sentinel value used in the serial form to indicate an immutable
-         * stack trace.
+         * 用于表示不可变堆栈跟踪的串行形式的哨兵(标记).
          */
         public static final StackTraceElement[] STACK_TRACE_SENTINEL =
                 new StackTraceElement[]{STACK_TRACE_ELEMENT_SENTINEL};
     }
 
     /**
-     * A shared value for an empty stack.
+     * 空堆栈的共享值.
      */
     private static final StackTraceElement[] UNASSIGNED_STACK = new StackTraceElement[0];
 
     /*
-     * To allow Throwable objects to be made immutable and safely
-     * reused by the JVM, such as OutOfMemoryErrors, fields of
-     * Throwable that are writable in response to user actions, cause,
-     * stackTrace, and suppressedExceptions obey the following
-     * protocol:
+     * 为了允许 JVM 使 Throwable 对象不可变并安全地重用, 例如: OutOfMemoryErrors,
+     * 可响应用户操作而写入的 Throwable 字段, cause, stackTrace 和 suppressExceptions
+     * 遵循以下协议:
      *
-     * 1) The fields are initialized to a non-null sentinel value
-     * which indicates the value has logically not been set.
+     * 1) 字段初始化为 non-null 的哨兵(标记)值, 表示逻辑上未设置该值.
      *
-     * 2) Writing a null to the field indicates further writes
-     * are forbidden
+     * 2) 向该字段写入 null 表示禁止进一步写入.
      *
-     * 3) The sentinel value may be replaced with another non-null
-     * value.
+     * 3) 哨兵(标记)值可以用另一个非 null 值替换.
      *
-     * For example, implementations of the HotSpot JVM have
-     * preallocated OutOfMemoryError objects to provide for better
-     * diagnosability of that situation.  These objects are created
-     * without calling the constructor for that class and the fields
-     * in question are initialized to null.  To support this
-     * capability, any new fields added to Throwable that require
-     * being initialized to a non-null value require a coordinated JVM
-     * change.
+     * 例如, HotSpot JVM 的实现具有预分配的 OutOfMemoryError 对象,
+     * 以提供对该情况的更好的可诊断性. 创建这些对象时不调用该类的构造函数,
+     * 并将有问题的字段初始化为 null. 要支持此功能, 添加到 Throwable 的任何需要初始化
+     * 为非空值的新字段都需要协调 JVM 更改.
      */
 
     /**
-     * The throwable that caused this throwable to get thrown, or null if this
-     * throwable was not caused by another throwable, or if the causative
-     * throwable is unknown.  If this field is equal to this throwable itself,
-     * it indicates that the cause of this throwable has not yet been
-     * initialized.
+     * 导致抛出此 Throwable 的 Throwable 对象, 如果抛出的原因未知,
+     * 则抛出此 Throwable 的 Throwable 为 null.
      *
      * @serial
      * @since 1.4
@@ -137,29 +122,25 @@ public class Throwable implements Serializable {
     private Throwable cause = this;
 
     /**
-     * The stack trace, as returned by {@link #getStackTrace()}.
+     * 堆栈跟踪, 作为 {@link #getStackTrace()} 的跟踪.
      * <p>
-     * The field is initialized to a zero-length array.  A {@code
-     * null} value of this field indicates subsequent calls to {@link
-     * #setStackTrace(StackTraceElement[])} and {@link
-     * #fillInStackTrace()} will be be no-ops.
+     * 这个字段初始化为一个长度为 0 的数组.  此字段的 {@code null} 值表示后续调用
+     * {@link #setStackTrace(StackTraceElement[])} 和 {@link #fillInStackTrace()}
+     * 将是不允许的操作.
      *
      * @serial
      * @since 1.4
      */
     private StackTraceElement[] stackTrace = UNASSIGNED_STACK;
 
-    // Setting this static field introduces an acceptable
-    // initialization dependency on a few java.util classes.
+    // 设置此静态字段会在一些 java.util 类上引入可接受的初始化依赖项.
     private static final List<Throwable> SUPPRESSED_SENTINEL =
             Collections.unmodifiableList(new ArrayList<Throwable>(0));
 
     /**
-     * The list of suppressed exceptions, as returned by {@link
-     * #getSuppressed()}.  The list is initialized to a zero-element
-     * unmodifiable sentinel list.  When a serialized Throwable is
-     * read in, if the {@code suppressedExceptions} field points to a
-     * zero-element list, the field is reset to the sentinel value.
+     * 被抑制的异常列表, 作为 {@link #getSuppressed()} 的返回值.
+     * 该列表初始化为零元素不可修改的哨兵(标记)列表. 读入序列化的 Throwable 时,
+     * 如果 {@code suppressExceptions} 字段指向零元素列表, 该字段将重置为哨兵(标记)值.
      *
      * @serial
      * @since 1.7
@@ -167,47 +148,42 @@ public class Throwable implements Serializable {
     private List<Throwable> suppressedExceptions = SUPPRESSED_SENTINEL;
 
     /**
-     * Message for trying to suppress a null exception.
+     * 尝试抑制空异常的消息.
      */
     private static final String NULL_CAUSE_MESSAGE = "Cannot suppress a null exception.";
 
     /**
-     * Message for trying to suppress oneself.
+     * 尝试抑制自己的消息.
      */
     private static final String SELF_SUPPRESSION_MESSAGE = "Self-suppression not permitted";
 
     /**
-     * Caption  for labeling causative exception stack traces
+     * 用于标记原因异常堆栈跟踪的标题
      */
     private static final String CAUSE_CAPTION = "Caused by: ";
 
     /**
-     * Caption for labeling suppressed exception stack traces
+     * 用于标记抑制异常堆栈跟踪的标题
      */
     private static final String SUPPRESSED_CAPTION = "Suppressed: ";
 
     /**
-     * Constructs a new throwable with {@code null} as its detail message.
-     * The cause is not initialized, and may subsequently be initialized by a
-     * call to {@link #initCause}.
+     * 构造一个新的 Throwable 使用 {@code null} 作为它的详细信息.
+     * 原因未初始化, 可能随后通过调用 {@link #initCause(Throwable)} 进行初始化.
      *
-     * <p>The {@link #fillInStackTrace()} method is called to initialize
-     * the stack trace data in the newly created throwable.
+     * <p>调用 {@link #fillInStackTrace()} 方法来初始化新创建的 Throwable 中的堆栈跟踪信息.
      */
     public Throwable() {
         fillInStackTrace();
     }
 
     /**
-     * Constructs a new throwable with the specified detail message.  The
-     * cause is not initialized, and may subsequently be initialized by
-     * a call to {@link #initCause}.
+     * 构造一个新的 Throwable 使用指定的详细信息.
+     * 原因未初始化, 可能随后通过调用 {@link #initCause(Throwable)} 进行初始化.
      *
-     * <p>The {@link #fillInStackTrace()} method is called to initialize
-     * the stack trace data in the newly created throwable.
+     * <p>调用 {@link #fillInStackTrace()} 方法来初始化新创建的 Throwable 中的堆栈跟踪信息.
      *
-     * @param message the detail message. The detail message is saved for
-     *                later retrieval by the {@link #getMessage()} method.
+     * @param message 详细消息. 详细消息被保存, 稍候可以通过 {@link #getMessage()} 方法恢复.
      */
     public Throwable(String message) {
         fillInStackTrace();
@@ -215,20 +191,14 @@ public class Throwable implements Serializable {
     }
 
     /**
-     * Constructs a new throwable with the specified detail message and
-     * cause.  <p>Note that the detail message associated with
-     * {@code cause} is <i>not</i> automatically incorporated in
-     * this throwable's detail message.
+     * 构造一个新的 Throwable 使用指定的信息和原因. <p> 注意, 详细信息与 {@code cause} 关联的
+     * <i>不</i>自动合并到此 Throwable 的详细消息中.
      *
-     * <p>The {@link #fillInStackTrace()} method is called to initialize
-     * the stack trace data in the newly created throwable.
+     * <p>调用 {@link #fillInStackTrace()} 方法来初始化新创建的 Throwable 中的堆栈跟踪数据.
      *
-     * @param message the detail message (which is saved for later retrieval
-     *                by the {@link #getMessage()} method).
-     * @param cause   the cause (which is saved for later retrieval by the
-     *                {@link #getCause()} method).  (A {@code null} value is
-     *                permitted, and indicates that the cause is nonexistent or
-     *                unknown.)
+     * @param message 详细消息. 详细消息被保存, 稍候可以通过 {@link #getMessage()} 方法恢复.
+     * @param cause   原因 (将被保存, 稍候可以通过 {@link #getCause()} 方法恢复).
+     *                (允许 {@code null} 值, 表示原因不存在或未知.)
      * @since 1.4
      */
     public Throwable(String message, Throwable cause) {
@@ -238,20 +208,16 @@ public class Throwable implements Serializable {
     }
 
     /**
-     * Constructs a new throwable with the specified cause and a detail
-     * message of {@code (cause==null ? null : cause.toString())} (which
-     * typically contains the class and detail message of {@code cause}).
-     * This constructor is useful for throwables that are little more than
-     * wrappers for other throwables (for example, {@link
-     * java.security.PrivilegedActionException}).
+     * 构造一个新的 Throwable 使用指定的原因和详细消息
+     * ({@code (cause==null ? null : cause.toString())}
+     * (通常包含 {@code cause} 的类和详细消息)).
+     * 这个构造函数对 throwables 包装其他 throwables 是有用的.
+     * (例如, {@link java.security.PrivilegedActionException}).
      *
-     * <p>The {@link #fillInStackTrace()} method is called to initialize
-     * the stack trace data in the newly created throwable.
+     * <p>调用 {@link #fillInStackTrace()} 方法来初始化新创建的 Throwable 中的堆栈跟踪数据.
      *
-     * @param cause the cause (which is saved for later retrieval by the
-     *              {@link #getCause()} method).  (A {@code null} value is
-     *              permitted, and indicates that the cause is nonexistent or
-     *              unknown.)
+     * @param cause 原因 (将被保存, 稍候可以通过 {@link #getCause()} 方法恢复).
+     *              (允许 {@code null} 值, 表示原因不存在或未知.)
      * @since 1.4
      */
     public Throwable(Throwable cause) {
@@ -261,40 +227,25 @@ public class Throwable implements Serializable {
     }
 
     /**
-     * Constructs a new throwable with the specified detail message,
-     * cause, {@linkplain #addSuppressed suppression} enabled or
-     * disabled, and writable stack trace enabled or disabled.  If
-     * suppression is disabled, {@link #getSuppressed} for this object
-     * will return a zero-length array and calls to {@link
-     * #addSuppressed} that would otherwise append an exception to the
-     * suppressed list will have no effect.  If the writable stack
-     * trace is false, this constructor will not call {@link
-     * #fillInStackTrace()}, a {@code null} will be written to the
-     * {@code stackTrace} field, and subsequent calls to {@code
-     * fillInStackTrace} and {@link
-     * #setStackTrace(StackTraceElement[])} will not set the stack
-     * trace.  If the writable stack trace is false, {@link
-     * #getStackTrace} will return a zero length array.
+     * 构造一个新的 Throwable 使用指定的详细信息, 原因,
+     * {@linkplain #addSuppressed(Throwable) 抑制} 是否启用,
+     * 堆栈跟踪是否可写. 如果抑制禁止, 这个对象的 {@link #getSuppressed}
+     * 将会返回一个零元素数组, 并且调用 {@link #addSuppressed} 对被抑制列表附加异常将无效.
+     * 如果堆栈跟踪不可写, 这个构造函数将不会调用 {@link #fillInStackTrace()},
+     * {@code null} 将写入 {@code stackTrace} 字段, 并且随后调用 {@code fillInStackTrace}
+     * 和 {@link #setStackTrace(StackTraceElement[])} 将不会设置堆栈跟踪.
+     * 如果堆栈跟踪不可写, {@link #getStackTrace}将返回零元素数组.
      *
-     * <p>Note that the other constructors of {@code Throwable} treat
-     * suppression as being enabled and the stack trace as being
-     * writable.  Subclasses of {@code Throwable} should document any
-     * conditions under which suppression is disabled and document
-     * conditions under which the stack trace is not writable.
-     * Disabling of suppression should only occur in exceptional
-     * circumstances where special requirements exist, such as a
-     * virtual machine reusing exception objects under low-memory
-     * situations.  Circumstances where a given exception object is
-     * repeatedly caught and rethrown, such as to implement control
-     * flow between two sub-systems, is another situation where
-     * immutable throwable objects would be appropriate.
+     * <p> 注意, {@code Throwable} 别的构造函数将抑制视为启用, 将堆栈跟踪设为可写.
+     * {@code Throwable} 的子类应该记录禁用抑制的任何条件和记录堆栈跟踪不可写的条件.
+     * 禁用抑制仅应在存在特殊要求的特殊情况下发生, 例如虚拟机在低内存情况下重用异常对象.
+     * 重新捕获和重新生成给定异常对象的情况, 例如在两个子系统之间实现控制流,
+     * 另一种情况, 不可变的 Throwable 对象是合适的.
      *
-     * @param message            the detail message.
-     * @param cause              the cause.  (A {@code null} value is permitted,
-     *                           and indicates that the cause is nonexistent or unknown.)
-     * @param enableSuppression  whether or not suppression is enabled or disabled
-     * @param writableStackTrace whether or not the stack trace should be
-     *                           writable
+     * @param message            详细消息.
+     * @param cause              原因.  (允许 {@code null} 值, 表示原因不存在或未知.)
+     * @param enableSuppression  是否启用抑制
+     * @param writableStackTrace 堆栈跟踪是否可写
      * @see OutOfMemoryError
      * @see NullPointerException
      * @see ArithmeticException
@@ -315,10 +266,9 @@ public class Throwable implements Serializable {
     }
 
     /**
-     * Returns the detail message string of this throwable.
+     * 返回此 Throwable 的详细消息字符串.
      *
-     * @return the detail message string of this {@code Throwable} instance
-     * (which may be {@code null}).
+     * @return 这个 {@code Throwable} 实例的详细消息字符串(可能为 {@code null}).
      */
     public String getMessage() {
         return detailMessage;
@@ -718,20 +668,19 @@ public class Throwable implements Serializable {
     }
 
     /**
-     * Fills in the execution stack trace. This method records within this
-     * {@code Throwable} object information about the current state of
-     * the stack frames for the current thread.
+     * 填写执行堆栈跟踪. 此方法在此 {@code Throwable} 对象中记录
+     * 有关当前线程的堆栈帧的当前状态的信息.
      *
-     * <p>If the stack trace of this {@code Throwable} {@linkplain
-     * Throwable#Throwable(String, Throwable, boolean, boolean) is not
-     * writable}, calling this method has no effect.
+     * <p>如果此 {@code Throwable} {@linkplain
+     * Throwable#Throwable(String, Throwable, boolean, boolean) 不可写},
+     * 调用这个方法没有影响.
      *
-     * @return a reference to this {@code Throwable} instance.
+     * @return 对此 {@code Throwable} 实例的引用.
      * @see java.lang.Throwable#printStackTrace()
      */
     public synchronized Throwable fillInStackTrace() {
         if (stackTrace != null ||
-                backtrace != null /* Out of protocol state */) {
+                backtrace != null /* 超出协议状态 */) {
             fillInStackTrace(0);
             stackTrace = UNASSIGNED_STACK;
         }
