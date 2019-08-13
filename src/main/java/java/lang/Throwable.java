@@ -275,13 +275,10 @@ public class Throwable implements Serializable {
     }
 
     /**
-     * Creates a localized description of this throwable.
-     * Subclasses may override this method in order to produce a
-     * locale-specific message.  For subclasses that do not override this
-     * method, the default implementation returns the same result as
-     * {@code getMessage()}.
+     * 为这个 Throwable 创建一个本地化描述. 子类可以重写此方法以生成特定于语言环境的消息.
+     * 对于不重写此方法的子类, 默认的实现与 {@code getMessage()} 返回相同的结果.
      *
-     * @return The localized description of this throwable.
+     * @return 这个 Throwable 创建一个本地化描述.
      * @since JDK1.1
      */
     public String getLocalizedMessage() {
@@ -289,23 +286,16 @@ public class Throwable implements Serializable {
     }
 
     /**
-     * Returns the cause of this throwable or {@code null} if the
-     * cause is nonexistent or unknown.  (The cause is the throwable that
-     * caused this throwable to get thrown.)
+     * 返回此 Throwable 的原因, 如果原因不存在或者未知, 则返回 null.
+     * (原因是一个 Throwable 导致抛出这个 Throwable.)
      *
-     * <p>This implementation returns the cause that was supplied via one of
-     * the constructors requiring a {@code Throwable}, or that was set after
-     * creation with the {@link #initCause(Throwable)} method.  While it is
-     * typically unnecessary to override this method, a subclass can override
-     * it to return a cause set by some other means.  This is appropriate for
-     * a "legacy chained throwable" that predates the addition of chained
-     * exceptions to {@code Throwable}.  Note that it is <i>not</i>
-     * necessary to override any of the {@code PrintStackTrace} methods,
-     * all of which invoke the {@code getCause} method to determine the
-     * cause of a throwable.
+     * <p>此实现返回通过需要 {@code Throwable} 的构造函数提供的原因, 或者在创建后
+     * 使用 {@link #initCause(Throwable)} 方法设置的原因. 虽然通常不必重写此方法,
+     * 但子类可以覆盖它以通过其他方式返回原因集. 这适用在 {@code Throwable} 添加链式异常之前的
+     * "遗留链式 Throwable". 请注意, <i>不</i>必须覆盖任何 {@code PrintStackTrace} 方法,
+     * 所有这些方法都会调用 {@code getCause} 方法来确定 Throwable 的原因.
      *
-     * @return the cause of this throwable or {@code null} if the
-     * cause is nonexistent or unknown.
+     * @return Throwable 的原因, 如果原因不存在或者未知, 则返回 null.
      * @since 1.4
      */
     public synchronized Throwable getCause() {
@@ -313,18 +303,12 @@ public class Throwable implements Serializable {
     }
 
     /**
-     * Initializes the <i>cause</i> of this throwable to the specified value.
-     * (The cause is the throwable that caused this throwable to get thrown.)
+     * 使用指定的 <i>cause</i> 初始化这个 Throwable 的原因. (原因是一个 Throwable 导致抛出这个 Throwable.)
      *
-     * <p>This method can be called at most once.  It is generally called from
-     * within the constructor, or immediately after creating the
-     * throwable.  If this throwable was created
-     * with {@link #Throwable(Throwable)} or
-     * {@link #Throwable(String, Throwable)}, this method cannot be called
-     * even once.
+     * <p>此方法最多调用一次. 它通常在构造函数内调用, 或者在创建 Throwable 之后立即调用. 如果是使用 {@link #Throwable(Throwable)}
+     * 或者 {@link #Throwable(String, Throwable)}, 则此方法甚至不能被调用一次. wttch: 在此方法内会做一些判断
      *
-     * <p>An example of using this method on a legacy throwable type
-     * without other support for setting the cause is:
+     * <p>在没有其他支持来设置原因的情况下在旧的 Throwable 类型上使用此方法的示例是:
      *
      * <pre>
      * try {
@@ -335,24 +319,22 @@ public class Throwable implements Serializable {
      * }
      * </pre>
      *
-     * @param cause the cause (which is saved for later retrieval by the
-     *              {@link #getCause()} method).  (A {@code null} value is
-     *              permitted, and indicates that the cause is nonexistent or
-     *              unknown.)
-     * @return a reference to this {@code Throwable} instance.
-     * @throws IllegalArgumentException if {@code cause} is this
-     *                                  throwable.  (A throwable cannot be its own cause.)
-     * @throws IllegalStateException    if this throwable was
-     *                                  created with {@link #Throwable(Throwable)} or
-     *                                  {@link #Throwable(String, Throwable)}, or this method has already
-     *                                  been called on this throwable.
+     * @param cause 原因 (保存以供以后 {@link #getCause()} 方法检索). (允许 {@code null} 值,
+     *              表示原因不存在或者未知.)
+     * @return 对此 {@code Throwable} 实例的引用.
+     * @throws IllegalArgumentException 如果 {@code cause} 是这个 Throwable. ( Throwable 不可能是它自己的原因.)
+     * @throws IllegalStateException    如果这个 Throwable 是通过 {@link #Throwable(Throwable)} 或者
+     *                                  {@link #Throwable(String, Throwable)} 构造函数创建的,
+     *                                  或者这个方法已经被调用过了.
      * @since 1.4
      */
     public synchronized Throwable initCause(Throwable cause) {
         if (this.cause != this)
+            // wttch: 不能覆盖原因,默认的 cause 是 this
             throw new IllegalStateException("Can't overwrite cause with " +
                     Objects.toString(cause, "a null"), this);
         if (cause == this)
+            // wttch: 不能将自己添加到导致自己的原因去
             throw new IllegalArgumentException("Self-causation not permitted", this);
         this.cause = cause;
         return this;
@@ -620,21 +602,23 @@ public class Throwable implements Serializable {
     }
 
     /**
-     * Wrapper class for PrintStream and PrintWriter to enable a single
-     * implementation of printStackTrace.
+     * PrintStream 和 PrintWriter 的包装类, 用于实现 printStackTrace 的单个实现.
      */
     private abstract static class PrintStreamOrWriter {
         /**
-         * Returns the object to be locked when using this StreamOrWriter
+         * 使用此 StreamOrWriter 时返回要锁定的对象.
          */
         abstract Object lock();
 
         /**
-         * Prints the specified string as a line on this StreamOrWriter
+         * 在此 StreamOrWriter 上将指定的字符串打印为一行.
          */
         abstract void println(Object o);
     }
 
+    /**
+     * 使用 PrintStream 构造 PrintStreamOrWriter
+     */
     private static class WrappedPrintStream extends PrintStreamOrWriter {
         private final PrintStream printStream;
 
@@ -651,6 +635,9 @@ public class Throwable implements Serializable {
         }
     }
 
+    /**
+     * 使用 PrintWriter 构造 PrintStreamOrWriter
+     */
     private static class WrappedPrintWriter extends PrintStreamOrWriter {
         private final PrintWriter printWriter;
 
