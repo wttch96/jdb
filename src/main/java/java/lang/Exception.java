@@ -1,44 +1,15 @@
-/*
- * Copyright (c) 1994, 2011, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang;
 
 /**
- * The class {@code Exception} and its subclasses are a form of
- * {@code Throwable} that indicates conditions that a reasonable
- * application might want to catch.
+ * {@code Exception} 类和它的子类是 {@code Throwable} 的一种形式.
+ * 表示合理的应用程序可能想要捕获的条件.
  *
- * <p>The class {@code Exception} and any subclasses that are not also
- * subclasses of {@link RuntimeException} are <em>checked
- * exceptions</em>.  Checked exceptions need to be declared in a
- * method or constructor's {@code throws} clause if they can be thrown
- * by the execution of the method or constructor and propagate outside
- * the method or constructor boundary.
+ * <p>{@code Exception} 和它的任何子类但不是 {@link RuntimeException} 类
+ * 都是<em>受检异常</em>. 受检异常可以通过执行方法或构造函数抛出并在方法或构造函数
+ * 边界外传播, 则需要在方法或构造函数的 throws 子句中声明受检异常.
  *
  * @author Frank Yellin
- * @jls 11.2 Compile-Time Checking of Exceptions
+ * @jls 11.2 编译时受检异常
  * @see java.lang.Error
  * @since JDK1.0
  */
@@ -46,38 +17,30 @@ public class Exception extends Throwable {
     static final long serialVersionUID = -3387516993124229948L;
 
     /**
-     * Constructs a new exception with {@code null} as its detail message.
-     * The cause is not initialized, and may subsequently be initialized by a
-     * call to {@link #initCause}.
+     * 构造一个新的异常使用 {@code null} 作为它的详细信息. 原因不会被初始化,
+     * 随后可以通过调用 {@link #initCause(Throwable)} 来初始化原因.
      */
     public Exception() {
         super();
     }
 
     /**
-     * Constructs a new exception with the specified detail message.  The
-     * cause is not initialized, and may subsequently be initialized by
-     * a call to {@link #initCause}.
+     * 使用指定的信息来构造新的异常. 原因不会被初始化, 随后可以通过调用
+     * {@link #initCause(Throwable)} 来初始化原因.
      *
-     * @param message the detail message. The detail message is saved for
-     *                later retrieval by the {@link #getMessage()} method.
+     * @param message 详细信息. 详细信息被保存并且可以通过调用 {@link #getMessage()} 方法恢复.
      */
     public Exception(String message) {
         super(message);
     }
 
     /**
-     * Constructs a new exception with the specified detail message and
-     * cause.  <p>Note that the detail message associated with
-     * {@code cause} is <i>not</i> automatically incorporated in
-     * this exception's detail message.
+     * 使用指定的详细信息和原因构造新的异常. <p>注意与 {@code cause} 相关的信息 <em>不会</em>
+     * 自动合并到此异常的详细信息中.
      *
-     * @param message the detail message (which is saved for later retrieval
-     *                by the {@link #getMessage()} method).
-     * @param cause   the cause (which is saved for later retrieval by the
-     *                {@link #getCause()} method).  (A <tt>null</tt> value is
-     *                permitted, and indicates that the cause is nonexistent or
-     *                unknown.)
+     * @param message 详细信息(详细信息被保存并且可以通过调用 {@link #getMessage()} 方法恢复.)
+     * @param cause   原因(原因被保存并且稍后可以通过调用 {@link #getCause()} 方法恢复).
+     *                (允许 <tt>null</tt> 值, 表示原因不存在或者未知.)
      * @since 1.4
      */
     public Exception(String message, Throwable cause) {
@@ -85,17 +48,16 @@ public class Exception extends Throwable {
     }
 
     /**
-     * Constructs a new exception with the specified cause and a detail
-     * message of <tt>(cause==null ? null : cause.toString())</tt> (which
-     * typically contains the class and detail message of <tt>cause</tt>).
-     * This constructor is useful for exceptions that are little more than
-     * wrappers for other throwables (for example, {@link
-     * java.security.PrivilegedActionException}).
+     * 构造一个新的 Throwable 使用指定的原因和详细消息
+     * ({@code (cause==null ? null : cause.toString())}
+     * (通常包含 {@code cause} 的类和详细消息)).
+     * 这个构造函数对 throwables 包装其他 throwables 是有用的.
+     * (例如, {@link java.security.PrivilegedActionException}).
      *
-     * @param cause the cause (which is saved for later retrieval by the
-     *              {@link #getCause()} method).  (A <tt>null</tt> value is
-     *              permitted, and indicates that the cause is nonexistent or
-     *              unknown.)
+     * <p>调用 {@link #fillInStackTrace()} 方法来初始化新创建的 Throwable 中的堆栈跟踪数据.
+     *
+     * @param cause 原因 (将被保存, 稍候可以通过 {@link #getCause()} 方法恢复).
+     *              (允许 {@code null} 值, 表示原因不存在或未知.)
      * @since 1.4
      */
     public Exception(Throwable cause) {
@@ -103,17 +65,12 @@ public class Exception extends Throwable {
     }
 
     /**
-     * Constructs a new exception with the specified detail message,
-     * cause, suppression enabled or disabled, and writable stack
-     * trace enabled or disabled.
+     * 使用指定的详细信息, 原因, 是否启用抑制，堆栈跟踪是否开启来构造新的异常.
      *
-     * @param message            the detail message.
-     * @param cause              the cause.  (A {@code null} value is permitted,
-     *                           and indicates that the cause is nonexistent or unknown.)
-     * @param enableSuppression  whether or not suppression is enabled
-     *                           or disabled
-     * @param writableStackTrace whether or not the stack trace should
-     *                           be writable
+     * @param message            详细信息.
+     * @param cause              原因.  (允许 {@code null} 值, 表示原因不存在或者未知.)
+     * @param enableSuppression  是否启用异常抑制
+     * @param writableStackTrace 堆栈跟踪是否可写
      * @since 1.7
      */
     protected Exception(String message, Throwable cause,
