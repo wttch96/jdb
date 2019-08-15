@@ -1,27 +1,3 @@
-/*
- * Copyright (c) 2003, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
 package java.lang;
 
 import java.util.Iterator;
@@ -31,35 +7,31 @@ import java.util.Spliterators;
 import java.util.function.Consumer;
 
 /**
- * Implementing this interface allows an object to be the target of
- * the "for-each loop" statement. See
+ * 实现这个接口允许对象成为 "for-each loop" 语法的目标. 参见
  * <strong>
  * <a href="{@docRoot}/../technotes/guides/language/foreach.html">For-each Loop</a>
  * </strong>
  *
- * @param <T> the type of elements returned by the iterator
+ * @param <T> 迭代器将会返回的元素的类型
  * @jls 14.14.2 The enhanced for statement
  * @since 1.5
  */
 public interface Iterable<T> {
     /**
-     * Returns an iterator over elements of type {@code T}.
+     * 返回 {@code T} 类型元素的迭代器.
      *
-     * @return an Iterator.
+     * @return 一个迭代器.
      */
     Iterator<T> iterator();
 
     /**
-     * Performs the given action for each element of the {@code Iterable}
-     * until all elements have been processed or the action throws an
-     * exception.  Unless otherwise specified by the implementing class,
-     * actions are performed in the order of iteration (if an iteration order
-     * is specified).  Exceptions thrown by the action are relayed to the
-     * caller.
+     * 对 {@code Iterable} 的每个元素执行给定操作, 知道处理完所有元素或者操作引发异常.
+     * 除非实现类另有指定, 否则操作按迭代顺序执行(如果指定了迭代顺序). 操作抛出的异常会
+     * 转发给调用者.
      *
-     * @param action The action to be performed for each element
-     * @throws NullPointerException if the specified action is null
-     * @implSpec <p>The default implementation behaves as if:
+     * @param action 要为每个元素执行的操作
+     * @throws NullPointerException 指定异常为空
+     * @implSpec <p>默认的实现行为是:
      * <pre>{@code
      *     for (T t : this)
      *         action.accept(t);
@@ -74,20 +46,13 @@ public interface Iterable<T> {
     }
 
     /**
-     * Creates a {@link Spliterator} over the elements described by this
-     * {@code Iterable}.
+     * 在 {@code Iterable} 描述的元素上创建 {@link Spliterator}.
      *
-     * @return a {@code Spliterator} over the elements described by this
-     * {@code Iterable}.
-     * @implSpec The default implementation creates an
-     * <em><a href="Spliterator.html#binding">early-binding</a></em>
-     * spliterator from the iterable's {@code Iterator}.  The spliterator
-     * inherits the <em>fail-fast</em> properties of the iterable's iterator.
-     * @implNote The default implementation should usually be overridden.  The
-     * spliterator returned by the default implementation has poor splitting
-     * capabilities, is unsized, and does not report any spliterator
-     * characteristics. Implementing classes can nearly always provide a
-     * better implementation.
+     * @return 关于此 {@code Iterable} 描述的元素的 {@code Spliterator}.
+     * @implSpec 默认实现是 <em><a href="Spliterator.html#binding">early-binding</a></em>
+     * 来自迭代器 {@code Iterator} 的分裂器. 分裂器继承了迭代器的 <em>fail-fast</em> 属性.
+     * @implNote 通常应该覆盖默认实现. 该默认实现返回的 Spliterator 分裂具有较差的分割能力, 未分级,
+     * 并且不报告任何分裂器特征. 实现类几乎总能提供更好的实现.
      * @since 1.8
      */
     default Spliterator<T> spliterator() {
