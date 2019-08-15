@@ -341,18 +341,15 @@ public class Throwable implements Serializable {
     }
 
     /**
-     * Returns a short description of this throwable.
-     * The result is the concatenation of:
+     * 返回这个 Throwable 的简单描述. 结果是连接以下信息:
      * <ul>
-     * <li> the {@linkplain Class#getName() name} of the class of this object
-     * <li> ": " (a colon and a space)
-     * <li> the result of invoking this object's {@link #getLocalizedMessage}
-     * method
+     * <li> 这个对象的类的 {@linkplain Class#getName() 名字}
+     * <li> ": " (一个冒号和一个空格)
+     * <li> 调用这个对象 {@link #getLocalizedMessage} 方法返回的结果
      * </ul>
-     * If {@code getLocalizedMessage} returns {@code null}, then just
-     * the class name is returned.
+     * 如果 {@code getLocalizedMessage} 返回 {@code null}, 则仅返回类名.
      *
-     * @return a string representation of this throwable.
+     * @return 这个 Throwable 的字符串描述.
      */
     public String toString() {
         String s = getClass().getName();
@@ -361,22 +358,17 @@ public class Throwable implements Serializable {
     }
 
     /**
-     * Prints this throwable and its backtrace to the
-     * standard error stream. This method prints a stack trace for this
-     * {@code Throwable} object on the error output stream that is
-     * the value of the field {@code System.err}. The first line of
-     * output contains the result of the {@link #toString()} method for
-     * this object.  Remaining lines represent data previously recorded by
-     * the method {@link #fillInStackTrace()}. The format of this
-     * information depends on the implementation, but the following
-     * example may be regarded as typical:
+     * 将此 Throwable 及其 backtrace 打印到标准错误流. 此方法在错误输出流上打印
+     * 此 {@code Throwable} 对象的堆栈跟踪, 该错误输出流默认是 {@code System.err} 字段的值.
+     * 第一行输出包含此对象的 {@link #toString()} 方法的结果. 剩余行表示先前由方法 {@link #fillInStackTrace()}
+     * 记录的数据. 此信息的格式取决于实现, 但以下示例可被视为典型:
      * <blockquote><pre>
      * java.lang.NullPointerException
      *         at MyClass.mash(MyClass.java:9)
      *         at MyClass.crunch(MyClass.java:6)
      *         at MyClass.main(MyClass.java:3)
      * </pre></blockquote>
-     * This example was produced by running the program:
+     * 这个例子是通过运行以下程序产生的:
      * <pre>
      * class MyClass {
      *     public static void main(String[] args) {
@@ -390,10 +382,8 @@ public class Throwable implements Serializable {
      *     }
      * }
      * </pre>
-     * The backtrace for a throwable with an initialized, non-null cause
-     * should generally include the backtrace for the cause.  The format
-     * of this information depends on the implementation, but the following
-     * example may be regarded as typical:
+     * 具有初始化非 null 原因的 Throwable 的 backtrace, 通常包含原因的 backtrace.
+     * 此信息的格式取决于实现, 但以下示例可被视为典型:
      * <pre>
      * HighLevelException: MidLevelException: LowLevelException
      *         at Junk.a(Junk.java:13)
@@ -409,14 +399,16 @@ public class Throwable implements Serializable {
      *         at Junk.c(Junk.java:21)
      *         ... 3 more
      * </pre>
-     * Note the presence of lines containing the characters {@code "..."}.
-     * These lines indicate that the remainder of the stack trace for this
-     * exception matches the indicated number of frames from the bottom of the
-     * stack trace of the exception that was caused by this exception (the
-     * "enclosing" exception).  This shorthand can greatly reduce the length
-     * of the output in the common case where a wrapped exception is thrown
-     * from same method as the "causative exception" is caught.  The above
-     * example was produced by running the program:
+     * 请注意包含字符 {@code "..."} 的行的存在. 这些行表示此异常的堆栈跟踪的剩余部分
+     * 匹配由此异常("包含"异常)引起的异常的跟踪堆栈底部的指示帧数. 这种简写可以大大减少
+     * 输出的长度, 在这种情况下, 从捕获"致使异常"的同一方法抛出包装异常.
+     * wttch: ... n more 紧挨的异常行就是 try catch 块中出异常的地方,
+     * ... n more 表示这个出现异常的地方调用了其他函数.
+     * 实际上是部分异常在此之前已经打印了, 为了节省资源防止重复打印.
+     * 像例子中 try catch 语句块, 新的包装 Throwable 抛出之前, 其实大部分 Throwable 的跟踪
+     * 是重复的, 像下列例子 c() 和 c() 后面的 e.printStackTrace(), 除了这个位置的跟踪不一样,
+     * 向上的 stackTrace 都是一样的.
+     * 上面的例子通过以下程序产生:
      * <pre>
      * public class Junk {
      *     public static void main(String args[]) {
@@ -462,13 +454,9 @@ public class Throwable implements Serializable {
      * class LowLevelException extends Exception {
      * }
      * </pre>
-     * As of release 7, the platform supports the notion of
-     * <i>suppressed exceptions</i> (in conjunction with the {@code
-     * try}-with-resources statement). Any exceptions that were
-     * suppressed in order to deliver an exception are printed out
-     * beneath the stack trace.  The format of this information
-     * depends on the implementation, but the following example may be
-     * regarded as typical:
+     * 从版本 7 开始, 该平台支持<i>抑制异常</i>的概念(与 {@code try}-with-resources 声明一起).
+     * 在堆栈跟踪下方打印出为了传递异常而被抑制的任何异常. 此信息的格式取决于实现,
+     * 但以下示例可能被视为典型:
      *
      * <pre>
      * Exception in thread "main" java.lang.Exception: Something happened
@@ -479,12 +467,10 @@ public class Throwable implements Serializable {
      *          at Foo.bar(Foo.java:9)
      *          ... 1 more
      * </pre>
-     * Note that the "... n more" notation is used on suppressed exceptions
-     * just at it is used on causes. Unlike causes, suppressed exceptions are
-     * indented beyond their "containing exceptions."
+     * 请注意, "... n more" 字符用于抑制异常, 仅用于原因. 与原因不同, 被抑制的异常会缩进
+     * 超出其 "包含异常" 的范围.
      *
-     * <p>An exception can have both a cause and one or more suppressed
-     * exceptions:
+     * <p>异常可以同时具有原因和一个或多个抑制异常:
      * <pre>
      * Exception in thread "main" java.lang.Exception: Main block
      *  at Foo3.main(Foo3.java:7)
@@ -497,7 +483,7 @@ public class Throwable implements Serializable {
      * Caused by: java.lang.Exception: I did it
      *  at Foo3.main(Foo3.java:8)
      * </pre>
-     * Likewise, a suppressed exception can have a cause:
+     * 同样, 被抑制的异常可能有原因:
      * <pre>
      * Exception in thread "main" java.lang.Exception: Main block
      *  at Foo4.main(Foo4.java:6)
@@ -514,33 +500,33 @@ public class Throwable implements Serializable {
     }
 
     /**
-     * Prints this throwable and its backtrace to the specified print stream.
+     * 使用指定的流打印这个 Throwable 和它的 backtrace.
      *
-     * @param s {@code PrintStream} to use for output
+     * @param s 输出流使用的 {@code PrintStream}
      */
     public void printStackTrace(PrintStream s) {
         printStackTrace(new WrappedPrintStream(s));
     }
 
     private void printStackTrace(PrintStreamOrWriter s) {
-        // Guard against malicious overrides of Throwable.equals by
-        // using a Set with identity equality semantics.
+        // 通过使用具有标示等同语义的 Set 来防止 Throwable.equals 的恶意覆盖.
         Set<Throwable> dejaVu =
                 Collections.newSetFromMap(new IdentityHashMap<Throwable, Boolean>());
         dejaVu.add(this);
 
         synchronized (s.lock()) {
-            // Print our stack trace
+            // 打印我们的堆栈跟踪
             s.println(this);
             StackTraceElement[] trace = getOurStackTrace();
+            // 打印自身的堆栈跟踪
             for (StackTraceElement traceElement : trace)
                 s.println("\tat " + traceElement);
 
-            // Print suppressed exceptions, if any
+            // 打印抑制的异常(如果有)
             for (Throwable se : getSuppressed())
                 se.printEnclosedStackTrace(s, trace, SUPPRESSED_CAPTION, "\t", dejaVu);
 
-            // Print cause, if any
+            // 打印原因, 如果有的话
             Throwable ourCause = getCause();
             if (ourCause != null)
                 ourCause.printEnclosedStackTrace(s, trace, CAUSE_CAPTION, "", dejaVu);
@@ -548,42 +534,52 @@ public class Throwable implements Serializable {
     }
 
     /**
-     * Print our stack trace as an enclosed exception for the specified
-     * stack trace.
+     * 打印我们的堆栈跟踪作为指定堆栈跟踪的包含 Throwable.
+     *
+     * @param s              打印使用的 {@code PrintStreamOrWriter}
+     * @param enclosingTrace 要打印的所包含的 Throwable
+     * @param caption        题目
+     * @param prefix         前缀
+     * @param dejaVu         已经打印的 Throwable 集合
      */
     private void printEnclosedStackTrace(PrintStreamOrWriter s,
                                          StackTraceElement[] enclosingTrace,
                                          String caption,
                                          String prefix,
                                          Set<Throwable> dejaVu) {
+        // 检查是否拥有锁
         assert Thread.holdsLock(s.lock());
         if (dejaVu.contains(this)) {
+            // 重复的 Throwable 引用
             s.println("\t[CIRCULAR REFERENCE:" + this + "]");
         } else {
             dejaVu.add(this);
-            // Compute number of frames in common between this and enclosing trace
+            // 计算此 stackTrace 和 enclosingTrace 之间共同的帧数
             StackTraceElement[] trace = getOurStackTrace();
             int m = trace.length - 1;
             int n = enclosingTrace.length - 1;
+            // 只有最深处(最外层的函数调用)才可能产生同样的跟踪帧
             while (m >= 0 && n >= 0 && trace[m].equals(enclosingTrace[n])) {
                 m--;
                 n--;
             }
             int framesInCommon = trace.length - 1 - m;
 
-            // Print our stack trace
+            // 打印我们的堆栈跟踪: 前缀 题目 this
             s.println(prefix + caption + this);
+            // 打印非同样的跟踪帧
             for (int i = 0; i <= m; i++)
                 s.println(prefix + "\tat " + trace[i]);
+            // 相同的跟踪帧数
             if (framesInCommon != 0)
                 s.println(prefix + "\t... " + framesInCommon + " more");
 
-            // Print suppressed exceptions, if any
+            // 如果存在任何的抑制的 Throwable, 打印它们
             for (Throwable se : getSuppressed())
                 se.printEnclosedStackTrace(s, trace, SUPPRESSED_CAPTION,
                         prefix + "\t", dejaVu);
 
-            // Print cause, if any
+            // 打印原因, 如果有的话
             Throwable ourCause = getCause();
             if (ourCause != null)
                 ourCause.printEnclosedStackTrace(s, trace, CAUSE_CAPTION, prefix, dejaVu);
@@ -591,10 +587,9 @@ public class Throwable implements Serializable {
     }
 
     /**
-     * Prints this throwable and its backtrace to the specified
-     * print writer.
+     * 将此 throwable 及其 backtrace 打印到指定的 print writer.
      *
-     * @param s {@code PrintWriter} to use for output
+     * @param s 输出使用的 {@code PrintWriter}
      * @since JDK1.1
      */
     public void printStackTrace(PrintWriter s) {
@@ -677,27 +672,16 @@ public class Throwable implements Serializable {
     private native Throwable fillInStackTrace(int dummy);
 
     /**
-     * Provides programmatic access to the stack trace information printed by
-     * {@link #printStackTrace()}.  Returns an array of stack trace elements,
-     * each representing one stack frame.  The zeroth element of the array
-     * (assuming the array's length is non-zero) represents the top of the
-     * stack, which is the last method invocation in the sequence.  Typically,
-     * this is the point at which this throwable was created and thrown.
-     * The last element of the array (assuming the array's length is non-zero)
-     * represents the bottom of the stack, which is the first method invocation
-     * in the sequence.
+     * 提供对打印的堆栈跟踪信息的编程访问 {@link #printStackTrace()} 时会调用.
+     * 返回堆栈跟踪元素的数组, 每个代表一个堆栈帧. 数组的第 0 个元素(假设数组长度不为 0)
+     * 表示栈顶, 这是序列中的最后一个方法调用. 通常情况下, 这就是这个 Throwable 被被创建和抛出的点.
+     * 数组的最后一个元素(假设数组长度不为 0)表示堆栈的底部, 这是第一个方法调用.
      *
-     * <p>Some virtual machines may, under some circumstances, omit one
-     * or more stack frames from the stack trace.  In the extreme case,
-     * a virtual machine that has no stack trace information concerning
-     * this throwable is permitted to return a zero-length array from this
-     * method.  Generally speaking, the array returned by this method will
-     * contain one element for every frame that would be printed by
-     * {@code printStackTrace}.  Writes to the returned array do not
-     * affect future calls to this method.
+     * <p> 在某些情况下, 某些虚拟机可能会省略一个虚拟机堆栈跟踪中的更多的堆栈帧. 在极端情况下,
+     * 没有堆栈跟踪信息的虚拟机允许此 Throwable 从此返回 0 长度数组方法. 一般来说, 这个方法返回的数组会
+     * 为每个要打印 {@code printStackTrace} 的帧包含一个元素. 写入返回的数组不会影响将来调用此方法.
      *
-     * @return an array of stack trace elements representing the stack trace
-     * pertaining to this throwable.
+     * @return 一个堆栈跟踪元素的数组, 表示与此 Throwable 相关的堆栈跟踪.
      * @since 1.4
      */
     public StackTraceElement[] getStackTrace() {
@@ -705,10 +689,11 @@ public class Throwable implements Serializable {
     }
 
     private synchronized StackTraceElement[] getOurStackTrace() {
-        // Initialize stack trace field with information from
-        // backtrace if this is the first call to this method
+        // 如果这是对此方法的第一次调用, 则使用来自 backtrace 的信息初始化堆栈跟踪字段.
+        // 空堆栈 || ( 空stackTrace && 非空 backtrace)
         if (stackTrace == UNASSIGNED_STACK ||
-                (stackTrace == null && backtrace != null) /* Out of protocol state */) {
+                (stackTrace == null && backtrace != null) /* 超出协议状态 */) {
+            // 堆栈深度, 如果无法跟踪堆栈, 则为 0
             int depth = getStackTraceDepth();
             stackTrace = new StackTraceElement[depth];
             for (int i = 0; i < depth; i++)
@@ -762,21 +747,19 @@ public class Throwable implements Serializable {
     }
 
     /**
-     * Returns the number of elements in the stack trace (or 0 if the stack
-     * trace is unavailable).
+     * 返回堆栈跟踪中的元素数(如果堆栈跟踪不可用, 则返回 0).
      * <p>
-     * package-protection for use by SharedSecrets.
+     * 包保护, 供 SharedSecrets 使用.
      */
     native int getStackTraceDepth();
 
     /**
-     * Returns the specified element of the stack trace.
+     * 返回堆栈跟踪的指定元素.
      * <p>
-     * package-protection for use by SharedSecrets.
+     * 包保护, 供 SharedSecrets 使用.
      *
-     * @param index index of the element to return.
-     * @throws IndexOutOfBoundsException if {@code index < 0 ||
-     *                                   index >= getStackTraceDepth() }
+     * @param index 返回的元素的索引.
+     * @throws IndexOutOfBoundsException 如果 {@code index < 0 || index >= getStackTraceDepth() }
      */
     native StackTraceElement getStackTraceElement(int index);
 
@@ -943,18 +926,12 @@ public class Throwable implements Serializable {
     private static final Throwable[] EMPTY_THROWABLE_ARRAY = new Throwable[0];
 
     /**
-     * Returns an array containing all of the exceptions that were
-     * suppressed, typically by the {@code try}-with-resources
-     * statement, in order to deliver this exception.
+     * 返回一个数组, 其中包含通常由 {@code try}-with-resources 语句抑制的所有异常, 以便传递此异常.
      * <p>
-     * If no exceptions were suppressed or {@linkplain
-     * #Throwable(String, Throwable, boolean, boolean) suppression is
-     * disabled}, an empty array is returned.  This method is
-     * thread-safe.  Writes to the returned array do not affect future
-     * calls to this method.
+     * 如果没有禁止异或 {@linkplain #Throwable(String, Throwable, boolean, boolean) 禁用异常抑制},
+     * 则返回一个空数组. 此方法是线程安全的. 写入返回的数组不会影响将来对此方法的调用.
      *
-     * @return an array containing all of the exceptions that were
-     * suppressed to deliver this exception.
+     * @return 包含为了传递此异常而被抑制的所有异常的数组.
      * @since 1.7
      */
     public final synchronized Throwable[] getSuppressed() {
