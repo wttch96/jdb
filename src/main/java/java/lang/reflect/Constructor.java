@@ -1,28 +1,3 @@
-/*
- * Copyright (c) 1996, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang.reflect;
 
 import sun.reflect.CallerSensitive;
@@ -39,13 +14,10 @@ import java.lang.annotation.Annotation;
 import java.lang.annotation.AnnotationFormatError;
 
 /**
- * {@code Constructor} provides information about, and access to, a single
- * constructor for a class.
+ * {@code Constructor} 提供有关类的单个构造函数的信息和访问权限.
  *
- * <p>{@code Constructor} permits widening conversions to occur when matching the
- * actual parameters to newInstance() with the underlying
- * constructor's formal parameters, but throws an
- * {@code IllegalArgumentException} if a narrowing conversion would occur.
+ * <p>{@code Constructor} 允许在将实际参数与 newInstance() 与底层构造函数的形参匹配时扩展转换,
+ * 但如果发生缩小转换则抛出 {@code IllegalArgumentException}.
  *
  * @param <T> the class in which the constructor is declared
  * @author Kenneth Russell
@@ -58,48 +30,50 @@ import java.lang.annotation.AnnotationFormatError;
  */
 public final class Constructor<T> extends Executable {
     private Class<T> clazz;
+    /**
+     * Wttch: 利用反射访问到这个私有变量发现这似乎是构造函数在定义时的排序位置 (以 0 起始).
+     */
     private int slot;
     private Class<?>[] parameterTypes;
     private Class<?>[] exceptionTypes;
     private int modifiers;
-    // Generics and annotations support
+    // 泛型和注解支持
+    // Wttch: 通过反射查看, 这个字段是一个类似函数签名的字符串形式
     private transient String signature;
-    // generic info repository; lazily initialized
+    // 泛型信息库; 延迟初始化
     private transient ConstructorRepository genericInfo;
     private byte[] annotations;
     private byte[] parameterAnnotations;
 
-    // Generics infrastructure
-    // Accessor for factory
+    // 泛型的基础信息
+    // 工厂的访问器
     private GenericsFactory getFactory() {
-        // create scope and factory
+        // 创造范围和工厂
         return CoreReflectionFactory.make(this, ConstructorScope.make(this));
     }
 
-    // Accessor for generic info repository
+    // 泛型信息库的访问器
     @Override
     ConstructorRepository getGenericInfo() {
-        // lazily initialize repository if necessary
+        // 如有必要, 延迟的初始化存储库
         if (genericInfo == null) {
-            // create and cache generic info repository
+            // 创建和缓存泛型信息库
             genericInfo =
                     ConstructorRepository.make(getSignature(),
                             getFactory());
         }
-        return genericInfo; //return cached repository
+        return genericInfo; //返回缓存仓库
     }
 
     private volatile ConstructorAccessor constructorAccessor;
-    // For sharing of ConstructorAccessors. This branching structure
-    // is currently only two levels deep (i.e., one root Constructor
-    // and potentially many Constructor objects pointing to it.)
+    // 为了共享构造函数访问器. 这个分支结构目前只有两个层次.
+    // (即, 一个根构造函数和可能有许多指向它的构造函数对象.)
     //
-    // If this branching structure would ever contain cycles, deadlocks can
-    // occur in annotation code.
+    // 如果此分支结构包含循环, 则注解代码中可能会发生死锁.
     private Constructor<T> root;
 
     /**
-     * Used by Excecutable for annotation sharing.
+     * 由 Executable 用于注解共享.
      */
     @Override
     Executable getRoot() {
@@ -107,9 +81,8 @@ public final class Constructor<T> extends Executable {
     }
 
     /**
-     * Package-private constructor used by ReflectAccess to enable
-     * instantiation of these objects in Java code from the java.lang
-     * package via sun.reflect.LangReflectAccess.
+     * ReflectAccess 使用包私有的构造函数, 通过 sun.reflect.LangReflectAccess 从
+     * java.lang 包中实现 Java 代码中这些对象的实例化.
      */
     Constructor(Class<T> declaringClass,
                 Class<?>[] parameterTypes,
@@ -130,18 +103,15 @@ public final class Constructor<T> extends Executable {
     }
 
     /**
-     * Package-private routine (exposed to java.lang.Class via
-     * ReflectAccess) which returns a copy of this Constructor. The copy's
-     * "root" field points to this Constructor.
+     * 包私有惯例(通过 ReflectAccess 暴露给 java.lang.Class), 它返回此 Constructor 的副本.
+     * 副本的 "root" 字段指向此构造函数.
      */
     Constructor<T> copy() {
-        // This routine enables sharing of ConstructorAccessor objects
-        // among Constructor objects which refer to the same underlying
-        // method in the VM. (All of this contortion is only necessary
-        // because of the "accessibility" bit in AccessibleObject,
-        // which implicitly requires that new java.lang.reflect
-        // objects be fabricated for each reflective call on Class
-        // objects.)
+        // 此惯例允许在 Constructor 对象之间共享 ConstructorAccessor 对象,
+        // 这些对象引用 VM 中的相同底层方法. (由于 AccessibleObject 中的　"accessibility" 位,
+        // 所有的这些扭曲都是必须的, 其中隐含的要求为 Class 对象的每个反射调用而编写新的
+        // java.lang.reflect 对象.)
+        // Wttch: getRoot 方法存在的原因为了共享 ConstructorAccessor.
         if (this.root != null)
             throw new IllegalArgumentException("Can not copy a non-root Constructor");
 
@@ -152,11 +122,14 @@ public final class Constructor<T> extends Executable {
                 annotations,
                 parameterAnnotations);
         res.root = this;
-        // Might as well eagerly propagate this if already present
+        // 如果已经存在, 也可能急切地宣传这个
         res.constructorAccessor = constructorAccessor;
         return res;
     }
 
+    /**
+     * 存在签名信息, 就表示存在泛型信息
+     */
     @Override
     boolean hasGenericInformation() {
         return (getSignature() != null);
@@ -176,8 +149,7 @@ public final class Constructor<T> extends Executable {
     }
 
     /**
-     * Returns the name of this constructor, as a string.  This is
-     * the binary name of the constructor's declaring class.
+     * 以字符串形式返回此构造函数的名称. 这是构造函数声明类的二进制名称.
      */
     @Override
     public String getName() {
