@@ -1,94 +1,50 @@
-/*
- * Copyright (c) 2000, 2006, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang;
 
 /**
- * A collection of assertion status directives (such as "enable assertions
- * in package p" or "disable assertions in class c").  This class is used by
- * the JVM to communicate the assertion status directives implied by
- * the <tt>java</tt> command line flags <tt>-enableassertions</tt>
- * (<tt>-ea</tt>) and <tt>-disableassertions</tt> (<tt>-da</tt>).
+ * 断言状态指令的集合(例如, "在包p中启用断言" 或 "在类c中禁用断言"). JVM 使用此类来
+ * 实现 <tt>java</tt> 命令行标志中隐含断言状态的指令 <tt>-enableassertions</tt>(<tt>-ea</tt>)
+ * 和 <tt>-disableassertions</tt>(<tt>-da</tt>).
  *
  * @author Josh Bloch
  * @since 1.4
  */
 class AssertionStatusDirectives {
     /**
-     * The classes for which assertions are to be enabled or disabled.
-     * The strings in this array are fully qualified class names (for
-     * example,"com.xyz.foo.Bar").
+     * 要启用或禁用断言的类. 此数组中的字符串是完全限定的类名 (例如, "com.xyz.foo.Bar").
      */
     String[] classes;
 
     /**
-     * A parallel array to <tt>classes</tt>, indicating whether each class
-     * is to have assertions enabled or disabled.  A value of <tt>true</tt>
-     * for <tt>classEnabled[i]</tt> indicates that the class named by
-     * <tt>classes[i]</tt> should have assertions enabled; a value of
-     * <tt>false</tt> indicates that it should have classes disabled.
-     * This array must have the same number of elements as <tt>classes</tt>.
+     * <tt>classes</tt> 的并行数组, 指示每个类是否启用或禁用断言. <tt>classEnable[i]</tt> 的值为
+     * <tt>true</tt> 表示由 <tt>classes[i]</tt> 命名的类应该启用断言; <tt>false</tt> 表示应禁用类.
+     * 此数组必须具有和 <tt>classes</tt> 相同的数量.
      *
-     * <p>In the case of conflicting directives for the same class, the
-     * last directive for a given class wins.  In other words, if a string
-     * <tt>s</tt> appears multiple times in the <tt>classes</tt> array
-     * and <tt>i</tt> is the highest integer for which
-     * <tt>classes[i].equals(s)</tt>, then <tt>classEnabled[i]</tt>
-     * indicates whether assertions are to be enabled in class <tt>s</tt>.
+     * <p>对于同一个类的冲突指令, 给定类的最后一个指定获胜. 换句话说, 如果字符串<tt>s</tt> 在 <tt>classes</tt>
+     * 数组中出现多次, 而 <tt>i</tt> 是 <tt>classes[i].equals(s)</tt> 的最高整数, 然后 <tt>classEnabled[i]</tt>
+     * 指示是否要在类 <tt>s</tt> 中启用断言.
      */
     boolean[] classEnabled;
 
     /**
-     * The package-trees for which assertions are to be enabled or disabled.
-     * The strings in this array are compete or partial package names
-     * (for example, "com.xyz" or "com.xyz.foo").
+     * 要启用或禁用断言的 package-tree. 此数组中的字符串是竞争或部分包名称(例如, "com.xyz" 或 "com.xyz.foo").
      */
     String[] packages;
 
     /**
-     * A parallel array to <tt>packages</tt>, indicating whether each
-     * package-tree is to have assertions enabled or disabled.  A value of
-     * <tt>true</tt> for <tt>packageEnabled[i]</tt> indicates that the
-     * package-tree named by <tt>packages[i]</tt> should have assertions
-     * enabled; a value of <tt>false</tt> indicates that it should have
-     * assertions disabled.  This array must have the same number of
-     * elements as <tt>packages</tt>.
+     * <tt>packages</tt> 的并行数组, 指示每个 package-tree 是启用还是禁用断言.
+     * <tt>packageEnabled[i]</tt> 的值 <tt>true</tt> 表示由 <tt>packages[i]</tt>
+     * 命名的 package-tree 应该启用断言; 值 <tt>false</tt> 表示它应该禁用断言. 此数组必须与
+     * <tt>packages</tt>具有相同数量的元素.
      * <p>
-     * In the case of conflicting directives for the same package-tree, the
-     * last directive for a given package-tree wins.  In other words, if a
-     * string <tt>s</tt> appears multiple times in the <tt>packages</tt> array
-     * and <tt>i</tt> is the highest integer for which
-     * <tt>packages[i].equals(s)</tt>, then <tt>packageEnabled[i]</tt>
-     * indicates whether assertions are to be enabled in package-tree
-     * <tt>s</tt>.
+     * 在针对同一 package-tree 的冲突指令的情况下, 给定包树的最后一个指令获胜.
+     * 换句话说, 如果字符串 <tt>s</tt> 在 <tt>packages</tt>数组中出现多次,
+     * 而 <tt>i</tt> 是 <tt>packages[i].equals(s)</tt> 的最高整数,
+     * 然后 <tt>packageEnabled[i]</tt> 指示是否要在 package-tree <tt>s</tt>中启用断言.
      */
     boolean[] packageEnabled;
 
     /**
-     * Whether or not assertions in non-system classes are to be enabled
-     * by default.
+     * 是否默认启用非系统类中的断言.
      */
     boolean deflt;
 }
