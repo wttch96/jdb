@@ -1,42 +1,14 @@
-/*
- * Copyright (c) 2000, 2011, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.lang;
 
 /**
- * Thrown to indicate that an assertion has failed.
+ * 抛出表示断言失败.
  *
- * <p>The seven one-argument public constructors provided by this
- * class ensure that the assertion error returned by the invocation:
+ * <p>此类提供的七个单参数公共构造函数确保调用返回的断言错误:
  * <pre>
  *     new AssertionError(<i>expression</i>)
  * </pre>
- * has as its detail message the <i>string conversion</i> of
- * <i>expression</i> (as defined in section 15.18.1.1 of
- * <cite>The Java&trade; Language Specification</cite>),
- * regardless of the type of <i>expression</i>.
+ * 具有<i>表达式</i>的<i>字符串转换</i>作为其详细信息 (如 <cite>The Java&trade; Language Specification</cite>
+ * 第 15.18.1.1 节所定义), 不管 <i>expression</i> 的类型如何.
  *
  * @since 1.4
  */
@@ -44,30 +16,26 @@ public class AssertionError extends Error {
     private static final long serialVersionUID = -5013299493970297370L;
 
     /**
-     * Constructs an AssertionError with no detail message.
+     * 构造一个没有详细信息的 AssertionError .
      */
     public AssertionError() {
     }
 
     /**
-     * This internal constructor does no processing on its string argument,
-     * even if it is a null reference.  The public constructors will
-     * never call this constructor with a null argument.
+     * 这个内部构造函数不处理其字符串参数, 即使它是一个空引用.
+     * 公共构造函数永远不会使用 null 参数调用此构造函数.
      */
     private AssertionError(String detailMessage) {
         super(detailMessage);
     }
 
     /**
-     * Constructs an AssertionError with its detail message derived
-     * from the specified object, which is converted to a string as
-     * defined in section 15.18.1.1 of
-     * <cite>The Java&trade; Language Specification</cite>.
+     * 构造一个 AssertionError 及其从指定对象派生的详细信息, 该对象被转换为
+     * <cite>The Java&trade; Language Specification</cite> 的 15.18.1.1 节中定义的字符串.
      * <p>
-     * If the specified object is an instance of {@code Throwable}, it
-     * becomes the <i>cause</i> of the newly constructed assertion error.
+     * 如果指定的对象是 {@code Throwable} 的实例, 则它将成为新构造的断言错误的 <i>cause</i>.
      *
-     * @param detailMessage value to be used in constructing detail message
+     * @param detailMessage 用于构造详细消息的值
      * @see Throwable#getCause()
      */
     public AssertionError(Object detailMessage) {
@@ -77,87 +45,75 @@ public class AssertionError extends Error {
     }
 
     /**
-     * Constructs an AssertionError with its detail message derived
-     * from the specified <code>boolean</code>, which is converted to
-     * a string as defined in section 15.18.1.1 of
-     * <cite>The Java&trade; Language Specification</cite>.
+     * 构造一个 AssertionError, 其详细消息派生自指定的 <code>boolean</code>, 它被转换为
+     * <cite>The Java&trade; Language Specification</cite> 的 15.18.1.1 节中定义的字符串.
      *
-     * @param detailMessage value to be used in constructing detail message
+     * @param detailMessage 用于构造详细消息的值
      */
     public AssertionError(boolean detailMessage) {
         this(String.valueOf(detailMessage));
     }
 
     /**
-     * Constructs an AssertionError with its detail message derived
-     * from the specified <code>char</code>, which is converted to a
-     * string as defined in section 15.18.1.1 of
-     * <cite>The Java&trade; Language Specification</cite>.
+     * 构造一个 AssertionError, 其详细消息派生自指定的 <code>char</code>, 它被转换为
+     * <cite>The Java&trade; Language Specification</cite> 的 15.18.1.1 节中定义的字符串.
      *
-     * @param detailMessage value to be used in constructing detail message
+     * @param detailMessage 用于构造详细消息的值
      */
     public AssertionError(char detailMessage) {
         this(String.valueOf(detailMessage));
     }
 
+
     /**
-     * Constructs an AssertionError with its detail message derived
-     * from the specified <code>int</code>, which is converted to a
-     * string as defined in section 15.18.1.1 of
-     * <cite>The Java&trade; Language Specification</cite>.
+     * 构造一个 AssertionError, 其详细消息派生自指定的 <code>int</code>, 它被转换为
+     * <cite>The Java&trade; Language Specification</cite> 的 15.18.1.1 节中定义的字符串.
      *
-     * @param detailMessage value to be used in constructing detail message
+     * @param detailMessage 用于构造详细消息的值
      */
     public AssertionError(int detailMessage) {
         this(String.valueOf(detailMessage));
     }
 
     /**
-     * Constructs an AssertionError with its detail message derived
-     * from the specified <code>long</code>, which is converted to a
-     * string as defined in section 15.18.1.1 of
-     * <cite>The Java&trade; Language Specification</cite>.
+     * 构造一个 AssertionError, 其详细消息派生自指定的 <code>long</code>, 它被转换为
+     * <cite>The Java&trade; Language Specification</cite> 的 15.18.1.1 节中定义的字符串.
      *
-     * @param detailMessage value to be used in constructing detail message
+     * @param detailMessage 用于构造详细消息的值
      */
     public AssertionError(long detailMessage) {
         this(String.valueOf(detailMessage));
     }
 
+
     /**
-     * Constructs an AssertionError with its detail message derived
-     * from the specified <code>float</code>, which is converted to a
-     * string as defined in section 15.18.1.1 of
-     * <cite>The Java&trade; Language Specification</cite>.
+     * 构造一个 AssertionError, 其详细消息派生自指定的 <code>float</code>, 它被转换为
+     * <cite>The Java&trade; Language Specification</cite> 的 15.18.1.1 节中定义的字符串.
      *
-     * @param detailMessage value to be used in constructing detail message
+     * @param detailMessage 用于构造详细消息的值
      */
     public AssertionError(float detailMessage) {
         this(String.valueOf(detailMessage));
     }
 
+
     /**
-     * Constructs an AssertionError with its detail message derived
-     * from the specified <code>double</code>, which is converted to a
-     * string as defined in section 15.18.1.1 of
-     * <cite>The Java&trade; Language Specification</cite>.
+     * 构造一个 AssertionError, 其详细消息派生自指定的 <code>double</code>, 它被转换为
+     * <cite>The Java&trade; Language Specification</cite> 的 15.18.1.1 节中定义的字符串.
      *
-     * @param detailMessage value to be used in constructing detail message
+     * @param detailMessage 用于构造详细消息的值
      */
     public AssertionError(double detailMessage) {
         this(String.valueOf(detailMessage));
     }
 
     /**
-     * Constructs a new {@code AssertionError} with the specified
-     * detail message and cause.
+     * 构造一个 {@code AssertionError} 使用详细消息和原因.
      *
-     * <p>Note that the detail message associated with
-     * {@code cause} is <i>not</i> automatically incorporated in
-     * this error's detail message.
+     * <p>注意 {@code cause} 相关联的详细信息 <em>不会</em>自动合并到这个 Error 的详细信息中去.
      *
-     * @param message the detail message, may be {@code null}
-     * @param cause   the cause, may be {@code null}
+     * @param message 详细消息, 可以为 {@code null}
+     * @param cause   原因, 可以为 {@code null}
      * @since 1.7
      */
     public AssertionError(String message, Throwable cause) {
