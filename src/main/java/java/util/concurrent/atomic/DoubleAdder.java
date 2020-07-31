@@ -34,6 +34,7 @@
  */
 
 package java.util.concurrent.atomic;
+
 import java.io.Serializable;
 
 /**
@@ -57,8 +58,8 @@ import java.io.Serializable;
  * compareTo} because instances are expected to be mutated, and so are
  * not useful as collection keys.
  *
- * @since 1.8
  * @author Doug Lea
+ * @since 1.8
  */
 public class DoubleAdder extends Striped64 implements Serializable {
     private static final long serialVersionUID = 7249069246863182397L;
@@ -86,17 +87,20 @@ public class DoubleAdder extends Striped64 implements Serializable {
      * @param x the value to add
      */
     public void add(double x) {
-        Cell[] as; long b, v; int m; Cell a;
+        Cell[] as;
+        long b, v;
+        int m;
+        Cell a;
         if ((as = cells) != null ||
-            !casBase(b = base,
-                     Double.doubleToRawLongBits
-                     (Double.longBitsToDouble(b) + x))) {
+                !casBase(b = base,
+                        Double.doubleToRawLongBits
+                                (Double.longBitsToDouble(b) + x))) {
             boolean uncontended = true;
             if (as == null || (m = as.length - 1) < 0 ||
-                (a = as[getProbe() & m]) == null ||
-                !(uncontended = a.cas(v = a.value,
-                                      Double.doubleToRawLongBits
-                                      (Double.longBitsToDouble(v) + x))))
+                    (a = as[getProbe() & m]) == null ||
+                    !(uncontended = a.cas(v = a.value,
+                            Double.doubleToRawLongBits
+                                    (Double.longBitsToDouble(v) + x))))
                 doubleAccumulate(x, null, uncontended);
         }
     }
@@ -114,7 +118,8 @@ public class DoubleAdder extends Striped64 implements Serializable {
      * @return the sum
      */
     public double sum() {
-        Cell[] as = cells; Cell a;
+        Cell[] as = cells;
+        Cell a;
         double sum = Double.longBitsToDouble(base);
         if (as != null) {
             for (int i = 0; i < as.length; ++i) {
@@ -133,7 +138,8 @@ public class DoubleAdder extends Striped64 implements Serializable {
      * known that no threads are concurrently updating.
      */
     public void reset() {
-        Cell[] as = cells; Cell a;
+        Cell[] as = cells;
+        Cell a;
         base = 0L; // relies on fact that double 0 must have same rep as long
         if (as != null) {
             for (int i = 0; i < as.length; ++i) {
@@ -154,7 +160,8 @@ public class DoubleAdder extends Striped64 implements Serializable {
      * @return the sum
      */
     public double sumThenReset() {
-        Cell[] as = cells; Cell a;
+        Cell[] as = cells;
+        Cell a;
         double sum = Double.longBitsToDouble(base);
         base = 0L;
         if (as != null) {
@@ -171,6 +178,7 @@ public class DoubleAdder extends Striped64 implements Serializable {
 
     /**
      * Returns the String representation of the {@link #sum}.
+     *
      * @return the String representation of the {@link #sum}
      */
     public String toString() {
@@ -191,7 +199,7 @@ public class DoubleAdder extends Striped64 implements Serializable {
      * narrowing primitive conversion.
      */
     public long longValue() {
-        return (long)sum();
+        return (long) sum();
     }
 
     /**
@@ -199,7 +207,7 @@ public class DoubleAdder extends Striped64 implements Serializable {
      * narrowing primitive conversion.
      */
     public int intValue() {
-        return (int)sum();
+        return (int) sum();
     }
 
     /**
@@ -207,39 +215,7 @@ public class DoubleAdder extends Striped64 implements Serializable {
      * after a narrowing primitive conversion.
      */
     public float floatValue() {
-        return (float)sum();
-    }
-
-    /**
-     * Serialization proxy, used to avoid reference to the non-public
-     * Striped64 superclass in serialized forms.
-     * @serial include
-     */
-    private static class SerializationProxy implements Serializable {
-        private static final long serialVersionUID = 7249069246863182397L;
-
-        /**
-         * The current value returned by sum().
-         * @serial
-         */
-        private final double value;
-
-        SerializationProxy(DoubleAdder a) {
-            value = a.sum();
-        }
-
-        /**
-         * Returns a {@code DoubleAdder} object with initial state
-         * held by this proxy.
-         *
-         * @return a {@code DoubleAdder} object with initial state
-         * held by this proxy.
-         */
-        private Object readResolve() {
-            DoubleAdder a = new DoubleAdder();
-            a.base = Double.doubleToRawLongBits(value);
-            return a;
-        }
+        return (float) sum();
     }
 
     /**
@@ -260,8 +236,42 @@ public class DoubleAdder extends Striped64 implements Serializable {
      * @throws java.io.InvalidObjectException always
      */
     private void readObject(java.io.ObjectInputStream s)
-        throws java.io.InvalidObjectException {
+            throws java.io.InvalidObjectException {
         throw new java.io.InvalidObjectException("Proxy required");
+    }
+
+    /**
+     * Serialization proxy, used to avoid reference to the non-public
+     * Striped64 superclass in serialized forms.
+     *
+     * @serial include
+     */
+    private static class SerializationProxy implements Serializable {
+        private static final long serialVersionUID = 7249069246863182397L;
+
+        /**
+         * The current value returned by sum().
+         *
+         * @serial
+         */
+        private final double value;
+
+        SerializationProxy(DoubleAdder a) {
+            value = a.sum();
+        }
+
+        /**
+         * Returns a {@code DoubleAdder} object with initial state
+         * held by this proxy.
+         *
+         * @return a {@code DoubleAdder} object with initial state
+         * held by this proxy.
+         */
+        private Object readResolve() {
+            DoubleAdder a = new DoubleAdder();
+            a.base = Double.doubleToRawLongBits(value);
+            return a;
+        }
     }
 
 }

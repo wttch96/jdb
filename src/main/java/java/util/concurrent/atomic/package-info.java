@@ -40,7 +40,7 @@
  * array elements to those that also provide an atomic conditional update
  * operation of the form:
  *
- *  <pre> {@code boolean compareAndSet(expectedValue, updateValue);}</pre>
+ * <pre> {@code boolean compareAndSet(expectedValue, updateValue);}</pre>
  *
  * <p>This method (which varies in argument types across different
  * classes) atomically sets a variable to the {@code updateValue} if it
@@ -67,7 +67,7 @@
  * {@code AtomicInteger} provide atomic increment methods.  One
  * application is to generate sequence numbers, as in:
  *
- *  <pre> {@code
+ * <pre> {@code
  * class Sequencer {
  *   private final AtomicLong sequenceNumber
  *     = new AtomicLong(0);
@@ -80,9 +80,9 @@
  * {@code getAndIncrement}, apply a function to a value atomically.
  * For example, given some transformation
  * <pre> {@code long transform(long input)}</pre>
- *
+ * <p>
  * write your utility method as follows:
- *  <pre> {@code
+ * <pre> {@code
  * long getAndTransform(AtomicLong var) {
  *   long prev, next;
  *   do {
@@ -129,7 +129,7 @@
  * contains <em>Updater</em> classes that can be used to obtain
  * {@code compareAndSet} operations on any selected {@code volatile}
  * field of any selected class.
- *
+ * <p>
  * {@link java.util.concurrent.atomic.AtomicReferenceFieldUpdater},
  * {@link java.util.concurrent.atomic.AtomicIntegerFieldUpdater}, and
  * {@link java.util.concurrent.atomic.AtomicLongFieldUpdater} are
@@ -178,7 +178,7 @@
  * class associates a single boolean with a reference.  For example, this
  * bit might be used inside a data structure to mean that the object
  * being referenced has logically been deleted.
- *
+ * <p>
  * The {@link java.util.concurrent.atomic.AtomicStampedReference}
  * class associates an integer value with a reference.  This may be
  * used for example, to represent version numbers corresponding to
@@ -200,7 +200,7 @@
  * representing {@code byte}.  In those infrequent cases where you would
  * like to do so, you can use an {@code AtomicInteger} to hold
  * {@code byte} values, and cast appropriately.
- *
+ * <p>
  * You can also hold floats using
  * {@link java.lang.Float#floatToRawIntBits} and
  * {@link java.lang.Float#intBitsToFloat} conversions, and doubles using

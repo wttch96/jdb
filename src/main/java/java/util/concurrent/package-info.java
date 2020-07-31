@@ -45,7 +45,7 @@
  * <h2>Executors</h2>
  *
  * <b>Interfaces.</b>
- *
+ * <p>
  * {@link java.util.concurrent.Executor} is a simple standardized
  * interface for defining custom thread-like subsystems, including
  * thread pools, asynchronous I/O, and lightweight task frameworks.
@@ -53,23 +53,23 @@
  * execute in a newly created thread, an existing task-execution thread,
  * or the thread calling {@link java.util.concurrent.Executor#execute
  * execute}, and may execute sequentially or concurrently.
- *
+ * <p>
  * {@link java.util.concurrent.ExecutorService} provides a more
  * complete asynchronous task execution framework.  An
  * ExecutorService manages queuing and scheduling of tasks,
  * and allows controlled shutdown.
- *
+ * <p>
  * The {@link java.util.concurrent.ScheduledExecutorService}
  * subinterface and associated interfaces add support for
  * delayed and periodic task execution.  ExecutorServices
  * provide methods arranging asynchronous execution of any
  * function expressed as {@link java.util.concurrent.Callable},
  * the result-bearing analog of {@link java.lang.Runnable}.
- *
+ * <p>
  * A {@link java.util.concurrent.Future} returns the results of
  * a function, allows determination of whether execution has
  * completed, and provides a means to cancel execution.
- *
+ * <p>
  * A {@link java.util.concurrent.RunnableFuture} is a {@code Future}
  * that possesses a {@code run} method that upon execution,
  * sets its results.
@@ -77,11 +77,11 @@
  * <p>
  *
  * <b>Implementations.</b>
- *
+ * <p>
  * Classes {@link java.util.concurrent.ThreadPoolExecutor} and
  * {@link java.util.concurrent.ScheduledThreadPoolExecutor}
  * provide tunable, flexible thread pools.
- *
+ * <p>
  * The {@link java.util.concurrent.Executors} class provides
  * factory methods for the most common kinds and configurations
  * of Executors, as well as a few utility methods for using
@@ -100,7 +100,7 @@
  * computation-intensive parallel processing.
  *
  * <h2>Queues</h2>
- *
+ * <p>
  * The {@link java.util.concurrent.ConcurrentLinkedQueue} class
  * supplies an efficient scalable thread-safe non-blocking FIFO queue.
  * The {@link java.util.concurrent.ConcurrentLinkedDeque} class is
@@ -132,7 +132,7 @@
  * provides an implementation.
  *
  * <h2>Timing</h2>
- *
+ * <p>
  * The {@link java.util.concurrent.TimeUnit} class provides
  * multiple granularities (including nanoseconds) for
  * specifying and controlling time-out based operations.  Most
@@ -150,7 +150,7 @@
  * of {@code Long.MAX_VALUE}.
  *
  * <h2>Synchronizers</h2>
- *
+ * <p>
  * Five classes aid common special-purpose synchronization idioms.
  * <ul>
  *
@@ -175,7 +175,7 @@
  * </ul>
  *
  * <h2>Concurrent Collections</h2>
- *
+ * <p>
  * Besides Queues, this package supplies Collection implementations
  * designed for use in multithreaded contexts:
  * {@link java.util.concurrent.ConcurrentHashMap},
@@ -260,8 +260,8 @@
  *   successfully returns from a {@code join} on that thread.
  *
  * </ul>
- *
- *
+ * <p>
+ * <p>
  * The methods of all classes in {@code java.util.concurrent} and its
  * subpackages extend these guarantees to higher-level
  * synchronization.  In particular:

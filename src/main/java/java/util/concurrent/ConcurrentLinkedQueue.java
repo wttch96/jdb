@@ -35,14 +35,7 @@
 
 package java.util.concurrent;
 
-import java.util.AbstractQueue;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Queue;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -98,9 +91,9 @@ import java.util.function.Consumer;
  * <a href="{@docRoot}/../technotes/guides/collections/index.html">
  * Java Collections Framework</a>.
  *
- * @since 1.5
- * @author Doug Lea
  * @param <E> the type of elements held in this collection
+ * @author Doug Lea
+ * @since 1.5
  */
 public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
         implements Queue<E>, java.io.Serializable {
@@ -176,48 +169,20 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      * CAS, so they never regress, although again this is merely an
      * optimization.
      */
+    private static final sun.misc.Unsafe UNSAFE;
+    private static final long headOffset;
+    private static final long tailOffset;
 
-    private static class Node<E> {
-        volatile E item;
-        volatile Node<E> next;
-
-        /**
-         * Constructs a new node.  Uses relaxed write because item can
-         * only be seen after publication via casNext.
-         */
-        Node(E item) {
-            UNSAFE.putObject(this, itemOffset, item);
-        }
-
-        boolean casItem(E cmp, E val) {
-            return UNSAFE.compareAndSwapObject(this, itemOffset, cmp, val);
-        }
-
-        void lazySetNext(Node<E> val) {
-            UNSAFE.putOrderedObject(this, nextOffset, val);
-        }
-
-        boolean casNext(Node<E> cmp, Node<E> val) {
-            return UNSAFE.compareAndSwapObject(this, nextOffset, cmp, val);
-        }
-
-        // Unsafe mechanics
-
-        private static final sun.misc.Unsafe UNSAFE;
-        private static final long itemOffset;
-        private static final long nextOffset;
-
-        static {
-            try {
-                UNSAFE = sun.misc.Unsafe.getUnsafe();
-                Class<?> k = Node.class;
-                itemOffset = UNSAFE.objectFieldOffset
-                    (k.getDeclaredField("item"));
-                nextOffset = UNSAFE.objectFieldOffset
-                    (k.getDeclaredField("next"));
-            } catch (Exception e) {
-                throw new Error(e);
-            }
+    static {
+        try {
+            UNSAFE = sun.misc.Unsafe.getUnsafe();
+            Class<?> k = ConcurrentLinkedQueue.class;
+            headOffset = UNSAFE.objectFieldOffset
+                    (k.getDeclaredField("head"));
+            tailOffset = UNSAFE.objectFieldOffset
+                    (k.getDeclaredField("tail"));
+        } catch (Exception e) {
+            throw new Error(e);
         }
     }
 
@@ -231,10 +196,11 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      * Non-invariants:
      * - head.item may or may not be null.
      * - it is permitted for tail to lag behind head, that is, for tail
-     *   to not be reachable from head!
+     * to not be reachable from head!
      */
     private transient volatile Node<E> head;
 
+    // Have to override just to update the javadoc
     /**
      * A node from which the last node on list (that is, the unique
      * node with node.next == null) can be reached in O(1) time.
@@ -244,7 +210,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      * Non-invariants:
      * - tail.item may or may not be null.
      * - it is permitted for tail to lag behind head, that is, for tail
-     *   to not be reachable from head!
+     * to not be reachable from head!
      * - tail.next may or may not be self-pointing to tail.
      */
     private transient volatile Node<E> tail;
@@ -263,7 +229,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      *
      * @param c the collection of elements to initially contain
      * @throws NullPointerException if the specified collection or any
-     *         of its elements are null
+     *                              of its elements are null
      */
     public ConcurrentLinkedQueue(Collection<? extends E> c) {
         Node<E> h = null, t = null;
@@ -283,7 +249,15 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
         tail = t;
     }
 
-    // Have to override just to update the javadoc
+    /**
+     * Throws NullPointerException if argument is null.
+     *
+     * @param v the element
+     */
+    private static void checkNotNull(Object v) {
+        if (v == null)
+            throw new NullPointerException();
+    }
 
     /**
      * Inserts the specified element at the tail of this queue.
@@ -293,6 +267,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      * @return {@code true} (as specified by {@link Collection#add})
      * @throws NullPointerException if the specified element is null
      */
+    @Override
     public boolean add(E e) {
         return offer(e);
     }
@@ -323,11 +298,12 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      * @return {@code true} (as specified by {@link Queue#offer})
      * @throws NullPointerException if the specified element is null
      */
+    @Override
     public boolean offer(E e) {
         checkNotNull(e);
         final Node<E> newNode = new Node<E>(e);
 
-        for (Node<E> t = tail, p = t;;) {
+        for (Node<E> t = tail, p = t; ; ) {
             Node<E> q = p.next;
             if (q == null) {
                 // p is last node
@@ -340,8 +316,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
                     return true;
                 }
                 // Lost CAS race to another thread; re-read next
-            }
-            else if (p == q)
+            } else if (p == q)
                 // We have fallen off list.  If tail is unchanged, it
                 // will also be off-list, in which case we need to
                 // jump to head, from which all live nodes are always
@@ -353,10 +328,11 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
         }
     }
 
+    @Override
     public E poll() {
         restartFromHead:
-        for (;;) {
-            for (Node<E> h = head, p = h, q;;) {
+        for (; ; ) {
+            for (Node<E> h = head, p = h, q; ; ) {
                 E item = p.item;
 
                 if (item != null && p.casItem(item, null)) {
@@ -365,12 +341,10 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
                     if (p != h) // hop two nodes at a time
                         updateHead(h, ((q = p.next) != null) ? q : p);
                     return item;
-                }
-                else if ((q = p.next) == null) {
+                } else if ((q = p.next) == null) {
                     updateHead(h, p);
                     return null;
-                }
-                else if (p == q)
+                } else if (p == q)
                     continue restartFromHead;
                 else
                     p = q;
@@ -378,16 +352,16 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
         }
     }
 
+    @Override
     public E peek() {
         restartFromHead:
-        for (;;) {
-            for (Node<E> h = head, p = h, q;;) {
+        for (; ; ) {
+            for (Node<E> h = head, p = h, q; ; ) {
                 E item = p.item;
                 if (item != null || (q = p.next) == null) {
                     updateHead(h, p);
                     return item;
-                }
-                else if (p == q)
+                } else if (p == q)
                     continue restartFromHead;
                 else
                     p = q;
@@ -405,14 +379,13 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      */
     Node<E> first() {
         restartFromHead:
-        for (;;) {
-            for (Node<E> h = head, p = h, q;;) {
+        for (; ; ) {
+            for (Node<E> h = head, p = h, q; ; ) {
                 boolean hasItem = (p.item != null);
                 if (hasItem || (q = p.next) == null) {
                     updateHead(h, p);
                     return hasItem ? p : null;
-                }
-                else if (p == q)
+                } else if (p == q)
                     continue restartFromHead;
                 else
                     p = q;
@@ -425,6 +398,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      *
      * @return {@code true} if this queue contains no elements
      */
+    @Override
     public boolean isEmpty() {
         return first() == null;
     }
@@ -445,6 +419,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      *
      * @return the number of elements in this queue
      */
+    @Override
     public int size() {
         int count = 0;
         for (Node<E> p = first(); p != null; p = succ(p))
@@ -463,6 +438,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      * @param o object to be checked for containment in this queue
      * @return {@code true} if this queue contains the specified element
      */
+    @Override
     public boolean contains(Object o) {
         if (o == null) return false;
         for (Node<E> p = first(); p != null; p = succ(p)) {
@@ -484,6 +460,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      * @param o element to be removed from this queue, if present
      * @return {@code true} if this queue changed as a result of the call
      */
+    @Override
     public boolean remove(Object o) {
         if (o != null) {
             Node<E> next, pred = null;
@@ -516,10 +493,11 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      *
      * @param c the elements to be inserted into this queue
      * @return {@code true} if this queue changed as a result of the call
-     * @throws NullPointerException if the specified collection or any
-     *         of its elements are null
+     * @throws NullPointerException     if the specified collection or any
+     *                                  of its elements are null
      * @throws IllegalArgumentException if the collection is this queue
      */
+    @Override
     public boolean addAll(Collection<? extends E> c) {
         if (c == this)
             // As historically specified in AbstractQueue#addAll
@@ -541,7 +519,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
             return false;
 
         // Atomically append the chain at the tail of this collection
-        for (Node<E> t = tail, p = t;;) {
+        for (Node<E> t = tail, p = t; ; ) {
             Node<E> q = p.next;
             if (q == null) {
                 // p is last node
@@ -558,8 +536,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
                     return true;
                 }
                 // Lost CAS race to another thread; re-read next
-            }
-            else if (p == q)
+            } else if (p == q)
                 // We have fallen off list.  If tail is unchanged, it
                 // will also be off-list, in which case we need to
                 // jump to head, from which all live nodes are always
@@ -584,6 +561,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      *
      * @return an array containing all of the elements in this queue
      */
+    @Override
     public Object[] toArray() {
         // Use ArrayList to deal with resizing.
         ArrayList<E> al = new ArrayList<E>();
@@ -616,8 +594,8 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      * The following code can be used to dump the queue into a newly
      * allocated array of {@code String}:
      *
-     *  <pre> {@code String[] y = x.toArray(new String[0]);}</pre>
-     *
+     * <pre> {@code String[] y = x.toArray(new String[0]);}</pre>
+     * <p>
      * Note that {@code toArray(new Object[0])} is identical in function to
      * {@code toArray()}.
      *
@@ -625,11 +603,12 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      *          be stored, if it is big enough; otherwise, a new array of the
      *          same runtime type is allocated for this purpose
      * @return an array containing all of the elements in this queue
-     * @throws ArrayStoreException if the runtime type of the specified array
-     *         is not a supertype of the runtime type of every element in
-     *         this queue
+     * @throws ArrayStoreException  if the runtime type of the specified array
+     *                              is not a supertype of the runtime type of every element in
+     *                              this queue
      * @throws NullPointerException if the specified array is null
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T[] toArray(T[] a) {
         // try to use sent-in array
@@ -638,7 +617,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
         for (p = first(); p != null && k < a.length; p = succ(p)) {
             E item = p.item;
             if (item != null)
-                a[k++] = (T)item;
+                a[k++] = (T) item;
         }
         if (p == null) {
             if (k < a.length)
@@ -665,8 +644,234 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
      *
      * @return an iterator over the elements in this queue in proper sequence
      */
+    @Override
     public Iterator<E> iterator() {
         return new Itr();
+    }
+
+    /**
+     * Saves this queue to a stream (that is, serializes it).
+     *
+     * @param s the stream
+     * @throws java.io.IOException if an I/O error occurs
+     * @serialData All of the elements (each an {@code E}) in
+     * the proper order, followed by a null
+     */
+    private void writeObject(java.io.ObjectOutputStream s)
+            throws java.io.IOException {
+
+        // Write out any hidden stuff
+        s.defaultWriteObject();
+
+        // Write out all elements in the proper order.
+        for (Node<E> p = first(); p != null; p = succ(p)) {
+            Object item = p.item;
+            if (item != null)
+                s.writeObject(item);
+        }
+
+        // Use trailing null as sentinel
+        s.writeObject(null);
+    }
+
+    /**
+     * Reconstitutes this queue from a stream (that is, deserializes it).
+     *
+     * @param s the stream
+     * @throws ClassNotFoundException if the class of a serialized object
+     *                                could not be found
+     * @throws java.io.IOException    if an I/O error occurs
+     */
+    private void readObject(java.io.ObjectInputStream s)
+            throws java.io.IOException, ClassNotFoundException {
+        s.defaultReadObject();
+
+        // Read in elements until trailing null sentinel found
+        Node<E> h = null, t = null;
+        Object item;
+        while ((item = s.readObject()) != null) {
+            @SuppressWarnings("unchecked")
+            Node<E> newNode = new Node<E>((E) item);
+            if (h == null)
+                h = t = newNode;
+            else {
+                t.lazySetNext(newNode);
+                t = newNode;
+            }
+        }
+        if (h == null)
+            h = t = new Node<E>(null);
+        head = h;
+        tail = t;
+    }
+
+    /**
+     * Returns a {@link Spliterator} over the elements in this queue.
+     *
+     * <p>The returned spliterator is
+     * <a href="package-summary.html#Weakly"><i>weakly consistent</i></a>.
+     *
+     * <p>The {@code Spliterator} reports {@link Spliterator#CONCURRENT},
+     * {@link Spliterator#ORDERED}, and {@link Spliterator#NONNULL}.
+     *
+     * @return a {@code Spliterator} over the elements in this queue
+     * @implNote The {@code Spliterator} implements {@code trySplit} to permit limited
+     * parallelism.
+     * @since 1.8
+     */
+    @Override
+    public Spliterator<E> spliterator() {
+        return new CLQSpliterator<E>(this);
+    }
+
+    private boolean casTail(Node<E> cmp, Node<E> val) {
+        return UNSAFE.compareAndSwapObject(this, tailOffset, cmp, val);
+    }
+
+    // Unsafe mechanics
+
+    private boolean casHead(Node<E> cmp, Node<E> val) {
+        return UNSAFE.compareAndSwapObject(this, headOffset, cmp, val);
+    }
+
+    private static class Node<E> {
+        private static final sun.misc.Unsafe UNSAFE;
+        private static final long itemOffset;
+        private static final long nextOffset;
+
+        static {
+            try {
+                UNSAFE = sun.misc.Unsafe.getUnsafe();
+                Class<?> k = Node.class;
+                itemOffset = UNSAFE.objectFieldOffset
+                        (k.getDeclaredField("item"));
+                nextOffset = UNSAFE.objectFieldOffset
+                        (k.getDeclaredField("next"));
+            } catch (Exception e) {
+                throw new Error(e);
+            }
+        }
+
+        volatile E item;
+        volatile Node<E> next;
+
+        // Unsafe mechanics
+
+        /**
+         * Constructs a new node.  Uses relaxed write because item can
+         * only be seen after publication via casNext.
+         */
+        Node(E item) {
+            UNSAFE.putObject(this, itemOffset, item);
+        }
+
+        boolean casItem(E cmp, E val) {
+            return UNSAFE.compareAndSwapObject(this, itemOffset, cmp, val);
+        }
+
+        void lazySetNext(Node<E> val) {
+            UNSAFE.putOrderedObject(this, nextOffset, val);
+        }
+
+        boolean casNext(Node<E> cmp, Node<E> val) {
+            return UNSAFE.compareAndSwapObject(this, nextOffset, cmp, val);
+        }
+    }
+
+    /**
+     * A customized variant of Spliterators.IteratorSpliterator
+     */
+    static final class CLQSpliterator<E> implements Spliterator<E> {
+        static final int MAX_BATCH = 1 << 25;  // max batch array size;
+        final ConcurrentLinkedQueue<E> queue;
+        Node<E> current;    // current node; null until initialized
+        int batch;          // batch size for splits
+        boolean exhausted;  // true when no more nodes
+
+        CLQSpliterator(ConcurrentLinkedQueue<E> queue) {
+            this.queue = queue;
+        }
+
+        @Override
+        public Spliterator<E> trySplit() {
+            Node<E> p;
+            final ConcurrentLinkedQueue<E> q = this.queue;
+            int b = batch;
+            int n = (b <= 0) ? 1 : (b >= MAX_BATCH) ? MAX_BATCH : b + 1;
+            if (!exhausted &&
+                    ((p = current) != null || (p = q.first()) != null) &&
+                    p.next != null) {
+                Object[] a = new Object[n];
+                int i = 0;
+                do {
+                    if ((a[i] = p.item) != null)
+                        ++i;
+                    if (p == (p = p.next))
+                        p = q.first();
+                } while (p != null && i < n);
+                if ((current = p) == null)
+                    exhausted = true;
+                if (i > 0) {
+                    batch = i;
+                    return Spliterators.spliterator
+                            (a, 0, i, Spliterator.ORDERED | Spliterator.NONNULL |
+                                    Spliterator.CONCURRENT);
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public void forEachRemaining(Consumer<? super E> action) {
+            Node<E> p;
+            if (action == null) throw new NullPointerException();
+            final ConcurrentLinkedQueue<E> q = this.queue;
+            if (!exhausted &&
+                    ((p = current) != null || (p = q.first()) != null)) {
+                exhausted = true;
+                do {
+                    E e = p.item;
+                    if (p == (p = p.next))
+                        p = q.first();
+                    if (e != null)
+                        action.accept(e);
+                } while (p != null);
+            }
+        }
+
+        @Override
+        public boolean tryAdvance(Consumer<? super E> action) {
+            Node<E> p;
+            if (action == null) throw new NullPointerException();
+            final ConcurrentLinkedQueue<E> q = this.queue;
+            if (!exhausted &&
+                    ((p = current) != null || (p = q.first()) != null)) {
+                E e;
+                do {
+                    e = p.item;
+                    if (p == (p = p.next))
+                        p = q.first();
+                } while (e == null && p != null);
+                if ((current = p) == null)
+                    exhausted = true;
+                if (e != null) {
+                    action.accept(e);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public long estimateSize() {
+            return Long.MAX_VALUE;
+        }
+
+        @Override
+        public int characteristics() {
+            return Spliterator.ORDERED | Spliterator.NONNULL |
+                    Spliterator.CONCURRENT;
+        }
     }
 
     private class Itr implements Iterator<E> {
@@ -709,7 +914,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
                 p = succ(nextNode);
             }
 
-            for (;;) {
+            for (; ; ) {
                 if (p == null) {
                     nextNode = null;
                     nextItem = null;
@@ -730,219 +935,24 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
             }
         }
 
+        @Override
         public boolean hasNext() {
             return nextNode != null;
         }
 
+        @Override
         public E next() {
             if (nextNode == null) throw new NoSuchElementException();
             return advance();
         }
 
+        @Override
         public void remove() {
             Node<E> l = lastRet;
             if (l == null) throw new IllegalStateException();
             // rely on a future traversal to relink.
             l.item = null;
             lastRet = null;
-        }
-    }
-
-    /**
-     * Saves this queue to a stream (that is, serializes it).
-     *
-     * @param s the stream
-     * @throws java.io.IOException if an I/O error occurs
-     * @serialData All of the elements (each an {@code E}) in
-     * the proper order, followed by a null
-     */
-    private void writeObject(java.io.ObjectOutputStream s)
-        throws java.io.IOException {
-
-        // Write out any hidden stuff
-        s.defaultWriteObject();
-
-        // Write out all elements in the proper order.
-        for (Node<E> p = first(); p != null; p = succ(p)) {
-            Object item = p.item;
-            if (item != null)
-                s.writeObject(item);
-        }
-
-        // Use trailing null as sentinel
-        s.writeObject(null);
-    }
-
-    /**
-     * Reconstitutes this queue from a stream (that is, deserializes it).
-     * @param s the stream
-     * @throws ClassNotFoundException if the class of a serialized object
-     *         could not be found
-     * @throws java.io.IOException if an I/O error occurs
-     */
-    private void readObject(java.io.ObjectInputStream s)
-        throws java.io.IOException, ClassNotFoundException {
-        s.defaultReadObject();
-
-        // Read in elements until trailing null sentinel found
-        Node<E> h = null, t = null;
-        Object item;
-        while ((item = s.readObject()) != null) {
-            @SuppressWarnings("unchecked")
-            Node<E> newNode = new Node<E>((E) item);
-            if (h == null)
-                h = t = newNode;
-            else {
-                t.lazySetNext(newNode);
-                t = newNode;
-            }
-        }
-        if (h == null)
-            h = t = new Node<E>(null);
-        head = h;
-        tail = t;
-    }
-
-    /** A customized variant of Spliterators.IteratorSpliterator */
-    static final class CLQSpliterator<E> implements Spliterator<E> {
-        static final int MAX_BATCH = 1 << 25;  // max batch array size;
-        final ConcurrentLinkedQueue<E> queue;
-        Node<E> current;    // current node; null until initialized
-        int batch;          // batch size for splits
-        boolean exhausted;  // true when no more nodes
-        CLQSpliterator(ConcurrentLinkedQueue<E> queue) {
-            this.queue = queue;
-        }
-
-        public Spliterator<E> trySplit() {
-            Node<E> p;
-            final ConcurrentLinkedQueue<E> q = this.queue;
-            int b = batch;
-            int n = (b <= 0) ? 1 : (b >= MAX_BATCH) ? MAX_BATCH : b + 1;
-            if (!exhausted &&
-                ((p = current) != null || (p = q.first()) != null) &&
-                p.next != null) {
-                Object[] a = new Object[n];
-                int i = 0;
-                do {
-                    if ((a[i] = p.item) != null)
-                        ++i;
-                    if (p == (p = p.next))
-                        p = q.first();
-                } while (p != null && i < n);
-                if ((current = p) == null)
-                    exhausted = true;
-                if (i > 0) {
-                    batch = i;
-                    return Spliterators.spliterator
-                        (a, 0, i, Spliterator.ORDERED | Spliterator.NONNULL |
-                         Spliterator.CONCURRENT);
-                }
-            }
-            return null;
-        }
-
-        public void forEachRemaining(Consumer<? super E> action) {
-            Node<E> p;
-            if (action == null) throw new NullPointerException();
-            final ConcurrentLinkedQueue<E> q = this.queue;
-            if (!exhausted &&
-                ((p = current) != null || (p = q.first()) != null)) {
-                exhausted = true;
-                do {
-                    E e = p.item;
-                    if (p == (p = p.next))
-                        p = q.first();
-                    if (e != null)
-                        action.accept(e);
-                } while (p != null);
-            }
-        }
-
-        public boolean tryAdvance(Consumer<? super E> action) {
-            Node<E> p;
-            if (action == null) throw new NullPointerException();
-            final ConcurrentLinkedQueue<E> q = this.queue;
-            if (!exhausted &&
-                ((p = current) != null || (p = q.first()) != null)) {
-                E e;
-                do {
-                    e = p.item;
-                    if (p == (p = p.next))
-                        p = q.first();
-                } while (e == null && p != null);
-                if ((current = p) == null)
-                    exhausted = true;
-                if (e != null) {
-                    action.accept(e);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public long estimateSize() { return Long.MAX_VALUE; }
-
-        public int characteristics() {
-            return Spliterator.ORDERED | Spliterator.NONNULL |
-                Spliterator.CONCURRENT;
-        }
-    }
-
-    /**
-     * Returns a {@link Spliterator} over the elements in this queue.
-     *
-     * <p>The returned spliterator is
-     * <a href="package-summary.html#Weakly"><i>weakly consistent</i></a>.
-     *
-     * <p>The {@code Spliterator} reports {@link Spliterator#CONCURRENT},
-     * {@link Spliterator#ORDERED}, and {@link Spliterator#NONNULL}.
-     *
-     * @implNote
-     * The {@code Spliterator} implements {@code trySplit} to permit limited
-     * parallelism.
-     *
-     * @return a {@code Spliterator} over the elements in this queue
-     * @since 1.8
-     */
-    @Override
-    public Spliterator<E> spliterator() {
-        return new CLQSpliterator<E>(this);
-    }
-
-    /**
-     * Throws NullPointerException if argument is null.
-     *
-     * @param v the element
-     */
-    private static void checkNotNull(Object v) {
-        if (v == null)
-            throw new NullPointerException();
-    }
-
-    private boolean casTail(Node<E> cmp, Node<E> val) {
-        return UNSAFE.compareAndSwapObject(this, tailOffset, cmp, val);
-    }
-
-    private boolean casHead(Node<E> cmp, Node<E> val) {
-        return UNSAFE.compareAndSwapObject(this, headOffset, cmp, val);
-    }
-
-    // Unsafe mechanics
-
-    private static final sun.misc.Unsafe UNSAFE;
-    private static final long headOffset;
-    private static final long tailOffset;
-    static {
-        try {
-            UNSAFE = sun.misc.Unsafe.getUnsafe();
-            Class<?> k = ConcurrentLinkedQueue.class;
-            headOffset = UNSAFE.objectFieldOffset
-                (k.getDeclaredField("head"));
-            tailOffset = UNSAFE.objectFieldOffset
-                (k.getDeclaredField("tail"));
-        } catch (Exception e) {
-            throw new Error(e);
         }
     }
 }

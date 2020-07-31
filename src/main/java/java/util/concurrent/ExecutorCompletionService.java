@@ -45,7 +45,7 @@ package java.util.concurrent;
  * <p>
  *
  * <b>Usage Examples.</b>
- *
+ * <p>
  * Suppose you have a set of solvers for a certain problem, each
  * returning a value of some type {@code Result}, and would like to
  * run them concurrently, processing the results of each of them that
@@ -67,7 +67,7 @@ package java.util.concurrent;
  *             use(r);
  *     }
  * }}</pre>
- *
+ * <p>
  * Suppose instead that you would like to use the first non-null result
  * of the set of tasks, ignoring any that encounter exceptions,
  * and cancelling all other tasks when the first one is ready:
@@ -110,15 +110,43 @@ public class ExecutorCompletionService<V> implements CompletionService<V> {
     private final BlockingQueue<Future<V>> completionQueue;
 
     /**
-     * FutureTask extension to enqueue upon completion
+     * Creates an ExecutorCompletionService using the supplied
+     * executor for base task execution and a
+     * {@link LinkedBlockingQueue} as a completion queue.
+     *
+     * @param executor the executor to use
+     * @throws NullPointerException if executor is {@code null}
      */
-    private class QueueingFuture extends FutureTask<Void> {
-        QueueingFuture(RunnableFuture<V> task) {
-            super(task, null);
-            this.task = task;
-        }
-        protected void done() { completionQueue.add(task); }
-        private final Future<V> task;
+    public ExecutorCompletionService(Executor executor) {
+        if (executor == null)
+            throw new NullPointerException();
+        this.executor = executor;
+        this.aes = (executor instanceof AbstractExecutorService) ?
+                (AbstractExecutorService) executor : null;
+        this.completionQueue = new LinkedBlockingQueue<Future<V>>();
+    }
+
+    /**
+     * Creates an ExecutorCompletionService using the supplied
+     * executor for base task execution and the supplied queue as its
+     * completion queue.
+     *
+     * @param executor        the executor to use
+     * @param completionQueue the queue to use as the completion queue
+     *                        normally one dedicated for use by this service. This
+     *                        queue is treated as unbounded -- failed attempted
+     *                        {@code Queue.add} operations for completed tasks cause
+     *                        them not to be retrievable.
+     * @throws NullPointerException if executor or completionQueue are {@code null}
+     */
+    public ExecutorCompletionService(Executor executor,
+                                     BlockingQueue<Future<V>> completionQueue) {
+        if (executor == null || completionQueue == null)
+            throw new NullPointerException();
+        this.executor = executor;
+        this.aes = (executor instanceof AbstractExecutorService) ?
+                (AbstractExecutorService) executor : null;
+        this.completionQueue = completionQueue;
     }
 
     private RunnableFuture<V> newTaskFor(Callable<V> task) {
@@ -135,46 +163,7 @@ public class ExecutorCompletionService<V> implements CompletionService<V> {
             return aes.newTaskFor(task, result);
     }
 
-    /**
-     * Creates an ExecutorCompletionService using the supplied
-     * executor for base task execution and a
-     * {@link LinkedBlockingQueue} as a completion queue.
-     *
-     * @param executor the executor to use
-     * @throws NullPointerException if executor is {@code null}
-     */
-    public ExecutorCompletionService(Executor executor) {
-        if (executor == null)
-            throw new NullPointerException();
-        this.executor = executor;
-        this.aes = (executor instanceof AbstractExecutorService) ?
-            (AbstractExecutorService) executor : null;
-        this.completionQueue = new LinkedBlockingQueue<Future<V>>();
-    }
-
-    /**
-     * Creates an ExecutorCompletionService using the supplied
-     * executor for base task execution and the supplied queue as its
-     * completion queue.
-     *
-     * @param executor the executor to use
-     * @param completionQueue the queue to use as the completion queue
-     *        normally one dedicated for use by this service. This
-     *        queue is treated as unbounded -- failed attempted
-     *        {@code Queue.add} operations for completed tasks cause
-     *        them not to be retrievable.
-     * @throws NullPointerException if executor or completionQueue are {@code null}
-     */
-    public ExecutorCompletionService(Executor executor,
-                                     BlockingQueue<Future<V>> completionQueue) {
-        if (executor == null || completionQueue == null)
-            throw new NullPointerException();
-        this.executor = executor;
-        this.aes = (executor instanceof AbstractExecutorService) ?
-            (AbstractExecutorService) executor : null;
-        this.completionQueue = completionQueue;
-    }
-
+    @Override
     public Future<V> submit(Callable<V> task) {
         if (task == null) throw new NullPointerException();
         RunnableFuture<V> f = newTaskFor(task);
@@ -182,6 +171,7 @@ public class ExecutorCompletionService<V> implements CompletionService<V> {
         return f;
     }
 
+    @Override
     public Future<V> submit(Runnable task, V result) {
         if (task == null) throw new NullPointerException();
         RunnableFuture<V> f = newTaskFor(task, result);
@@ -189,17 +179,37 @@ public class ExecutorCompletionService<V> implements CompletionService<V> {
         return f;
     }
 
+    @Override
     public Future<V> take() throws InterruptedException {
         return completionQueue.take();
     }
 
+    @Override
     public Future<V> poll() {
         return completionQueue.poll();
     }
 
+    @Override
     public Future<V> poll(long timeout, TimeUnit unit)
             throws InterruptedException {
         return completionQueue.poll(timeout, unit);
+    }
+
+    /**
+     * FutureTask extension to enqueue upon completion
+     */
+    private class QueueingFuture extends FutureTask<Void> {
+        private final Future<V> task;
+
+        QueueingFuture(RunnableFuture<V> task) {
+            super(task, null);
+            this.task = task;
+        }
+
+        @Override
+        protected void done() {
+            completionQueue.add(task);
+        }
     }
 
 }
