@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>java.io.Bits</OriginalElement>
+  <nodes>
+    <node x="705.0" y="1605.0">java.io.RandomAccessFile</node>
+    <node x="7.0" y="1628.0">java.io.BufferedInputStream</node>
+    <node x="408.0" y="1923.0">java.io.CharArrayReader</node>
+    <node x="170.0" y="1270.0">java.io.PushbackInputStream</node>
+    <node x="656.0" y="1506.0">java.io.ObjectOutput</node>
+    <node x="431.0" y="1483.0">java.io.ObjectInputStream</node>
+    <node x="419.0" y="2153.0">java.io.FilterReader</node>
+    <node x="657.0" y="1699.0">java.lang.AutoCloseable</node>
+    <node x="0.0" y="1399.0">java.io.LineNumberInputStream</node>
+    <node x="358.0" y="1557.0">java.io.ByteArrayInputStream</node>
+    <node x="951.0" y="1345.0">java.io.DataOutputStream</node>
+    <node x="297.0" y="1649.0">java.io.PipedInputStream</node>
+    <node x="355.0" y="1089.0">java.io.FilePermission</node>
+    <node x="492.0" y="2082.0">java.lang.Readable</node>
+    <node x="501.0" y="71.0">java.io.InvalidObjectException</node>
+    <node x="874.0" y="2066.0">java.io.PrintWriter</node>
+    <node x="690.0" y="0.0">java.io.StreamCorruptedException</node>
+    <node x="372.0" y="919.0">java.io.Externalizable</node>
+    <node x="979.0" y="1640.0">java.io.FilterOutputStream</node>
+    <node x="131.0" y="2146.0">java.io.LineNumberReader</node>
+    <node x="860.0" y="2220.0">java.io.CharArrayWriter</node>
+    <node x="540.0" y="1994.0">java.io.Reader</node>
+    <node x="335.0" y="527.0">java.io.EOFException</node>
+    <node x="744.0" y="2149.0">java.io.PipedWriter</node>
+    <node x="364.0" y="671.0">java.lang.Exception</node>
+    <node x="278.0" y="426.0">java.io.FileNotFoundException</node>
+    <node x="217.0" y="990.0">java.io.Serializable</node>
+    <node x="147.0" y="598.0">java.io.UncheckedIOException</node>
+    <node x="607.0" y="449.0">java.io.SyncFailedException</node>
+    <node x="442.0" y="751.0">java.io.CharConversionException</node>
+    <node x="324.0" y="2329.0">java.io.PushbackReader</node>
+    <node x="862.0" y="1924.0">java.io.Writer</node>
+    <node x="559.0" y="1412.0">java.io.DataInput</node>
+    <node x="528.0" y="1628.0">java.io.ObjectInput</node>
+    <node x="620.0" y="676.0">java.io.UnsupportedEncodingException</node>
+    <node x="590.0" y="142.0">java.io.WriteAbortedException</node>
+    <node x="448.0" y="355.0">java.io.UTFDataFormatException</node>
+    <node x="277.0" y="812.0">java.lang.Throwable</node>
+    <node x="645.0" y="2065.0">java.io.PipedReader</node>
+    <node x="366.0" y="1341.0">java.io.DataInputStream</node>
+    <node x="1048.0" y="1747.0">java.io.ByteArrayOutputStream</node>
+    <node x="34.0" y="1079.0">java.io.ObjectStreamClass</node>
+    <node x="485.0" y="1852.0">java.io.StringBufferInputStream</node>
+    <node x="469.0" y="600.0">java.io.InterruptedIOException</node>
+    <node x="1180.0" y="1529.0">java.io.BufferedOutputStream</node>
+    <node x="860.0" y="382.0">java.io.InvalidClassException</node>
+    <node x="0.0" y="890.0">java.io.SerializablePermission</node>
+    <node x="202.0" y="1486.0">java.io.FilterInputStream</node>
+    <node x="997.0" y="2137.0">java.io.OutputStreamWriter</node>
+    <node x="1168.0" y="1911.0">java.io.Console</node>
+    <node x="767.0" y="1427.0">java.io.ObjectOutputStream</node>
+    <node x="771.0" y="520.0">java.io.NotActiveException</node>
+    <node x="952.0" y="1853.0">java.io.Flushable</node>
+    <node x="850.0" y="1711.0">java.io.OutputStream</node>
+    <node x="854.0" y="1782.0">java.io.PrintStream</node>
+    <node x="780.0" y="1344.0">java.io.DataOutput</node>
+    <node x="999.0" y="1924.0">java.lang.Appendable</node>
+    <node x="174.0" y="1730.0">java.io.SequenceInputStream</node>
+    <node x="920.0" y="1995.0">java.io.BufferedWriter</node>
+    <node x="767.0" y="1853.0">java.io.StringWriter</node>
+    <node x="677.0" y="1967.0">java.io.FilterWriter</node>
+    <node x="396.0" y="213.0">java.io.OptionalDataException</node>
+    <node x="1185.0" y="2224.0">java.io.FileWriter</node>
+    <node x="963.0" y="1569.0">java.io.FileOutputStream</node>
+    <node x="520.0" y="529.0">java.io.IOException</node>
+    <node x="276.0" y="1832.0">java.io.FileInputStream</node>
+    <node x="851.0" y="1498.0">java.io.PipedOutputStream</node>
+    <node x="847.0" y="171.0">java.io.NotSerializableException</node>
+    <node x="560.0" y="2237.0">java.io.InputStreamReader</node>
+    <node x="157.0" y="741.0">java.io.IOError</node>
+    <node x="623.0" y="284.0">java.io.ObjectStreamException</node>
+    <node x="355.0" y="2004.0">java.io.StringReader</node>
+    <node x="672.0" y="1770.0">java.io.Closeable</node>
+    <node x="291.0" y="2075.0">java.io.BufferedReader</node>
+    <node x="617.0" y="2391.0">java.io.FileReader</node>
+    <node x="162.0" y="1195.0">java.io.FilePermissionCollection</node>
+    <node x="587.0" y="1272.0">java.io.ObjectStreamConstants</node>
+    <node x="437.0" y="1720.0">java.io.InputStream</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="java.io.ObjectInputStream" target="java.io.ObjectInput">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.ObjectInputStream" target="java.io.InputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.LineNumberReader" target="java.io.BufferedReader">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.Console" target="java.io.Flushable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.InterruptedIOException" target="java.io.IOException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.ObjectOutputStream" target="java.io.ObjectStreamConstants">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.lang.Throwable" target="java.io.Serializable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.PrintStream" target="java.io.FilterOutputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.RandomAccessFile" target="java.io.Closeable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.FilterInputStream" target="java.io.InputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.CharArrayWriter" target="java.io.Writer">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.ObjectOutput" target="java.io.DataOutput">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.NotActiveException" target="java.io.ObjectStreamException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.UncheckedIOException" target="java.lang.Exception">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.OutputStream" target="java.io.Closeable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.NotSerializableException" target="java.io.ObjectStreamException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.BufferedWriter" target="java.io.Writer">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.RandomAccessFile" target="java.io.DataOutput">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.Reader" target="java.lang.Readable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.FilePermission" target="java.io.Serializable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.ObjectInputStream" target="java.io.ObjectStreamConstants">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.DataOutputStream" target="java.io.DataOutput">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.ByteArrayInputStream" target="java.io.InputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.UTFDataFormatException" target="java.io.IOException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.StringWriter" target="java.io.Writer">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.ByteArrayOutputStream" target="java.io.OutputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.DataInputStream" target="java.io.DataInput">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.PrintStream" target="java.io.Closeable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.FileWriter" target="java.io.OutputStreamWriter">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.PipedWriter" target="java.io.Writer">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.Externalizable" target="java.io.Serializable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.BufferedReader" target="java.io.Reader">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.InvalidObjectException" target="java.io.ObjectStreamException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.UnsupportedEncodingException" target="java.io.IOException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.EOFException" target="java.io.IOException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.ObjectStreamException" target="java.io.IOException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.FileOutputStream" target="java.io.OutputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.DataOutputStream" target="java.io.FilterOutputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.FileNotFoundException" target="java.io.IOException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.CharConversionException" target="java.io.IOException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.FilterOutputStream" target="java.io.OutputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.Writer" target="java.io.Flushable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.IOError" target="java.lang.Throwable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.PrintStream" target="java.lang.Appendable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.FileReader" target="java.io.InputStreamReader">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.FilterWriter" target="java.io.Writer">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.OutputStream" target="java.io.Flushable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.StringBufferInputStream" target="java.io.InputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.ObjectStreamClass" target="java.io.Serializable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.OptionalDataException" target="java.io.ObjectStreamException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.FilterReader" target="java.io.Reader">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.ObjectOutputStream" target="java.io.OutputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.PipedReader" target="java.io.Reader">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.lang.Exception" target="java.lang.Throwable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.SequenceInputStream" target="java.io.InputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.PrintWriter" target="java.io.Writer">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.WriteAbortedException" target="java.io.ObjectStreamException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.StreamCorruptedException" target="java.io.ObjectStreamException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.PipedInputStream" target="java.io.InputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.SyncFailedException" target="java.io.IOException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.FileInputStream" target="java.io.InputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.StringReader" target="java.io.Reader">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.ObjectInput" target="java.lang.AutoCloseable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.BufferedInputStream" target="java.io.FilterInputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.ObjectInput" target="java.io.DataInput">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.ObjectOutput" target="java.lang.AutoCloseable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.Reader" target="java.io.Closeable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.PushbackReader" target="java.io.FilterReader">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.IOException" target="java.lang.Exception">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.InputStream" target="java.io.Closeable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.PushbackInputStream" target="java.io.FilterInputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.OutputStreamWriter" target="java.io.Writer">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.SerializablePermission" target="java.io.Serializable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.InvalidClassException" target="java.io.ObjectStreamException">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.DataInputStream" target="java.io.FilterInputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.ObjectOutputStream" target="java.io.ObjectOutput">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.Writer" target="java.io.Closeable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.RandomAccessFile" target="java.io.DataInput">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.BufferedOutputStream" target="java.io.FilterOutputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.LineNumberInputStream" target="java.io.FilterInputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.CharArrayReader" target="java.io.Reader">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.InputStreamReader" target="java.io.Reader">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.Closeable" target="java.lang.AutoCloseable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.Writer" target="java.lang.Appendable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.FilePermissionCollection" target="java.io.Serializable">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="java.io.PipedOutputStream" target="java.io.OutputStream">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Orthogonal" zoom="0.8457595870206489" x="768.0490037929983" y="2227.053973928587" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
